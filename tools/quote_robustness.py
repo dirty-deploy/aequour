@@ -46,8 +46,9 @@ def render():
     import numpy as np
     from PIL import Image, ImageDraw, ImageFont
     OUT.mkdir(parents=True, exist_ok=True)
-    f_big = ImageFont.truetype("C:/Windows/Fonts/arialbd.ttf", 40)
-    f = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 26)
+    from autosettle_vision import fonts
+    f_big = fonts.load("bold", 40)
+    f = fonts.load("sans", 26)
     for i, (variant, trap, lines) in enumerate(QUOTES):
         W, H = 1100, 1300
         img = Image.new("RGB", (W, H), (252, 252, 248))

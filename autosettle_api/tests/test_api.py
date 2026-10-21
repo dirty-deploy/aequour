@@ -462,3 +462,25 @@ class TestRecordedVisionIsLabelled(unittest.TestCase):
                 os.environ.pop("AEQUOUR_DEV_PHOTOS", None)
             else:
                 os.environ["AEQUOUR_DEV_PHOTOS"] = old
+
+
+class TestMakeQuote(unittest.TestCase):
+    def test_synthetic_quote_from_any_claim_goes_through_the_normal_quote_check(self):
+        import random
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "tools"))
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+        import make_quote
+        from autosettle_vision import quote_gen
+        c, _ = replay_client()
+        v = c.post("/claims", json={"scenario": "offer"}).json()
+        q = make_quote.lines_to_quote(v["lines"], {"part": 2.5})
+        part = next(x for x in q["lines"] if x["type"] == "part")
+        self.assertGreater(part["total"], v["lines"][0]["part_mrp"] * 2)
+        r = c.post(f"/claims/{v['claim_id']}/quote", json={"quote": q}).json()
+        verdicts = {x["description"]: x["verdict"] for x in r["quote_result"]["lines"]}
+        self.assertEqual(verdicts[part["description"]], "above_range")           # the inflated part is flagged
+        self.assertLessEqual(r["offer"], v["offer"] + 2000)                       # no big move from an inflated line
+        out = Path(tempfile.mkdtemp()) / "q.jpg"
+        quote_gen.render(q, random.Random(1), out, stamp="SYNTHETIC")
+        self.assertGreater(out.stat().st_size, 5000)

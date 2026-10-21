@@ -89,6 +89,20 @@ def main():
         return all(o["held"] and o["offer_unchanged"] for o in out), "; ".join(f"{o['name']}: held={o['held']}" for o in out)
     step("two attacks through the attack runner", "both held, offer unchanged", attacks)
 
+    def synthetic_quote():
+        import random
+        sys.path.insert(0, str(ROOT / "tools"))
+        import make_quote
+        from autosettle_vision import quote_gen
+        v = scenario("offer")
+        qq = make_quote.lines_to_quote(v["lines"], {"part": 2.5})
+        out = Path(tempfile.mkdtemp()) / "synthetic_quote.jpg"
+        quote_gen.render(qq, random.Random(11), out, stamp="SYNTHETIC")
+        r = c.post(f"/claims/{v['claim_id']}/quote", json={"quote": qq}).json()
+        flagged = [x["verdict"] for x in r["quote_result"]["lines"] if x["description"].endswith("Assy")]
+        return out.stat().st_size > 5000 and flagged == ["above_range"], f"image {out.stat().st_size // 1024} KiB, inflated part: {flagged}, offer {r['original_offer']} -> {r['offer']}"
+    step("tools/make_quote.py: a SYNTHETIC quote with one inflated line", "image written; the inflated part is flagged above range", synthetic_quote)
+
     def range_hidden():
         cid = scenario("offer")["claim_id"]
         return "ceiling" not in c.get(f"/claims/{cid}").text.lower() and c.get(f"/adjuster/{cid}/range").json()["applies"], "customer view clean, adjuster range present"

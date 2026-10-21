@@ -25,11 +25,11 @@ Live photo and video analysis, the language model (Qwen3-VL-8B 4-bit, which rewo
 ## Tests (each count was measured with the command shown)
 ```
 python -m unittest discover -s autosettle_engine/tests -t .     # 48 tests (money logic, 5,000-claim fuzz)
-python -m unittest discover -s autosettle_api/tests -t .        # 26 tests, no GPU (1 is skipped when the demo photo is not on the machine)
+python -m unittest discover -s autosettle_api/tests -t .        # 31 tests, no GPU (1 is skipped when the demo photo is not on the machine)
 python -m unittest discover -s autosettle_vision/tests -t .     # 9 tests, needs the live stack (1 skipped unless AEQUOUR_ISHAN_VIDEOS is set)
 python -m autosettle_engine.exploit_suite                       # 20 attack scripts held, plus 1 control
 python -m autosettle_vision.video_attacks                       # 6 video attack scripts held, plus 1 control (synthetic clips)
-python tools/smoke.py                                           # replay demo path, PASS or FAIL per step
+python tools/smoke.py                                           # replay demo path, 14 steps, PASS or FAIL each
 python tools/eval_dev.py                                        # replays the dev-photo table from the cache (22 of 74 found)
 ```
 The engine tests, API tests and attack suite pass in a fresh virtual environment that has only `requirements-replay.txt` installed, on Python 3.12 and 3.14. "Passed" means these tests, written against the same code, pass; it does not mean no attack exists.

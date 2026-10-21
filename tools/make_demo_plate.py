@@ -12,9 +12,11 @@ img = Image.new("RGB", (W, H), (40, 70, 140))                      # blue car bo
 d = ImageDraw.Draw(img)
 d.rectangle((0, 560, W, H), fill=(25, 25, 28))                    # bumper
 d.rounded_rectangle((330, 360, 950, 500), 12, fill=(250, 250, 250), outline=(0, 0, 0), width=6)
-f = ImageFont.truetype("C:/Windows/Fonts/arialbd.ttf", 96)
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent.parent))
+from autosettle_vision import fonts  # noqa: E402
+f = fonts.load("bold", 96)
 d.text((640, 430), text, font=f, fill=(0, 0, 0), anchor="mm")
-d.text((40, 40), "SYNTHETIC DEMO IMAGE", font=ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 28), fill=(220, 220, 220))
+d.text((40, 40), "SYNTHETIC DEMO IMAGE", font=fonts.load("sans", 28), fill=(220, 220, 220))
 a = np.array(img)
 M = cv2.getPerspectiveTransform(np.float32([[0, 0], [W, 0], [W, H], [0, H]]),
                                 np.float32([[30, 20], [W - 10, 0], [W - 40, H - 10], [0, H - 30]]))

@@ -13,8 +13,9 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 OUT = Path("runs/quotes")
-FONTS = [f for f in ["C:/Windows/Fonts/arial.ttf", "C:/Windows/Fonts/consola.ttf", "C:/Windows/Fonts/times.ttf",
-                     "C:/Windows/Fonts/calibri.ttf", "C:/Windows/Fonts/segoeui.ttf"] if Path(f).exists()]
+from . import fonts
+
+FONTS = [f for f in fonts.available() if f != "bold"] or ["builtin"]      # font families found on this machine
 GARAGES = ["Shree Balaji Motors", "New Delhi Auto Works", "Sharma Car Care", "Royal Denting & Painting",
            "A-1 Auto Garage", "Gurgaon Car Clinic"]
 
@@ -49,12 +50,12 @@ def scenario(rng, parts):
     return {"lines": lines, "gst_percent": 18, "grand_total": round(sub * 1.18)}
 
 
-def render(q, rng, path):
+def render(q, rng, path, stamp=None):
     W, H = 1100, 1400
     img = Image.new("RGB", (W, H), (250, 250, 245))
     dr = ImageDraw.Draw(img)
-    fpath = rng.choice(FONTS)
-    big, mid, small = (ImageFont.truetype(fpath, s) for s in (44, 28, 24))
+    family = rng.choice(FONTS)
+    big, mid, small = (fonts.load(family, s) for s in (44, 28, 24))
     y = 50
     dr.text((60, y), rng.choice(GARAGES), font=big, fill=(20, 20, 90)); y += 70
     dr.text((60, y), "ESTIMATE / QUOTATION   No. %d" % rng.randint(100, 999), font=mid, fill=(0, 0, 0)); y += 45
@@ -77,6 +78,8 @@ def render(q, rng, path):
         dr.text((560, y), lab, font=mid, fill=(0, 0, 0))
         dr.text((cols[3], y), f"{val:,}", font=mid, fill=(0, 0, 0)); y += 42
     dr.text((60, H - 120), "Authorised signatory", font=small, fill=(60, 60, 60))
+    if stamp:                                       # a visible watermark so a synthetic quote can never pass for a real one
+        dr.text((W // 2, H // 2), stamp, font=fonts.load(family, 120), fill=(200, 40, 40), anchor="mm")
     # phone-photo look: slight rotation, perspective, blur, noise, uneven light
     a = np.array(img)
     ang = rng.uniform(-4, 4)
