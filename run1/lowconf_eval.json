@@ -1,0 +1,606 @@
+{
+ "summary": {
+  "photos": 41,
+  "offers_before": 9,
+  "offers_after": 7,
+  "offers_removed": [
+   [
+    "c16_90e_Avenue_LaSalle_10.jpg",
+    "OFFER",
+    14031
+   ],
+   [
+    "c23_Subaru_Levorg_48028046188.jpg",
+    "OFFER",
+    5915
+   ]
+  ],
+  "offers_before_by_expect": {
+   "OFFER": 6,
+   "HUMAN": 2,
+   "ASK_MORE": 1
+  },
+  "offers_after_by_expect": {
+   "OFFER": 4,
+   "HUMAN": 2,
+   "ASK_MORE": 1
+  },
+  "severe_detections": 27,
+  "severe_below_0_5": 12,
+  "severe_below_0_5_part_correct": 6,
+  "severe_below_0_5_part_and_severity_correct": 3
+ },
+ "low": [
+  {
+   "file": "c09_Front_crashed_SLK.jpg",
+   "part": "Front-bumper",
+   "damage": "Dent",
+   "conf": 0.402,
+   "part_correct": true,
+   "severity_correct": true,
+   "expect": "HUMAN"
+  },
+  {
+   "file": "c10_Damaged_car_door.jpg",
+   "part": "Fender",
+   "damage": "Dent",
+   "conf": 0.3,
+   "part_correct": true,
+   "severity_correct": false,
+   "expect": "HUMAN"
+  },
+  {
+   "file": "c11_Crashed_black_W211.jpg",
+   "part": "Hood",
+   "damage": "Dent",
+   "conf": 0.492,
+   "part_correct": true,
+   "severity_correct": true,
+   "expect": "HUMAN"
+  },
+  {
+   "file": "c13_Crash_test_car_from_the_West_Germany_USA.jpg",
+   "part": "Back-door",
+   "damage": "Dent",
+   "conf": 0.339,
+   "part_correct": false,
+   "severity_correct": false,
+   "expect": "HUMAN"
+  },
+  {
+   "file": "c13_Crash_test_car_from_the_West_Germany_USA.jpg",
+   "part": "Windshield",
+   "damage": "Broken part",
+   "conf": 0.472,
+   "part_correct": false,
+   "severity_correct": false,
+   "expect": "HUMAN"
+  },
+  {
+   "file": "c16_90e_Avenue_LaSalle_10.jpg",
+   "part": "Back-door",
+   "damage": "Dent",
+   "conf": 0.472,
+   "part_correct": true,
+   "severity_correct": true,
+   "expect": "OFFER"
+  },
+  {
+   "file": "c19_Moscow_Cherepovetskaya_Street_and_Abramt.jpg",
+   "part": "Fender",
+   "damage": "Dent",
+   "conf": 0.298,
+   "part_correct": false,
+   "severity_correct": false,
+   "expect": "ASK_MORE"
+  },
+  {
+   "file": "c19_Moscow_Cherepovetskaya_Street_and_Abramt.jpg",
+   "part": "Front-bumper",
+   "damage": "Dent",
+   "conf": 0.259,
+   "part_correct": false,
+   "severity_correct": false,
+   "expect": "ASK_MORE"
+  },
+  {
+   "file": "c19_Moscow_Cherepovetskaya_Street_and_Abramt.jpg",
+   "part": "Front-door",
+   "damage": "Dent",
+   "conf": 0.498,
+   "part_correct": true,
+   "severity_correct": false,
+   "expect": "ASK_MORE"
+  },
+  {
+   "file": "c23_Subaru_Levorg_48028046188.jpg",
+   "part": "Fender",
+   "damage": "Dent",
+   "conf": 0.337,
+   "part_correct": true,
+   "severity_correct": false,
+   "expect": "OFFER"
+  },
+  {
+   "file": "c29_1977_79_Toyota_Corolla_in_an_appaling_ro.jpg",
+   "part": "Hood",
+   "damage": "Dent",
+   "conf": 0.32,
+   "part_correct": false,
+   "severity_correct": false,
+   "expect": "HUMAN"
+  },
+  {
+   "file": "c53_Alto_800_accident.jpg",
+   "part": "Headlight",
+   "damage": "Broken part",
+   "conf": 0.318,
+   "part_correct": false,
+   "severity_correct": false,
+   "expect": "HUMAN"
+  }
+ ],
+ "rows": [
+  {
+   "file": "c00_Zdiby_automobil.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c01_Unfallflucht_hit_and_run.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified"
+   ]
+  },
+  {
+   "file": "c02_Chloe_s_car_after_encounter_with_her_let.jpg",
+   "expect": "OFFER",
+   "before": "OFFER",
+   "offer_before": 2152,
+   "after": "OFFER",
+   "offer_after": 2152,
+   "reasons_after": []
+  },
+  {
+   "file": "c03_Puerto_Rico_San_Juan_Honda_Ridgeline_whi.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c04_Abandoned_Suzuki_Osidge_London.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c05_Abandoned_Suzuki_Osidge_London_2.jpg",
+   "expect": "OFFER",
+   "before": "OFFER",
+   "offer_before": 2763,
+   "after": "OFFER",
+   "offer_after": 2763,
+   "reasons_after": []
+  },
+  {
+   "file": "c06_US_Government_wrecked_Dodge_Stratus_in_M.jpg",
+   "expect": "HUMAN",
+   "before": "OFFER",
+   "offer_before": 5244,
+   "after": "OFFER",
+   "offer_after": 5244,
+   "reasons_after": []
+  },
+  {
+   "file": "c07_Lada_Nova1.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c09_Front_crashed_SLK.jpg",
+   "expect": "HUMAN",
+   "before": "SURVEYOR",
+   "offer_before": null,
+   "after": "SURVEYOR",
+   "offer_after": null,
+   "reasons_after": [
+    "structural_or_safety_damage"
+   ]
+  },
+  {
+   "file": "c10_Damaged_car_door.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "coverage_ok"
+   ]
+  },
+  {
+   "file": "c11_Crashed_black_W211.jpg",
+   "expect": "HUMAN",
+   "before": "SURVEYOR",
+   "offer_before": null,
+   "after": "SURVEYOR",
+   "offer_after": null,
+   "reasons_after": [
+    "structural_or_safety_damage"
+   ]
+  },
+  {
+   "file": "c12_2007_Chevrolet_HHR_involved_in_crash.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c13_Crash_test_car_from_the_West_Germany_USA.jpg",
+   "expect": "HUMAN",
+   "before": "SURVEYOR",
+   "offer_before": null,
+   "after": "SURVEYOR",
+   "offer_after": null,
+   "reasons_after": [
+    "structural_or_safety_damage"
+   ]
+  },
+  {
+   "file": "c14_Evening_in_downtown_Inuvik_NT.jpg",
+   "expect": "ASK_MORE",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c15_Jeep_Grand_Cherokee_Manhattan_New_York_U.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c16_90e_Avenue_LaSalle_10.jpg",
+   "expect": "OFFER",
+   "before": "OFFER",
+   "offer_before": 14031,
+   "after": "ESCALATE",
+   "offer_after": null,
+   "reasons_after": [
+    "low_conf_severe"
+   ]
+  },
+  {
+   "file": "c17_90e_Avenue_LaSalle_12.jpg",
+   "expect": "HUMAN",
+   "before": "SURVEYOR",
+   "offer_before": null,
+   "after": "SURVEYOR",
+   "offer_after": null,
+   "reasons_after": [
+    "structural_or_safety_damage"
+   ]
+  },
+  {
+   "file": "c18_Fabia_I_2003_accident_front_right.jpg",
+   "expect": "HUMAN",
+   "before": "OFFER",
+   "offer_before": 5915,
+   "after": "OFFER",
+   "offer_after": 5915,
+   "reasons_after": []
+  },
+  {
+   "file": "c19_Moscow_Cherepovetskaya_Street_and_Abramt.jpg",
+   "expect": "ASK_MORE",
+   "before": "SURVEYOR",
+   "offer_before": null,
+   "after": "SURVEYOR",
+   "offer_after": null,
+   "reasons_after": [
+    "structural_or_safety_damage"
+   ]
+  },
+  {
+   "file": "c20_Damaged_car_on_road_Dubai_01.jpg",
+   "expect": "ASK_MORE",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c21_Damaged_car_on_road_Dubai_02.jpg",
+   "expect": "ASK_MORE",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c22_Poor_Citroen_C5_44990379005.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c23_Subaru_Levorg_48028046188.jpg",
+   "expect": "OFFER",
+   "before": "OFFER",
+   "offer_before": 5915,
+   "after": "ESCALATE",
+   "offer_after": null,
+   "reasons_after": [
+    "low_conf_severe"
+   ]
+  },
+  {
+   "file": "c24_Crash_test_car_from_the_West_Germany_USA.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c25_CarInDitch.jpg",
+   "expect": "ASK_MORE",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c26_Bumper_crop.jpg",
+   "expect": "OFFER",
+   "before": "OFFER",
+   "offer_before": 3070,
+   "after": "OFFER",
+   "offer_after": 3070,
+   "reasons_after": []
+  },
+  {
+   "file": "c27_Unfall_im_Cape_Arid_Nationalpark_Austral.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified",
+    "coverage_ok"
+   ]
+  },
+  {
+   "file": "c28_Howth_Co_Dublin_Ireland_5898219627.jpg",
+   "expect": "ASK_MORE",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c29_1977_79_Toyota_Corolla_in_an_appaling_ro.jpg",
+   "expect": "HUMAN",
+   "before": "SURVEYOR",
+   "offer_before": null,
+   "after": "SURVEYOR",
+   "offer_after": null,
+   "reasons_after": [
+    "structural_or_safety_damage"
+   ]
+  },
+  {
+   "file": "c30_Oh_deer.jpg",
+   "expect": "OFFER",
+   "before": "OFFER",
+   "offer_before": 2763,
+   "after": "OFFER",
+   "offer_after": 2763,
+   "reasons_after": []
+  },
+  {
+   "file": "c31_1994_Ford_Mustang_GT_front_end_damage_20.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c32_VW_Kafer_1200_Bj_1974_85_in_Wuppertal_He.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c33_Roadside_Assistance_in_New_York.jpg",
+   "expect": "ASK_MORE",
+   "before": "OFFER",
+   "offer_before": 3070,
+   "after": "OFFER",
+   "offer_after": 3070,
+   "reasons_after": []
+  },
+  {
+   "file": "c34_Skoda_Roomster_Blue_Dented.jpg",
+   "expect": "OFFER",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c44_Chennai_damage_1.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c48_Crashed_Taxi_Multiple_Car_Accident_Rabin.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified"
+   ]
+  },
+  {
+   "file": "c49_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c50_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c51_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "expect": "ASK_MORE",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified"
+   ]
+  },
+  {
+   "file": "c53_Alto_800_accident.jpg",
+   "expect": "HUMAN",
+   "before": "SURVEYOR",
+   "offer_before": null,
+   "after": "SURVEYOR",
+   "offer_after": null,
+   "reasons_after": [
+    "structural_or_safety_damage"
+   ]
+  },
+  {
+   "file": "c54_Disastered_car.jpg",
+   "expect": "HUMAN",
+   "before": "ASK_MORE",
+   "offer_before": null,
+   "after": "ASK_MORE",
+   "offer_after": null,
+   "reasons_after": [
+    "parts_identified",
+    "damage_identified",
+    "coverage_ok"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,487 @@
+{
+ "rq00": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Bumper Front Assy",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 1100,
+     "total": 1100
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 4650,
+     "total": 4650
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 9440
+  },
+  "raw": "{\"lines\":[{\"description\":\"Bumper Front Assy\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":1100,\"total\":1100},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":4650,\"total\":4650}],\"gst_percent\":18,\"grand_total\":9440}"
+ },
+ "rq01": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Front Bumper (Genuine)",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Fitting charges",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 900,
+     "total": 900
+    },
+    {
+     "description": "Paint & polish",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 3800,
+     "total": 3800
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 8201
+  },
+  "raw": "{\"lines\":[{\"description\":\"Front Bumper (Genuine)\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Fitting charges\",\"type\":\"labour\",\"qty\":1,\"unit_price\":900,\"total\":900},{\"description\":\"Paint & polish\",\"type\":\"paint\",\"qty\":1,\"unit_price\":3800,\"total\":3800}],\"gst_percent\":18,\"grand_total\":8201}"
+ },
+ "rq02": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Bumper Front Assy",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 4000,
+     "total": 4000
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 450,
+     "total": 450
+    },
+    {
+     "description": "Consumables",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 300,
+     "total": 300
+    },
+    {
+     "description": "Misc charges",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 250,
+     "total": 250
+    },
+    {
+     "description": "Car wash",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 250,
+     "total": 250
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 9735
+  },
+  "raw": "{\"lines\":[{\"description\":\"Bumper Front Assy\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":4000,\"total\":4000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":450,\"total\":450},{\"description\":\"Consumables\",\"type\":\"part\",\"qty\":1,\"unit_price\":300,\"total\":300},{\"description\":\"Misc charges\",\"type\":\"part\",\"qty\":1,\"unit_price\":250,\"total\":250},{\"description\":\"Car wash\",\"type\":\"part\",\"qty\":1,\"unit_price\":250,\"total\":250}],\"gst_percent\":18,\"grand_total\":9735}"
+ },
+ "rq03": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Front Bumper",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 3900,
+     "total": 3900
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 1000,
+     "total": 1000
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 4000,
+     "total": 4000
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 10502
+  },
+  "raw": "{\"lines\":[{\"description\":\"Front Bumper\",\"type\":\"part\",\"qty\":1,\"unit_price\":3900,\"total\":3900},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":1000,\"total\":1000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":4000,\"total\":4000}],\"gst_percent\":18,\"grand_total\":10502}"
+ },
+ "rq04": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Bumper Front Assy",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Bonnet Panel",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 5450,
+     "total": 5450
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 1500,
+     "total": 1500
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 6000,
+     "total": 6000
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 17936
+  },
+  "raw": "{\"lines\":[{\"description\":\"Bumper Front Assy\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Bonnet Panel\",\"type\":\"part\",\"qty\":1,\"unit_price\":5450,\"total\":5450},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":1500,\"total\":1500},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":6000,\"total\":6000}],\"gst_percent\":18,\"grand_total\":17936}"
+ },
+ "rq05": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Front Bumper",
+     "type": "part",
+     "qty": 2,
+     "unit_price": 2250,
+     "total": 4500
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 1000,
+     "total": 1000
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 4000,
+     "total": 4000
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 11210
+  },
+  "raw": "{\"lines\":[{\"description\":\"Front Bumper\",\"type\":\"part\",\"qty\":2,\"unit_price\":2250,\"total\":4500},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":1000,\"total\":1000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":4000,\"total\":4000}],\"gst_percent\":18,\"grand_total\":11210}"
+ },
+ "rq06": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Bumper Front Assy",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Head Lamp Assy RH",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 7500,
+     "total": 7500
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 4000,
+     "total": 4000
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 1200,
+     "total": 1200
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 17641
+  },
+  "raw": "{\"lines\":[{\"description\":\"Bumper Front Assy\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Head Lamp Assy RH\",\"type\":\"part\",\"qty\":1,\"unit_price\":7500,\"total\":7500},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":4000,\"total\":4000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":1200,\"total\":1200}],\"gst_percent\":18,\"grand_total\":17641}"
+ },
+ "rq07": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Bumper Front Assy",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Fr Fender LH",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 1500,
+     "total": 1500
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 1000,
+     "total": 1000
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 4000,
+     "total": 4000
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 10325
+  },
+  "raw": "{\"lines\":[{\"description\":\"Bumper Front Assy\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Fr Fender LH\",\"type\":\"part\",\"qty\":1,\"unit_price\":1500,\"total\":1500},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":1000,\"total\":1000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":4000,\"total\":4000}],\"gst_percent\":18,\"grand_total\":10325}"
+ },
+ "rq08": {
+  "parsed": {
+   "lines": [],
+   "gst_percent": null,
+   "grand_total": null,
+   "parse_error": "Expecting ',' delimiter: line 1 column 269 (char 268)"
+  },
+  "raw": "{\"lines\":[{\"description\":\"Front Bumper\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":6000,\"total\":6000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":4000,\"total\":4000},\"gst_percent\":18,\"grand_total\":14455}"
+ },
+ "rq09": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Front Bumper",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 1000,
+     "total": 1000
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 9000,
+     "total": 9000
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 14455
+  },
+  "raw": "{\"lines\":[{\"description\":\"Front Bumper\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":1000,\"total\":1000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":9000,\"total\":9000}],\"gst_percent\":18,\"grand_total\":14455}"
+ },
+ "rq10": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Bumper Front Assy",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2400,
+     "total": 2400
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 900,
+     "total": 900
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 3000,
+     "total": 3000
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 7434
+  },
+  "raw": "{\"lines\":[{\"description\":\"Bumper Front Assy\",\"type\":\"part\",\"qty\":1,\"unit_price\":2400,\"total\":2400},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":900,\"total\":900},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":3000,\"total\":3000}],\"gst_percent\":18,\"grand_total\":7434}"
+ },
+ "rq11": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "BUMPER FR",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Denting & painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 4000,
+     "total": 4000
+    },
+    {
+     "description": "R&R labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 800,
+     "total": 800
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 8319
+  },
+  "raw": "{\"lines\":[{\"description\":\"BUMPER FR\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Denting & painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":4000,\"total\":4000},{\"description\":\"R&R labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":800,\"total\":800}],\"gst_percent\":18,\"grand_total\":8319}"
+ },
+ "rq12": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Front Bumper",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2100,
+     "total": 2100
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 700,
+     "total": 700
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 2500,
+     "total": 2500
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 6254
+  },
+  "raw": "{\"lines\":[{\"description\":\"Front Bumper\",\"type\":\"part\",\"qty\":1,\"unit_price\":2100,\"total\":2100},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":700,\"total\":700},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":2500,\"total\":2500}],\"gst_percent\":18,\"grand_total\":6254}"
+ },
+ "rq13": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Bumper Front Assy",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2250,
+     "total": 2250
+    },
+    {
+     "description": "Tail Lamp LH",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2600,
+     "total": 2600
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 1000,
+     "total": 1000
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 4000,
+     "total": 4000
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 11623
+  },
+  "raw": "{\"lines\":[{\"description\":\"Bumper Front Assy\",\"type\":\"part\",\"qty\":1,\"unit_price\":2250,\"total\":2250},{\"description\":\"Tail Lamp LH\",\"type\":\"part\",\"qty\":1,\"unit_price\":2600,\"total\":2600},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":1000,\"total\":1000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":4000,\"total\":4000}],\"gst_percent\":18,\"grand_total\":11623}"
+ },
+ "rq14": {
+  "parsed": {
+   "lines": [
+    {
+     "description": "Front Bumper",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 2700,
+     "total": 2700
+    },
+    {
+     "description": "Labour",
+     "type": "labour",
+     "qty": 1,
+     "unit_price": 1000,
+     "total": 1000
+    },
+    {
+     "description": "Painting",
+     "type": "paint",
+     "qty": 1,
+     "unit_price": 4000,
+     "total": 4000
+    },
+    {
+     "description": "Service charge",
+     "type": "part",
+     "qty": 1,
+     "unit_price": 500,
+     "total": 500
+    }
+   ],
+   "gst_percent": 18,
+   "grand_total": 9676
+  },
+  "raw": "{\"lines\":[{\"description\":\"Front Bumper\",\"type\":\"part\",\"qty\":1,\"unit_price\":2700,\"total\":2700},{\"description\":\"Labour\",\"type\":\"labour\",\"qty\":1,\"unit_price\":1000,\"total\":1000},{\"description\":\"Painting\",\"type\":\"paint\",\"qty\":1,\"unit_price\":4000,\"total\":4000},{\"description\":\"Service charge\",\"type\":\"part\",\"qty\":1,\"unit_price\":500,\"total\":500}],\"gst_percent\":18,\"grand_total\":9676}"
+ }
+}

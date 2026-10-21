@@ -1,0 +1,7 @@
+[
+ {"policy_id": "POL-DEMO-001", "plate": "DL3CAB1234", "make": "Maruti", "model": "Swift", "reg_date": "2023-06-01", "engine_cc": 1197, "idv": 600000},
+ {"policy_id": "POL-DEMO-002", "plate": "HR26DK8337", "make": "Tata", "model": "Nexon", "reg_date": "2022-03-15", "engine_cc": 1199, "idv": 820000},
+ {"policy_id": "POL-DEMO-003", "plate": "UP16BT4521", "make": "Hyundai", "model": "Creta", "reg_date": "2024-01-20", "engine_cc": 1497, "idv": 1250000},
+ {"policy_id": "POL-DEMO-004", "plate": "DL8CAF5031", "make": "Hyundai", "model": "i20", "reg_date": "2021-09-10", "engine_cc": 1197, "idv": 520000},
+ {"policy_id": "POL-DEMO-005", "plate": "HR51BX7712", "make": "Tata", "model": "Punch", "reg_date": "2023-11-05", "engine_cc": 1199, "idv": 610000}
+]

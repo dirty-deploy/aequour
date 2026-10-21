@@ -1,0 +1,29 @@
+{
+ "variant": "clean",
+ "trap": "honest quote, garage naming",
+ "lines": [
+  {
+   "description": "Bumper Front Assy",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2250,
+   "total": 2250
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 1100,
+   "total": 1100
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 4650,
+   "total": 4650
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 9440
+}

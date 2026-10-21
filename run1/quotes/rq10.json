@@ -1,0 +1,29 @@
+{
+ "variant": "rotate",
+ "trap": "part 7% above reference (inside tolerance)",
+ "lines": [
+  {
+   "description": "Bumper Front Assy",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2400,
+   "total": 2400
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 900,
+   "total": 900
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 3000,
+   "total": 3000
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 7434
+}

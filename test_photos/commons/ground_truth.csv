@@ -1,0 +1,42 @@
+file,car,expect,damage,note
+c00_Zdiby_automobil.jpg,Honda Civic (old),OFFER,Front-bumper:Broken part:severe; Hood:Dent:moderate,front-end hit; wide shot in snow
+c01_Unfallflucht_hit_and_run.jpg,VW Golf,OFFER,Quarter-panel:Surface damage:minor,rear scrape; mirror piece on road
+c02_Chloe_s_car_after_encounter_with_her_let.jpg,Toyota Yaris,OFFER,Front-door:Dent:moderate,door crease; person in car
+c03_Puerto_Rico_San_Juan_Honda_Ridgeline_whi.jpg,Honda Ridgeline,OFFER,Back-door:Dent:moderate,dent low on rear door
+c04_Abandoned_Suzuki_Osidge_London.jpg,Suzuki Swift (2014),OFFER,Fender:Dent:moderate; Front-bumper:Surface damage:minor,front view of same car as c05
+c05_Abandoned_Suzuki_Osidge_London_2.jpg,Suzuki Swift (2014),OFFER,Fender:Broken part:severe; Front-bumper:Broken part:moderate; Hood:Dent:minor,front-left corner
+c06_US_Government_wrecked_Dodge_Stratus_in_M.jpg,Dodge Stratus,HUMAN,Hood:Dent:severe; Front-bumper:Broken part:moderate,hood buckled: radiator/support likely hit
+c07_Lada_Nova1.jpg,Lada,OFFER,Grille:Missing part:moderate; Front-bumper:Dent:minor,grille gone
+c09_Front_crashed_SLK.jpg,Mercedes SLK,HUMAN,Front-bumper:Broken part:severe; Fender:Dent:severe; Headlight:Broken part:severe; Hood:Dent:severe,heavy front crash
+c10_Damaged_car_door.jpg,Ford (old),HUMAN,Front-door:Dent:severe; Fender:Dent:moderate,side impact; window shattered
+c11_Crashed_black_W211.jpg,Mercedes E-class,HUMAN,Front-bumper:Missing part:severe; Fender:Broken part:severe; Hood:Dent:severe; Headlight:Broken part:severe,heavy front crash
+c12_2007_Chevrolet_HHR_involved_in_crash.jpg,Chevrolet HHR,HUMAN,Fender:Dent:severe; Hood:Dent:severe; Headlight:Broken part:severe; Front-bumper:Broken part:severe,heavy front crash
+c13_Crash_test_car_from_the_West_Germany_USA.jpg,Mercedes C-class taxi,HUMAN,Front-bumper:Missing part:severe; Hood:Dent:severe; Fender:Dent:severe,crash-test car; same scene as c24
+c14_Evening_in_downtown_Inuvik_NT.jpg,sedan,ASK_MORE,Front-bumper:Broken part:moderate,car far away
+c15_Jeep_Grand_Cherokee_Manhattan_New_York_U.jpg,Jeep Grand Cherokee,HUMAN,Front-bumper:Missing part:severe; Grille:Missing part:severe; Headlight:Missing part:severe,front end torn off
+c16_90e_Avenue_LaSalle_10.jpg,Honda Civic,OFFER,Back-door:Dent:severe; Front-door:Dent:moderate,side impact on doors
+c17_90e_Avenue_LaSalle_12.jpg,Chevrolet Sonic,HUMAN,Front-door:Dent:severe; Back-door:Dent:severe,curtain airbag deployed
+c18_Fabia_I_2003_accident_front_right.jpg,Skoda Fabia,HUMAN,Fender:Dent:severe; Hood:Dent:severe; Front-bumper:Broken part:severe; Headlight:Broken part:severe,heavy front crash
+c19_Moscow_Cherepovetskaya_Street_and_Abramt.jpg,Mitsubishi Lancer,ASK_MORE,Front-door:Dent:moderate,car far away
+c20_Damaged_car_on_road_Dubai_01.jpg,Toyota RAV4,ASK_MORE,Back-bumper:Dent:moderate,far away through windscreen
+c21_Damaged_car_on_road_Dubai_02.jpg,Toyota RAV4,ASK_MORE,Back-bumper:Dent:moderate; Trunk:Dent:moderate,through windscreen
+c22_Poor_Citroen_C5_44990379005.jpg,Citroen C5,OFFER,Front-bumper:Broken part:moderate,front-right corner
+c23_Subaru_Levorg_48028046188.jpg,Subaru Levorg,OFFER,Front-bumper:Broken part:moderate; Headlight:Broken part:minor; Fender:Dent:minor,front-right corner
+c24_Crash_test_car_from_the_West_Germany_USA.jpg,Mercedes C-class taxi,HUMAN,Front-bumper:Missing part:severe; Hood:Dent:severe; Fender:Dent:severe,crop of c13
+c25_CarInDitch.jpg,hatchback,ASK_MORE,,car in a ditch far away
+c26_Bumper_crop.jpg,Volvo estate (old),OFFER,Back-bumper:Dent:minor,old car; bumper bent
+c27_Unfall_im_Cape_Arid_Nationalpark_Austral.jpg,SUV,OFFER,Back-door:Surface damage:moderate,scrape close-up
+c28_Howth_Co_Dublin_Ireland_5898219627.jpg,silver car,ASK_MORE,Back-bumper:Dent:moderate,close-up; panel not identifiable
+c29_1977_79_Toyota_Corolla_in_an_appaling_ro.jpg,Toyota Corolla (1970s),HUMAN,Trunk:Surface damage:severe; Back-bumper:Surface damage:severe,rust and wear: not accident damage
+c30_Oh_deer.jpg,Acura TSX,OFFER,Front-bumper:Broken part:moderate; Fender:Dent:moderate,deer strike; taped
+c31_1994_Ford_Mustang_GT_front_end_damage_20.jpg,Ford Mustang,OFFER,Hood:Dent:moderate; Front-bumper:Dent:moderate; Headlight:Broken part:minor,front-end
+c32_VW_Kafer_1200_Bj_1974_85_in_Wuppertal_He.jpg,VW Beetle,OFFER,Hood:Dent:minor,dent hard to see
+c33_Roadside_Assistance_in_New_York.jpg,SUV,ASK_MORE,,car off road far away
+c34_Skoda_Roomster_Blue_Dented.jpg,Skoda Roomster,OFFER,Back-bumper:Dent:minor,dent hard to see at this size
+c44_Chennai_damage_1.jpg,Toyota Corolla,HUMAN,,car lodged on a fence: underbody unknown
+c48_Crashed_Taxi_Multiple_Car_Accident_Rabin.jpg,Ambassador taxi,HUMAN,Hood:Dent:severe; Front-bumper:Broken part:severe; Grille:Broken part:severe,multi-car crash
+c49_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg,Hyundai i10 + taxi,HUMAN,Front-bumper:Broken part:severe; Hood:Dent:moderate,multi-car crash scene
+c50_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg,Ambassador taxi,HUMAN,,crowd; damage hidden
+c51_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg,Ambassador taxi,ASK_MORE,,crowd; damage hidden
+c53_Alto_800_accident.jpg,Maruti Alto 800,HUMAN,Windshield:Broken part:severe; Hood:Dent:moderate; Front-bumper:Broken part:moderate,windscreen star pattern: possible pedestrian strike
+c54_Disastered_car.jpg,hatchback,HUMAN,,burnt out

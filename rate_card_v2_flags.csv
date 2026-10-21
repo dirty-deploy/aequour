@@ -1,0 +1,40 @@
+csv_line,model,part,side,price,tier,issue,suggested_action
+2,Creta,Front-bumper,single,1794,D,"rejected as upper/lower only, but Brezza and Punch upper-only rows are accepted: inconsistent",apply one rule to all two-piece bumpers
+6,Creta,Tail-light,L,2521,C,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+6,Creta,Tail-light,L,2521,C,unopened row from a template-price source; pooled with the 1st-gen row for 2015-2020 Cretas,reject (D); 2nd-gen tail lamp still needed
+7,Creta,Windshield,single,5546,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+8,Nexon,Front-bumper,single,6035,A,"price is a variant-range endpoint from a listing page, not a part page",downgrade to B and note the variant; or open the part page and record its URL and MRP
+8,Nexon,Front-bumper,single,6035,A,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+9,Nexon,Back-bumper,single,6162,C,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+10,Nexon,Hood,single,7947,A,"price is a variant-range endpoint from a listing page, not a part page",downgrade to B and note the variant; or open the part page and record its URL and MRP
+10,Nexon,Hood,single,7947,A,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+11,Nexon,Fender,single,3410,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+12,Nexon,Back-door,L,12680,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+13,Nexon,Headlight,L,8724,C,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+14,Nexon,Headlight,R,8724,C,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+15,Nexon,Grille,single,2820,C,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+15,Nexon,Grille,single,2820,C,its own flag says no item at this price exists in the listing,reject (D)
+19,Swift,Front-door,L,4665,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+29,Brezza,Headlight,L,7799,B,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+32,Venue,Front-bumper,single,3183,D,"rejected as upper/lower only, but Brezza and Punch upper-only rows are accepted: inconsistent",apply one rule to all two-piece bumpers
+34,Venue,Front-door,L,13166,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+35,Venue,Back-door,L,12072,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+36,Venue,Headlight,L,5859,A,"price is a variant-range endpoint from a listing page, not a part page",downgrade to B and note the variant; or open the part page and record its URL and MRP
+36,Venue,Headlight,L,5859,A,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+36,Venue,Headlight,L,5859,A,"base-variant price; higher trims cost more, so offers for them will be low",state on the assumptions slide
+37,Venue,Headlight,R,5436,A,"price is a variant-range endpoint from a listing page, not a part page",downgrade to B and note the variant; or open the part page and record its URL and MRP
+37,Venue,Headlight,R,5436,A,no fitment window: treated as fitting every generation and pooled with windowed rows,"add valid_from/valid_to from the page, or downgrade to C"
+37,Venue,Headlight,R,5436,A,"base-variant price; higher trims cost more, so offers for them will be low",state on the assumptions slide
+38,Venue,Trunk,single,8226,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+43,Punch,Tail-light,L,2420,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+44,Punch,Tail-light,R,2469,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+45,Punch,Windshield,single,7574,A,"source_url is a category listing, so the part page cannot be rechecked",record the part-page URL that was opened
+57,Punch,Headlight,L,3612,A,"base-variant price; higher trims cost more, so offers for them will be low",state on the assumptions slide
+58,Punch,Headlight,R,5007,A,"base-variant price; higher trims cost more, so offers for them will be low",state on the assumptions slide
+69,Venue,Mirror,L,1378,A,"base-variant price; higher trims cost more, so offers for them will be low",state on the assumptions slide
+75,Nexon,Mirror,L,3112,A,"base-variant price; higher trims cost more, so offers for them will be low",state on the assumptions slide
+139,Creta,Front-bumper,single,2402,A,"two-piece bumper: only the upper cover is priced, so replace price is understated and a full-bumper garage quote will be flagged above range","price replace as upper + lower, or one rule for all two-piece bumpers"
+147,Brezza,Front-bumper,single,2050,B,"two-piece bumper: only the upper cover is priced, so replace price is understated and a full-bumper garage quote will be flagged above range","price replace as upper + lower, or one rule for all two-piece bumpers"
+148,Brezza,Front-bumper,single,3000,B,"two-piece bumper: only the upper cover is priced, so replace price is understated and a full-bumper garage quote will be flagged above range","price replace as upper + lower, or one rule for all two-piece bumpers"
+149,Punch,Front-bumper,single,2601,B,"two-piece bumper: only the upper cover is priced, so replace price is understated and a full-bumper garage quote will be flagged above range","price replace as upper + lower, or one rule for all two-piece bumpers"
+151,Punch,Headlight,R,3612,B,"base-variant price; higher trims cost more, so offers for them will be low",state on the assumptions slide

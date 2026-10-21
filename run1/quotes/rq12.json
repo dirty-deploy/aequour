@@ -1,0 +1,29 @@
+{
+ "variant": "clean",
+ "trap": "honest, cheaper than our estimate",
+ "lines": [
+  {
+   "description": "Front Bumper",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2100,
+   "total": 2100
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 700,
+   "total": 700
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 2500,
+   "total": 2500
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 6254
+}

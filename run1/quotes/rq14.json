@@ -1,0 +1,36 @@
+{
+ "variant": "rotate+lowcon",
+ "trap": "inflated part + padded line",
+ "lines": [
+  {
+   "description": "Front Bumper",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2700,
+   "total": 2700
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 1000,
+   "total": 1000
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 4000,
+   "total": 4000
+  },
+  {
+   "description": "Service charge",
+   "type": "other",
+   "qty": 1,
+   "unit_price": 500,
+   "total": 500
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 9676
+}

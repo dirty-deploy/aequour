@@ -1,0 +1,36 @@
+{
+ "variant": "lowcon",
+ "trap": "fender priced as a replacement (photos show a repaint)",
+ "lines": [
+  {
+   "description": "Bumper Front Assy",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2250,
+   "total": 2250
+  },
+  {
+   "description": "Fr Fender LH",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 1500,
+   "total": 1500
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 1000,
+   "total": 1000
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 4000,
+   "total": 4000
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 10325
+}

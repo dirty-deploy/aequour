@@ -1,0 +1,1461 @@
+{
+ "c00_Zdiby_automobil.jpg": {
+  "engine_vision": {
+   "image_id": "c00_Zdiby_automobil.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c00_Zdiby_automobil.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c01_Unfallflucht_hit_and_run.jpg": {
+  "engine_vision": {
+   "image_id": "c01_Unfallflucht_hit_and_run.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Quarter-panel",
+     "part_conf": 0.443,
+     "damage_class": "Dent",
+     "damage_conf": 0.404,
+     "severity": "minor",
+     "damage_area_fraction": 0.0667
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Quarter-panel",
+    "damage_class": "Dent",
+    "severity": "minor",
+    "damage_conf": 0.404,
+    "damage_area_fraction": 0.0667,
+    "damage_source": "dent_det:quaterpanel-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c01_Unfallflucht_hit_and_run.jpg"
+  ]
+ },
+ "c02_Chloe_s_car_after_encounter_with_her_let.jpg": {
+  "engine_vision": {
+   "image_id": "c02_Chloe_s_car_after_encounter_with_her_let.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Fender",
+     "part_conf": 0.954,
+     "damage_class": "Dent",
+     "damage_conf": 0.521,
+     "severity": "moderate",
+     "damage_area_fraction": 0.5132
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Fender",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.521,
+    "damage_area_fraction": 0.5132,
+    "damage_source": "dent_det:fender-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c02_Chloe_s_car_after_encounter_with_her_let.jpg"
+  ]
+ },
+ "c03_Puerto_Rico_San_Juan_Honda_Ridgeline_whi.jpg": {
+  "engine_vision": {
+   "image_id": "c03_Puerto_Rico_San_Juan_Honda_Ridgeline_whi.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c03_Puerto_Rico_San_Juan_Honda_Ridgeline_whi.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c04_Abandoned_Suzuki_Osidge_London.jpg": {
+  "engine_vision": {
+   "image_id": "c04_Abandoned_Suzuki_Osidge_London.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c04_Abandoned_Suzuki_Osidge_London.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c05_Abandoned_Suzuki_Osidge_London_2.jpg": {
+  "engine_vision": {
+   "image_id": "c05_Abandoned_Suzuki_Osidge_London_2.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.881,
+     "damage_class": "Dent",
+     "damage_conf": 0.72,
+     "severity": "moderate",
+     "damage_area_fraction": 0.5107
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Front-bumper",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.72,
+    "damage_area_fraction": 0.5107,
+    "damage_source": "dent_det:front-bumper-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c05_Abandoned_Suzuki_Osidge_London_2.jpg"
+  ]
+ },
+ "c06_US_Government_wrecked_Dodge_Stratus_in_M.jpg": {
+  "engine_vision": {
+   "image_id": "c06_US_Government_wrecked_Dodge_Stratus_in_M.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Hood",
+     "part_conf": 0.582,
+     "damage_class": "Dent",
+     "damage_conf": 0.501,
+     "severity": "moderate",
+     "damage_area_fraction": 0.5629
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Hood",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.501,
+    "damage_area_fraction": 0.5629,
+    "damage_source": "dent_det:bonnet-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c06_US_Government_wrecked_Dodge_Stratus_in_M.jpg"
+  ]
+ },
+ "c07_Lada_Nova1.jpg": {
+  "engine_vision": {
+   "image_id": "c07_Lada_Nova1.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_damage_found"
+  ]
+ },
+ "c09_Front_crashed_SLK.jpg": {
+  "engine_vision": {
+   "image_id": "c09_Front_crashed_SLK.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "structural_suspected"
+   ],
+   "detections": [
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.833,
+     "damage_class": "Dent",
+     "damage_conf": 0.402,
+     "severity": "severe",
+     "damage_area_fraction": 0.6832
+    },
+    {
+     "part_class": "Hood",
+     "part_conf": 0.87,
+     "damage_class": "Dent",
+     "damage_conf": 0.763,
+     "severity": "severe",
+     "damage_area_fraction": 0.6667
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Front-bumper",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.402,
+    "damage_area_fraction": 0.6832,
+    "damage_source": "dent_det:front-bumper-dent"
+   },
+   {
+    "part_class": "Hood",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.763,
+    "damage_area_fraction": 0.6667,
+    "damage_source": "dent_det:bonnet-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c09_Front_crashed_SLK.jpg",
+   "structural_suspected"
+  ]
+ },
+ "c10_Damaged_car_door.jpg": {
+  "engine_vision": {
+   "image_id": "c10_Damaged_car_door.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "unassigned_damage"
+   ],
+   "detections": [
+    {
+     "part_class": "Fender",
+     "part_conf": 0.932,
+     "damage_class": "Dent",
+     "damage_conf": 0.3,
+     "severity": "severe",
+     "damage_area_fraction": 0.7105
+    },
+    {
+     "part_class": "Front-window",
+     "part_conf": 0.819,
+     "damage_class": "Missing part",
+     "damage_conf": 0.666,
+     "severity": "severe",
+     "damage_area_fraction": 0.8137
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Fender",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.3,
+    "damage_area_fraction": 0.7105,
+    "damage_source": "dent_det:fender-dent"
+   },
+   {
+    "part_class": "Front-window",
+    "damage_class": "Missing part",
+    "severity": "severe",
+    "damage_conf": 0.666,
+    "damage_area_fraction": 0.8137,
+    "damage_source": "damage_merged_s"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c10_Damaged_car_door.jpg",
+   "unassigned_damage"
+  ]
+ },
+ "c11_Crashed_black_W211.jpg": {
+  "engine_vision": {
+   "image_id": "c11_Crashed_black_W211.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "structural_suspected"
+   ],
+   "detections": [
+    {
+     "part_class": "Fender",
+     "part_conf": 0.863,
+     "damage_class": "Dent",
+     "damage_conf": 0.664,
+     "severity": "severe",
+     "damage_area_fraction": 0.6926
+    },
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.29,
+     "damage_class": "Dent",
+     "damage_conf": 0.516,
+     "severity": "moderate",
+     "damage_area_fraction": 0.5672
+    },
+    {
+     "part_class": "Hood",
+     "part_conf": 0.886,
+     "damage_class": "Dent",
+     "damage_conf": 0.492,
+     "severity": "severe",
+     "damage_area_fraction": 0.6361
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Fender",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.664,
+    "damage_area_fraction": 0.6926,
+    "damage_source": "dent_det:fender-dent"
+   },
+   {
+    "part_class": "Front-bumper",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.516,
+    "damage_area_fraction": 0.5672,
+    "damage_source": "dent_det:front-bumper-dent"
+   },
+   {
+    "part_class": "Hood",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.492,
+    "damage_area_fraction": 0.6361,
+    "damage_source": "dent_det:bonnet-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c11_Crashed_black_W211.jpg",
+   "structural_suspected"
+  ]
+ },
+ "c12_2007_Chevrolet_HHR_involved_in_crash.jpg": {
+  "engine_vision": {
+   "image_id": "c12_2007_Chevrolet_HHR_involved_in_crash.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Headlight",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    },
+    {
+     "part_class": "Hood",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Headlight",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   },
+   {
+    "part_class": "Hood",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c12_2007_Chevrolet_HHR_involved_in_crash.jpg",
+   "need_wider_photo:Headlight",
+   "need_wider_photo:Hood"
+  ]
+ },
+ "c13_Crash_test_car_from_the_West_Germany_USA.jpg": {
+  "engine_vision": {
+   "image_id": "c13_Crash_test_car_from_the_West_Germany_USA.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "structural_suspected"
+   ],
+   "detections": [
+    {
+     "part_class": "Back-door",
+     "part_conf": 0.916,
+     "damage_class": "Dent",
+     "damage_conf": 0.339,
+     "severity": "severe",
+     "damage_area_fraction": 0.6579
+    },
+    {
+     "part_class": "Hood",
+     "part_conf": 0.933,
+     "damage_class": "Dent",
+     "damage_conf": 0.709,
+     "severity": "severe",
+     "damage_area_fraction": 0.7613
+    },
+    {
+     "part_class": "Windshield",
+     "part_conf": 0.891,
+     "damage_class": "Broken part",
+     "damage_conf": 0.472,
+     "severity": "severe",
+     "damage_area_fraction": 0.7149
+    },
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Back-door",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.339,
+    "damage_area_fraction": 0.6579,
+    "damage_source": "dent_det:doorouter-dent"
+   },
+   {
+    "part_class": "Hood",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.709,
+    "damage_area_fraction": 0.7613,
+    "damage_source": "dent_det:bonnet-dent"
+   },
+   {
+    "part_class": "Windshield",
+    "damage_class": "Broken part",
+    "severity": "severe",
+    "damage_conf": 0.472,
+    "damage_area_fraction": 0.7149,
+    "damage_source": "dent_det:Front-windscreen-damage"
+   },
+   {
+    "part_class": "Front-bumper",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c13_Crash_test_car_from_the_West_Germany_USA.jpg",
+   "structural_suspected",
+   "need_wider_photo:Front-bumper"
+  ]
+ },
+ "c14_Evening_in_downtown_Inuvik_NT.jpg": {
+  "engine_vision": {
+   "image_id": "c14_Evening_in_downtown_Inuvik_NT.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Hood",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Hood",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c14_Evening_in_downtown_Inuvik_NT.jpg",
+   "need_wider_photo:Hood"
+  ]
+ },
+ "c15_Jeep_Grand_Cherokee_Manhattan_New_York_U.jpg": {
+  "engine_vision": {
+   "image_id": "c15_Jeep_Grand_Cherokee_Manhattan_New_York_U.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Fender",
+     "part_conf": 0.339,
+     "damage_class": "Dent",
+     "damage_conf": 0.636,
+     "severity": "severe",
+     "damage_area_fraction": 0.785
+    },
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    },
+    {
+     "part_class": "Headlight",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Fender",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.636,
+    "damage_area_fraction": 0.785,
+    "damage_source": "dent_det:fender-dent"
+   },
+   {
+    "part_class": "Front-bumper",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   },
+   {
+    "part_class": "Headlight",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c15_Jeep_Grand_Cherokee_Manhattan_New_York_U.jpg",
+   "need_wider_photo:Front-bumper",
+   "need_wider_photo:Headlight"
+  ]
+ },
+ "c16_90e_Avenue_LaSalle_10.jpg": {
+  "engine_vision": {
+   "image_id": "c16_90e_Avenue_LaSalle_10.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Back-door",
+     "part_conf": 0.881,
+     "damage_class": "Dent",
+     "damage_conf": 0.472,
+     "severity": "severe",
+     "damage_area_fraction": 0.6101
+    },
+    {
+     "part_class": "Quarter-panel",
+     "part_conf": 0.933,
+     "damage_class": "Dent",
+     "damage_conf": 0.706,
+     "severity": "moderate",
+     "damage_area_fraction": 0.4706
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Back-door",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.472,
+    "damage_area_fraction": 0.6101,
+    "damage_source": "dent_det:doorouter-dent"
+   },
+   {
+    "part_class": "Quarter-panel",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.706,
+    "damage_area_fraction": 0.4706,
+    "damage_source": "dent_det:quaterpanel-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c16_90e_Avenue_LaSalle_10.jpg"
+  ]
+ },
+ "c17_90e_Avenue_LaSalle_12.jpg": {
+  "engine_vision": {
+   "image_id": "c17_90e_Avenue_LaSalle_12.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "structural_suspected"
+   ],
+   "detections": [
+    {
+     "part_class": "Back-door",
+     "part_conf": 0.942,
+     "damage_class": "Dent",
+     "damage_conf": 0.805,
+     "severity": "severe",
+     "damage_area_fraction": 0.7086
+    },
+    {
+     "part_class": "Front-door",
+     "part_conf": 0.954,
+     "damage_class": "Dent",
+     "damage_conf": 0.8,
+     "severity": "severe",
+     "damage_area_fraction": 0.6458
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Back-door",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.805,
+    "damage_area_fraction": 0.7086,
+    "damage_source": "dent_det:doorouter-dent"
+   },
+   {
+    "part_class": "Front-door",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.8,
+    "damage_area_fraction": 0.6458,
+    "damage_source": "dent_det:doorouter-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c17_90e_Avenue_LaSalle_12.jpg",
+   "structural_suspected"
+  ]
+ },
+ "c18_Fabia_I_2003_accident_front_right.jpg": {
+  "engine_vision": {
+   "image_id": "c18_Fabia_I_2003_accident_front_right.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Fender",
+     "part_conf": 0.621,
+     "damage_class": "Dent",
+     "damage_conf": 0.654,
+     "severity": "moderate",
+     "damage_area_fraction": 0.3013
+    },
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.864,
+     "damage_class": "Dent",
+     "damage_conf": 0.559,
+     "severity": "severe",
+     "damage_area_fraction": 0.6294
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Fender",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.654,
+    "damage_area_fraction": 0.3013,
+    "damage_source": "dent_det:fender-dent"
+   },
+   {
+    "part_class": "Front-bumper",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.559,
+    "damage_area_fraction": 0.6294,
+    "damage_source": "dent_det:front-bumper-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c18_Fabia_I_2003_accident_front_right.jpg"
+  ]
+ },
+ "c19_Moscow_Cherepovetskaya_Street_and_Abramt.jpg": {
+  "engine_vision": {
+   "image_id": "c19_Moscow_Cherepovetskaya_Street_and_Abramt.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "structural_suspected"
+   ],
+   "detections": [
+    {
+     "part_class": "Fender",
+     "part_conf": 0.902,
+     "damage_class": "Dent",
+     "damage_conf": 0.298,
+     "severity": "severe",
+     "damage_area_fraction": 0.6188
+    },
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.913,
+     "damage_class": "Dent",
+     "damage_conf": 0.259,
+     "severity": "severe",
+     "damage_area_fraction": 0.6942
+    },
+    {
+     "part_class": "Front-door",
+     "part_conf": 0.95,
+     "damage_class": "Dent",
+     "damage_conf": 0.498,
+     "severity": "severe",
+     "damage_area_fraction": 0.7238
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Fender",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.298,
+    "damage_area_fraction": 0.6188,
+    "damage_source": "dent_det:fender-dent"
+   },
+   {
+    "part_class": "Front-bumper",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.259,
+    "damage_area_fraction": 0.6942,
+    "damage_source": "dent_det:front-bumper-dent"
+   },
+   {
+    "part_class": "Front-door",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.498,
+    "damage_area_fraction": 0.7238,
+    "damage_source": "dent_det:doorouter-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c19_Moscow_Cherepovetskaya_Street_and_Abramt.jpg",
+   "structural_suspected"
+  ]
+ },
+ "c20_Damaged_car_on_road_Dubai_01.jpg": {
+  "engine_vision": {
+   "image_id": "c20_Damaged_car_on_road_Dubai_01.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c20_Damaged_car_on_road_Dubai_01.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c21_Damaged_car_on_road_Dubai_02.jpg": {
+  "engine_vision": {
+   "image_id": "c21_Damaged_car_on_road_Dubai_02.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c21_Damaged_car_on_road_Dubai_02.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c22_Poor_Citroen_C5_44990379005.jpg": {
+  "engine_vision": {
+   "image_id": "c22_Poor_Citroen_C5_44990379005.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Quarter-panel",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Quarter-panel",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c22_Poor_Citroen_C5_44990379005.jpg",
+   "need_wider_photo:Quarter-panel"
+  ]
+ },
+ "c23_Subaru_Levorg_48028046188.jpg": {
+  "engine_vision": {
+   "image_id": "c23_Subaru_Levorg_48028046188.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Fender",
+     "part_conf": 0.928,
+     "damage_class": "Dent",
+     "damage_conf": 0.337,
+     "severity": "severe",
+     "damage_area_fraction": 0.6393
+    },
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.95,
+     "damage_class": "Dent",
+     "damage_conf": 0.787,
+     "severity": "moderate",
+     "damage_area_fraction": 0.3944
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Fender",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.337,
+    "damage_area_fraction": 0.6393,
+    "damage_source": "dent_det:fender-dent"
+   },
+   {
+    "part_class": "Front-bumper",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.787,
+    "damage_area_fraction": 0.3944,
+    "damage_source": "dent_det:front-bumper-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c23_Subaru_Levorg_48028046188.jpg"
+  ]
+ },
+ "c24_Crash_test_car_from_the_West_Germany_USA.jpg": {
+  "engine_vision": {
+   "image_id": "c24_Crash_test_car_from_the_West_Germany_USA.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Hood",
+     "part_conf": 0.813,
+     "damage_class": "Dent",
+     "damage_conf": 0.835,
+     "severity": "severe",
+     "damage_area_fraction": 0.7068
+    },
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Hood",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.835,
+    "damage_area_fraction": 0.7068,
+    "damage_source": "dent_det:bonnet-dent"
+   },
+   {
+    "part_class": "Front-bumper",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c24_Crash_test_car_from_the_West_Germany_USA.jpg",
+   "need_wider_photo:Front-bumper"
+  ]
+ },
+ "c25_CarInDitch.jpg": {
+  "engine_vision": {
+   "image_id": "c25_CarInDitch.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c25_CarInDitch.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c26_Bumper_crop.jpg": {
+  "engine_vision": {
+   "image_id": "c26_Bumper_crop.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Back-door",
+     "part_conf": 0.901,
+     "damage_class": "Dent",
+     "damage_conf": 0.74,
+     "severity": "moderate",
+     "damage_area_fraction": 0.466
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Back-door",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.74,
+    "damage_area_fraction": 0.466,
+    "damage_source": "dent_det:doorouter-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c26_Bumper_crop.jpg"
+  ]
+ },
+ "c27_Unfall_im_Cape_Arid_Nationalpark_Austral.jpg": {
+  "engine_vision": {
+   "image_id": "c27_Unfall_im_Cape_Arid_Nationalpark_Austral.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "unassigned_damage"
+   ],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c27_Unfall_im_Cape_Arid_Nationalpark_Austral.jpg",
+   "unassigned_damage",
+   "no_damage_found"
+  ]
+ },
+ "c28_Howth_Co_Dublin_Ireland_5898219627.jpg": {
+  "engine_vision": {
+   "image_id": "c28_Howth_Co_Dublin_Ireland_5898219627.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c28_Howth_Co_Dublin_Ireland_5898219627.jpg",
+   "low_quality:c28_Howth_Co_Dublin_Ireland_5898219627.jpg:blurry"
+  ]
+ },
+ "c29_1977_79_Toyota_Corolla_in_an_appaling_ro.jpg": {
+  "engine_vision": {
+   "image_id": "c29_1977_79_Toyota_Corolla_in_an_appaling_ro.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "structural_suspected"
+   ],
+   "detections": [
+    {
+     "part_class": "Front-door",
+     "part_conf": 0.912,
+     "damage_class": "Dent",
+     "damage_conf": 0.827,
+     "severity": "moderate",
+     "damage_area_fraction": 0.4209
+    },
+    {
+     "part_class": "Hood",
+     "part_conf": 0.737,
+     "damage_class": "Dent",
+     "damage_conf": 0.32,
+     "severity": "severe",
+     "damage_area_fraction": 0.6992
+    },
+    {
+     "part_class": "License-plate",
+     "part_conf": 0.934,
+     "damage_class": "Broken part",
+     "damage_conf": 0.592,
+     "severity": "severe",
+     "damage_area_fraction": 0.9845
+    },
+    {
+     "part_class": "Roof",
+     "part_conf": 0.37,
+     "damage_class": "Dent",
+     "damage_conf": 0.647,
+     "severity": "severe",
+     "damage_area_fraction": 0.7576
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Front-door",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.827,
+    "damage_area_fraction": 0.4209,
+    "damage_source": "dent_det:doorouter-dent"
+   },
+   {
+    "part_class": "Hood",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.32,
+    "damage_area_fraction": 0.6992,
+    "damage_source": "dent_det:bonnet-dent"
+   },
+   {
+    "part_class": "License-plate",
+    "damage_class": "Broken part",
+    "severity": "severe",
+    "damage_conf": 0.592,
+    "damage_area_fraction": 0.9845,
+    "damage_source": "damage_merged_s"
+   },
+   {
+    "part_class": "Roof",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.647,
+    "damage_area_fraction": 0.7576,
+    "damage_source": "dent_det:roof-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c29_1977_79_Toyota_Corolla_in_an_appaling_ro.jpg",
+   "structural_suspected"
+  ]
+ },
+ "c30_Oh_deer.jpg": {
+  "engine_vision": {
+   "image_id": "c30_Oh_deer.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Front-bumper",
+     "part_conf": 0.771,
+     "damage_class": "Dent",
+     "damage_conf": 0.663,
+     "severity": "moderate",
+     "damage_area_fraction": 0.553
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Front-bumper",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.663,
+    "damage_area_fraction": 0.553,
+    "damage_source": "dent_det:front-bumper-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c30_Oh_deer.jpg"
+  ]
+ },
+ "c31_1994_Ford_Mustang_GT_front_end_damage_20.jpg": {
+  "engine_vision": {
+   "image_id": "c31_1994_Ford_Mustang_GT_front_end_damage_20.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Hood",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Hood",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c31_1994_Ford_Mustang_GT_front_end_damage_20.jpg",
+   "need_wider_photo:Hood"
+  ]
+ },
+ "c32_VW_Kafer_1200_Bj_1974_85_in_Wuppertal_He.jpg": {
+  "engine_vision": {
+   "image_id": "c32_VW_Kafer_1200_Bj_1974_85_in_Wuppertal_He.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c32_VW_Kafer_1200_Bj_1974_85_in_Wuppertal_He.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c33_Roadside_Assistance_in_New_York.jpg": {
+  "engine_vision": {
+   "image_id": "c33_Roadside_Assistance_in_New_York.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Back-door",
+     "part_conf": 0.954,
+     "damage_class": "Dent",
+     "damage_conf": 0.377,
+     "severity": "moderate",
+     "damage_area_fraction": 0.5107
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Back-door",
+    "damage_class": "Dent",
+    "severity": "moderate",
+    "damage_conf": 0.377,
+    "damage_area_fraction": 0.5107,
+    "damage_source": "dent_det:doorouter-dent"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c33_Roadside_Assistance_in_New_York.jpg"
+  ]
+ },
+ "c34_Skoda_Roomster_Blue_Dented.jpg": {
+  "engine_vision": {
+   "image_id": "c34_Skoda_Roomster_Blue_Dented.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c34_Skoda_Roomster_Blue_Dented.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c44_Chennai_damage_1.jpg": {
+  "engine_vision": {
+   "image_id": "c44_Chennai_damage_1.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c44_Chennai_damage_1.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c48_Crashed_Taxi_Multiple_Car_Accident_Rabin.jpg": {
+  "engine_vision": {
+   "image_id": "c48_Crashed_Taxi_Multiple_Car_Accident_Rabin.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Back-window",
+     "part_conf": 0.462,
+     "damage_class": "Missing part",
+     "damage_conf": 0.592,
+     "severity": "severe",
+     "damage_area_fraction": 0.9893
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Back-window",
+    "damage_class": "Missing part",
+    "severity": "severe",
+    "damage_conf": 0.592,
+    "damage_area_fraction": 0.9893,
+    "damage_source": "damage_merged_s"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c48_Crashed_Taxi_Multiple_Car_Accident_Rabin.jpg"
+  ]
+ },
+ "c49_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg": {
+  "engine_vision": {
+   "image_id": "c49_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": []
+  },
+  "detections": [],
+  "flags": [
+   "no_camera_metadata:c49_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "no_damage_found"
+  ]
+ },
+ "c50_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg": {
+  "engine_vision": {
+   "image_id": "c50_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Roof",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Roof",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c50_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "need_wider_photo:Roof"
+  ]
+ },
+ "c51_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg": {
+  "engine_vision": {
+   "image_id": "c51_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [],
+   "detections": [
+    {
+     "part_class": "Roof",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Roof",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c51_Multiple_Car_Accident_Rabindra_Sadan_Are.jpg",
+   "need_wider_photo:Roof"
+  ]
+ },
+ "c53_Alto_800_accident.jpg": {
+  "engine_vision": {
+   "image_id": "c53_Alto_800_accident.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "structural_suspected"
+   ],
+   "detections": [
+    {
+     "part_class": "Fender",
+     "part_conf": 0.92,
+     "damage_class": "Dent",
+     "damage_conf": 0.729,
+     "severity": "severe",
+     "damage_area_fraction": 0.7376
+    },
+    {
+     "part_class": "Headlight",
+     "part_conf": 0.447,
+     "damage_class": "Broken part",
+     "damage_conf": 0.318,
+     "severity": "severe",
+     "damage_area_fraction": 0.785
+    },
+    {
+     "part_class": "Hood",
+     "part_conf": 0.953,
+     "damage_class": "Dent",
+     "damage_conf": 0.789,
+     "severity": "severe",
+     "damage_area_fraction": 0.7504
+    },
+    {
+     "part_class": "Windshield",
+     "part_conf": 0.458,
+     "damage_class": "Broken part",
+     "damage_conf": 0.513,
+     "severity": "severe",
+     "damage_area_fraction": 0.6274
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Fender",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.729,
+    "damage_area_fraction": 0.7376,
+    "damage_source": "dent_det:fender-dent"
+   },
+   {
+    "part_class": "Headlight",
+    "damage_class": "Broken part",
+    "severity": "severe",
+    "damage_conf": 0.318,
+    "damage_area_fraction": 0.785,
+    "damage_source": "dent_det:Headlight-damage"
+   },
+   {
+    "part_class": "Hood",
+    "damage_class": "Dent",
+    "severity": "severe",
+    "damage_conf": 0.789,
+    "damage_area_fraction": 0.7504,
+    "damage_source": "dent_det:bonnet-dent"
+   },
+   {
+    "part_class": "Windshield",
+    "damage_class": "Broken part",
+    "severity": "severe",
+    "damage_conf": 0.513,
+    "damage_area_fraction": 0.6274,
+    "damage_source": "dent_det:Front-windscreen-damage"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c53_Alto_800_accident.jpg",
+   "structural_suspected"
+  ]
+ },
+ "c54_Disastered_car.jpg": {
+  "engine_vision": {
+   "image_id": "c54_Disastered_car.jpg",
+   "plate_read": null,
+   "integrity_flags": [],
+   "flags": [
+    "unassigned_damage"
+   ],
+   "detections": [
+    {
+     "part_class": "Hood",
+     "part_conf": 0.0,
+     "damage_class": null,
+     "damage_conf": 0.0,
+     "severity": null,
+     "damage_area_fraction": null
+    }
+   ]
+  },
+  "detections": [
+   {
+    "part_class": "Hood",
+    "damage_class": null,
+    "severity": null,
+    "damage_conf": 0.0,
+    "damage_area_fraction": null,
+    "damage_source": "close-up only"
+   }
+  ],
+  "flags": [
+   "no_camera_metadata:c54_Disastered_car.jpg",
+   "unassigned_damage",
+   "need_wider_photo:Hood"
+  ]
+ }
+}

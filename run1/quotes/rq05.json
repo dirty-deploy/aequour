@@ -1,0 +1,29 @@
+{
+ "variant": "blur",
+ "trap": "quantity 2 on the bumper",
+ "lines": [
+  {
+   "description": "Front Bumper",
+   "type": "part",
+   "qty": 2,
+   "unit_price": 2250,
+   "total": 4500
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 1000,
+   "total": 1000
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 4000,
+   "total": 4000
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 11210
+}

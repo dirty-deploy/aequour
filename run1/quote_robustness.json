@@ -1,0 +1,246 @@
+[
+ {
+  "quote": "rq00",
+  "variant": "clean",
+  "trap": "honest quote, garage naming",
+  "read": true,
+  "lines_exact": "3/3",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 5295,
+  "ceiling": 6313,
+  "verdicts": [
+   "Bumper Front Assy: ok",
+   "Labour: ok",
+   "Painting: ok"
+  ]
+ },
+ {
+  "quote": "rq01",
+  "variant": "blur",
+  "trap": "honest quote",
+  "read": true,
+  "lines_exact": "3/3",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4351,
+  "ceiling": 6313,
+  "verdicts": [
+   "Front Bumper (Genuine): ok",
+   "Fitting charges: ok",
+   "Paint & polish: ok"
+  ]
+ },
+ {
+  "quote": "rq02",
+  "variant": "rotate",
+  "trap": "padded lines",
+  "read": true,
+  "lines_exact": "1/6",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4076,
+  "ceiling": 6313,
+  "verdicts": [
+   "Bumper Front Assy: ok",
+   "Labour: above_range",
+   "Painting: ok",
+   "Consumables: unknown_item",
+   "Misc charges: unknown_item",
+   "Car wash: unknown_item"
+  ]
+ },
+ {
+  "quote": "rq03",
+  "variant": "lowcon",
+  "trap": "inflated part price",
+  "read": true,
+  "lines_exact": "3/3",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4626,
+  "ceiling": 6313,
+  "verdicts": [
+   "Front Bumper: above_range",
+   "Labour: ok",
+   "Painting: ok"
+  ]
+ },
+ {
+  "quote": "rq04",
+  "variant": "clean",
+  "trap": "line for an undamaged part (bonnet)",
+  "read": true,
+  "lines_exact": "4/4",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4076,
+  "ceiling": 6313,
+  "verdicts": [
+   "Bumper Front Assy: ok",
+   "Bonnet Panel: not_seen",
+   "Labour: above_range",
+   "Painting: above_range"
+  ]
+ },
+ {
+  "quote": "rq05",
+  "variant": "blur",
+  "trap": "quantity 2 on the bumper",
+  "read": true,
+  "lines_exact": "3/3",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4626,
+  "ceiling": 6313,
+  "verdicts": [
+   "Front Bumper: ok",
+   "Labour: ok",
+   "Painting: ok"
+  ]
+ },
+ {
+  "quote": "rq06",
+  "variant": "rotate",
+  "trap": "undamaged headlamp added",
+  "read": true,
+  "lines_exact": "2/4",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4076,
+  "ceiling": 6313,
+  "verdicts": [
+   "Bumper Front Assy: ok",
+   "Head Lamp Assy RH: not_seen",
+   "Labour: above_range",
+   "Painting: ok"
+  ]
+ },
+ {
+  "quote": "rq07",
+  "variant": "lowcon",
+  "trap": "fender priced as a replacement (photos show a repaint)",
+  "read": true,
+  "lines_exact": "4/4",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4626,
+  "ceiling": 6313,
+  "verdicts": [
+   "Bumper Front Assy: ok",
+   "Fr Fender LH: action_mismatch",
+   "Labour: ok",
+   "Painting: ok"
+  ]
+ },
+ {
+  "quote": "rq08",
+  "variant": "clean",
+  "trap": "inflated labour",
+  "read": true,
+  "lines_exact": "0/3",
+  "grand_total_ok": false,
+  "offer": 4076,
+  "updated": 4076,
+  "ceiling": 6313,
+  "verdicts": []
+ },
+ {
+  "quote": "rq09",
+  "variant": "blur",
+  "trap": "inflated painting",
+  "read": true,
+  "lines_exact": "3/3",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4276,
+  "ceiling": 6313,
+  "verdicts": [
+   "Front Bumper: ok",
+   "Labour: ok",
+   "Painting: above_range"
+  ]
+ },
+ {
+  "quote": "rq10",
+  "variant": "rotate",
+  "trap": "part 7% above reference (inside tolerance)",
+  "read": true,
+  "lines_exact": "3/3",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4176,
+  "ceiling": 6313,
+  "verdicts": [
+   "Bumper Front Assy: ok",
+   "Labour: ok",
+   "Painting: ok"
+  ]
+ },
+ {
+  "quote": "rq11",
+  "variant": "lowcon",
+  "trap": "abbreviated naming",
+  "read": true,
+  "lines_exact": "3/3",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4426,
+  "ceiling": 6313,
+  "verdicts": [
+   "BUMPER FR: ok",
+   "Denting & painting: ok",
+   "R&R labour: ok"
+  ]
+ },
+ {
+  "quote": "rq12",
+  "variant": "clean",
+  "trap": "honest, cheaper than our estimate",
+  "read": true,
+  "lines_exact": "3/3",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4076,
+  "ceiling": 6313,
+  "verdicts": [
+   "Front Bumper: ok",
+   "Labour: ok",
+   "Painting: ok"
+  ]
+ },
+ {
+  "quote": "rq13",
+  "variant": "blur",
+  "trap": "undamaged tail lamp added",
+  "read": true,
+  "lines_exact": "4/4",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4626,
+  "ceiling": 6313,
+  "verdicts": [
+   "Bumper Front Assy: ok",
+   "Tail Lamp LH: not_seen",
+   "Labour: ok",
+   "Painting: ok"
+  ]
+ },
+ {
+  "quote": "rq14",
+  "variant": "rotate+lowcon",
+  "trap": "inflated part + padded line",
+  "read": true,
+  "lines_exact": "3/4",
+  "grand_total_ok": true,
+  "offer": 4076,
+  "updated": 4626,
+  "ceiling": 6313,
+  "verdicts": [
+   "Front Bumper: above_range",
+   "Labour: ok",
+   "Painting: ok",
+   "Service charge: unknown_item"
+  ]
+ }
+]

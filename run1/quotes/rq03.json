@@ -1,0 +1,29 @@
+{
+ "variant": "lowcon",
+ "trap": "inflated part price",
+ "lines": [
+  {
+   "description": "Front Bumper",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 3900,
+   "total": 3900
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 1000,
+   "total": 1000
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 4000,
+   "total": 4000
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 10502
+}

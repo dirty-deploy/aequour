@@ -1,0 +1,29 @@
+{
+ "variant": "lowcon",
+ "trap": "abbreviated naming",
+ "lines": [
+  {
+   "description": "BUMPER FR",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2250,
+   "total": 2250
+  },
+  {
+   "description": "Denting & painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 4000,
+   "total": 4000
+  },
+  {
+   "description": "R&R labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 800,
+   "total": 800
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 8319
+}

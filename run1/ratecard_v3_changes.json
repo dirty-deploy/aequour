@@ -1,0 +1,272 @@
+[
+ {
+  "line": 6,
+  "model": "Creta",
+  "part_class": "Tail-light",
+  "price_inr": "2521",
+  "confidence": "C_LISTED_UNVERIFIED",
+  "new_confidence": "D_REJECTED_UNVERIFIED",
+  "new_price": "2521",
+  "why": "Creta tail lamp C row from an aftermarket template-price source, never opened; reject per task"
+ },
+ {
+  "line": 15,
+  "model": "Nexon",
+  "part_class": "Grille",
+  "price_inr": "2820",
+  "confidence": "C_LISTED_UNVERIFIED",
+  "new_confidence": "D_REJECTED_NOT_FOUND",
+  "new_price": "2820",
+  "why": "Nexon grille 2,820: its own flag says no genuine item at this price exists; reject per task"
+ },
+ {
+  "line": 8,
+  "model": "Nexon",
+  "part_class": "Front-bumper",
+  "price_inr": "6035",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "B_RANGE_ENDPOINT",
+  "new_price": "6035",
+  "why": "variant-range endpoint (FRONT BUMPER SKIN 6,035; listing range 4,365-6,035); part page opened: fits NEXON 01.2020-02.2023"
+ },
+ {
+  "line": 10,
+  "model": "Nexon",
+  "part_class": "Hood",
+  "price_inr": "7947",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "B_RANGE_ENDPOINT",
+  "new_price": "7947",
+  "why": "variant-range endpoint (ASSY HOOD SHELL 7,947; hoods 7,947-12,201); part page opened: NEXON 1ST GEN 08.2017-01.2020"
+ },
+ {
+  "line": 36,
+  "model": "Venue",
+  "part_class": "Headlight",
+  "price_inr": "5859",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "B_RANGE_ENDPOINT",
+  "new_price": "5859",
+  "why": "variant-range endpoint (LH lamps 5,436-25,285); part page opened: VENUE 1ST GEN"
+ },
+ {
+  "line": 37,
+  "model": "Venue",
+  "part_class": "Headlight",
+  "price_inr": "5436",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "B_RANGE_ENDPOINT",
+  "new_price": "5436",
+  "why": "variant-range endpoint (RH lamps 5,436-24,196); part page opened: VENUE 1ST GEN F/L"
+ },
+ {
+  "line": 9,
+  "model": "Nexon",
+  "part_class": "Back-bumper",
+  "price_inr": "6162",
+  "confidence": "C_LISTED_UNVERIFIED",
+  "new_confidence": "C_LISTED_UNVERIFIED",
+  "new_price": "6162",
+  "why": "Nexon rear bumper 6,162 (aftermarket listing): no genuine item at this price in the boodmo NEXON rear-bumper listing (5,472-6,292); stays C, no window"
+ },
+ {
+  "line": 13,
+  "model": "Nexon",
+  "part_class": "Headlight",
+  "price_inr": "8724",
+  "confidence": "C_LISTED_UNVERIFIED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "9783",
+  "why": "8,724 was a discounted selling price; part page opened: HEADLAMP ASSY WITH CLEAR LENS LH, MRP 9,783 incl. taxes, NEXON 1ST GEN F/L"
+ },
+ {
+  "line": 14,
+  "model": "Nexon",
+  "part_class": "Headlight",
+  "price_inr": "8724",
+  "confidence": "C_LISTED_UNVERIFIED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "9783",
+  "why": "8,724 was a discounted selling price; part page opened: HEADLAMP ASSY WITH CLEAR LENS RH, MRP 9,783 incl. taxes, NEXON 1ST GEN F/L"
+ },
+ {
+  "line": 29,
+  "model": "Brezza",
+  "part_class": "Headlight",
+  "price_inr": "7799",
+  "confidence": "B_PRICE_EXISTS_FITMENT_UNCONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "7799",
+  "why": "Maruti store page shows MRP 7,799 but no fitment; same part on boodmo (HEADLAMP ASSY L, MRP 7,799 incl. taxes) fits BREZZA 2ND GEN"
+ },
+ {
+  "line": 7,
+  "model": "Creta",
+  "part_class": "Windshield",
+  "price_inr": "5546",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "5546",
+  "why": "listing URL -> part page (fits CRETA 2ND GEN + F/L, Alcazar)"
+ },
+ {
+  "line": 11,
+  "model": "Nexon",
+  "part_class": "Fender",
+  "price_inr": "3410",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "3410",
+  "why": "listing URL -> part page (CED FENDER ASSY RH, NEXON 2ND GEN)"
+ },
+ {
+  "line": 12,
+  "model": "Nexon",
+  "part_class": "Back-door",
+  "price_inr": "12680",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "12680",
+  "why": "listing URL -> part page (REAR DOOR SHELL RH, NEXON 2ND GEN); side corrected L -> R (the page is the RH door)"
+ },
+ {
+  "line": 19,
+  "model": "Swift",
+  "part_class": "Front-door",
+  "price_inr": "4665",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "4665",
+  "why": "listing URL -> part page (PANEL ASSY FR DOOR L, SWIFT 2ND GEN)"
+ },
+ {
+  "line": 34,
+  "model": "Venue",
+  "part_class": "Front-door",
+  "price_inr": "13166",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "13166",
+  "why": "listing URL -> part page (VENUE 1ST GEN + F/L)"
+ },
+ {
+  "line": 35,
+  "model": "Venue",
+  "part_class": "Back-door",
+  "price_inr": "12072",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "12072",
+  "why": "listing URL -> part page (VENUE 1ST GEN)"
+ },
+ {
+  "line": 38,
+  "model": "Venue",
+  "part_class": "Trunk",
+  "price_inr": "8226",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "8226",
+  "why": "listing URL -> part page (PANEL ASSY-TAIL GATE, VENUE 1ST GEN)"
+ },
+ {
+  "line": 43,
+  "model": "Punch",
+  "part_class": "Tail-light",
+  "price_inr": "2420",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "2420",
+  "why": "listing URL -> part page (TAIL LAMP LED ASSY LH, PUNCH 1ST GEN)"
+ },
+ {
+  "line": 44,
+  "model": "Punch",
+  "part_class": "Tail-light",
+  "price_inr": "2469",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "2469",
+  "why": "listing URL -> part page (TAIL LAMP LED ASSY RH, PUNCH 1ST GEN)"
+ },
+ {
+  "line": 45,
+  "model": "Punch",
+  "part_class": "Windshield",
+  "price_inr": "7574",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "7574",
+  "why": "listing URL -> part page (WINDSCREEN GLASS ASSY, PUNCH 1ST GEN + F/L)"
+ },
+ {
+  "line": 22,
+  "model": "Baleno",
+  "part_class": "Headlight",
+  "price_inr": "12955",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "12955",
+  "why": "Maruti listing URL -> product page (MRP 12,955 incl. taxes; fits BALENO 2022-2026)"
+ },
+ {
+  "line": 23,
+  "model": "Baleno",
+  "part_class": "Headlight",
+  "price_inr": "12955",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "12955",
+  "why": "Maruti listing URL -> product page (MRP 12,955 incl. taxes; fits BALENO 2022-2026)"
+ },
+ {
+  "line": 147,
+  "model": "Brezza",
+  "part_class": "Front-bumper",
+  "price_inr": "2050",
+  "confidence": "B_PRICE_EXISTS_FITMENT_UNCONFIRMED",
+  "new_confidence": "D_SUPERSEDED_BY_SUM",
+  "new_price": "2050",
+  "why": "Brezza 2nd-gen upper skin only; both skins now priced, so the replace price is the new sum row (keeps partial and full prices apart)"
+ },
+ {
+  "line": 148,
+  "model": "Brezza",
+  "part_class": "Front-bumper",
+  "price_inr": "3000",
+  "confidence": "B_PRICE_EXISTS_FITMENT_UNCONFIRMED",
+  "new_confidence": "C_PARTIAL_UPPER_ONLY",
+  "new_price": "3000",
+  "why": "Brezza 1st-gen upper skin; no lower skin priced for this generation"
+ },
+ {
+  "line": 149,
+  "model": "Punch",
+  "part_class": "Front-bumper",
+  "price_inr": "2601",
+  "confidence": "B_PRICE_EXISTS_FITMENT_UNCONFIRMED",
+  "new_confidence": "C_PARTIAL_UPPER_ONLY",
+  "new_price": "2601",
+  "why": "Punch upper skin; the only priced lower skin (2,515) fits PUNCH EV, not this car"
+ },
+ {
+  "line": "new",
+  "model": "Brezza",
+  "part_class": "Front-bumper",
+  "price_inr": "4120",
+  "confidence": "",
+  "new_confidence": "B_SUM_OF_TWO_PIECES",
+  "new_price": "4120",
+  "why": "two-piece bumper with both skins priced: replace = sum (tier B)"
+ },
+ {
+  "line": 139,
+  "model": "Creta",
+  "part_class": "Front-bumper",
+  "price_inr": "2402",
+  "confidence": "A_CONFIRMED",
+  "new_confidence": "A_CONFIRMED",
+  "new_price": "2402",
+  "why": "kept A: part page title is COVER-FR BUMPER (not UPR/LWR) and fits CRETA 2ND GEN; the UPR/LWR covers in the listing belong to other generations"
+ }
+]

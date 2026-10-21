@@ -1,0 +1,29 @@
+{
+ "variant": "clean",
+ "trap": "inflated labour",
+ "lines": [
+  {
+   "description": "Front Bumper",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2250,
+   "total": 2250
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 6000,
+   "total": 6000
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 4000,
+   "total": 4000
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 14455
+}

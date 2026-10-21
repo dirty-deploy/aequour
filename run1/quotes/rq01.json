@@ -1,0 +1,29 @@
+{
+ "variant": "blur",
+ "trap": "honest quote",
+ "lines": [
+  {
+   "description": "Front Bumper (Genuine)",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2250,
+   "total": 2250
+  },
+  {
+   "description": "Fitting charges",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 900,
+   "total": 900
+  },
+  {
+   "description": "Paint & polish",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 3800,
+   "total": 3800
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 8201
+}

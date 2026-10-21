@@ -1,0 +1,50 @@
+{
+ "variant": "rotate",
+ "trap": "padded lines",
+ "lines": [
+  {
+   "description": "Bumper Front Assy",
+   "type": "part",
+   "qty": 1,
+   "unit_price": 2250,
+   "total": 2250
+  },
+  {
+   "description": "Labour",
+   "type": "labour",
+   "qty": 1,
+   "unit_price": 1000,
+   "total": 1000
+  },
+  {
+   "description": "Painting",
+   "type": "paint",
+   "qty": 1,
+   "unit_price": 4000,
+   "total": 4000
+  },
+  {
+   "description": "Consumables",
+   "type": "other",
+   "qty": 1,
+   "unit_price": 450,
+   "total": 450
+  },
+  {
+   "description": "Misc charges",
+   "type": "other",
+   "qty": 1,
+   "unit_price": 300,
+   "total": 300
+  },
+  {
+   "description": "Car wash",
+   "type": "other",
+   "qty": 1,
+   "unit_price": 250,
+   "total": 250
+  }
+ ],
+ "gst_percent": 18,
+ "grand_total": 9735
+}
