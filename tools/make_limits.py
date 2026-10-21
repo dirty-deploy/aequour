@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SHOW = ["recall", "never_outlined", "silent_misses", "offers", "heldout", "crops", "video_tests", "engine", "prices", "quotes"]
+SHOW = ["recall", "never_outlined", "silent_misses", "offers", "heldout", "scratch", "severity", "plates", "crops", "video_tests", "engine", "prices", "quotes"]
 NOT_MEASURED = ["Accuracy on real Indian claim photos at scale", "Severity accuracy (no public dataset labels severity)",
                 "Handwritten garage quotes and real garage invoices", "Anything about real walk-around videos"]
 

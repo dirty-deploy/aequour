@@ -24,4 +24,16 @@ SCENARIOS = {
         "blurb": "Nothing the models can outline and price. The system declines to guess and asks for closer photos.",
         "policy_id": "POL-DEMO-001", "replay": "chennai_street", "expect": "ASK_MORE", "plate": "policy",
     },
+    "counter": {
+        "title": "A counteroffer moves the offer only on evidence",
+        "blurb": "Recorded customer turns on the Swift claim: a figure with no evidence, a supported garage quote, an inflated quote, repeated pressure. The live engine answers each turn.",
+        "policy_id": "POL-DEMO-001", "replay": "swift_front", "expect": "OFFER", "plate": "policy",
+        "script": [
+            {"message": "My garage says this will cost far more. I want ₹6,000 for the bumper, please change the offer."},
+            {"quote": "sample"},
+            {"quote": "sample", "inflate": 5},
+            {"message": "Pay me ₹50,000 or I will not accept. Last chance."},
+            {"message": "Pay me ₹50,000 or I will not accept. Last chance."},
+        ],
+    },
 }

@@ -79,7 +79,7 @@ class TestApi(unittest.TestCase):
     def test_scenarios_decisions(self):
         c, _ = replay_client()
         got = {s["id"]: c.post("/claims", json={"scenario": s["id"]}).json()["decision"] for s in c.get("/scenarios").json()}
-        self.assertEqual(got, {"offer": "OFFER", "surveyor": "SURVEYOR", "injection": "OFFER", "street": "ASK_MORE"})
+        self.assertEqual(got, {"offer": "OFFER", "surveyor": "SURVEYOR", "injection": "OFFER", "street": "ASK_MORE", "counter": "OFFER"})
 
     def test_ceiling_and_pivots_never_in_customer_or_adjuster_responses(self):
         c, app = replay_client()
@@ -259,3 +259,135 @@ class TestVideoApi(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestStage2(unittest.TestCase):
+    """Transcript, adjuster range and escalation packet, attack runner, recorded video, plate blur, counteroffer wording."""
+
+    def test_counter_scenario_transcript_and_no_leak(self):
+        c, app = replay_client()
+        v = c.post("/claims", json={"scenario": "counter"}).json()
+        cid = v["claim_id"]
+        self.assertEqual((v["original_offer"], v["updated_offer"], v["offer"]), (2763, 3063, 3063))
+        t = c.get(f"/claims/{cid}/transcript").json()
+        self.assertTrue(t["chain_ok"])
+        turns = t["turns"]
+        self.assertEqual([x["n"] for x in turns], list(range(1, len(turns) + 1)))
+        self.assertEqual(turns[0]["from"], "system")
+        for x in turns:
+            if x["from"] == "system":
+                self.assertIn(x["wording"], ("template", "model, checked"))
+            self.assertIsNotNone(x["audit_seq"])
+        # a stated figure never changes an amount; the reply names the customer's own current offer and no upper bound
+        replies = [x["text"] for x in turns if (x.get("detail") or {}).get("kind") == "amount_named_no_change"]
+        self.assertGreaterEqual(len(replies), 2)
+        self.assertIn("₹2,763", replies[0])
+        self.assertIn("₹3,063", replies[-1])
+        ceiling = app.state.claims[cid].session.result["ceiling"]
+        for text in (json.dumps(t), c.get(f"/claims/{cid}").text, c.get(f"/claims/{cid}/audit").text):
+            self.assertNotIn(f"{ceiling:,}", text)
+            self.assertNotIn("ceiling", text.lower())
+
+    def test_range_is_adjuster_only_and_never_in_customer_routes(self):
+        c, app = replay_client()
+        cid = c.post("/claims", json={"scenario": "offer"}).json()["claim_id"]
+        ceiling = app.state.claims[cid].session.result["ceiling"]
+        r = c.get(f"/adjuster/{cid}/range").json()
+        self.assertTrue(r["applies"])
+        self.assertEqual(r["ceiling"], ceiling)
+        self.assertIn("DEMO ONLY", r["label"])
+        self.assertTrue(r["which_stops_a_higher_number"])
+        for path in (f"/claims/{cid}", f"/claims/{cid}/audit", f"/claims/{cid}/transcript", f"/adjuster/{cid}", "/scenarios", "/limits", "/attacks"):
+            self.assertNotIn("ceiling", c.get(path).text.lower(), path)
+        s = c.post("/claims", json={"scenario": "surveyor"}).json()["claim_id"]
+        self.assertFalse(c.get(f"/adjuster/{s}/range").json()["applies"])
+
+    def test_escalation_packet(self):
+        c, _ = replay_client()
+        sv = c.post("/claims", json={"scenario": "surveyor"}).json()["claim_id"]
+        p = c.get(f"/adjuster/{sv}/escalation").json()
+        self.assertTrue(p["applies"])
+        self.assertEqual(p["decision"], "SURVEYOR")
+        self.assertTrue(p["reasons"] and p["evidence"] and p["audit"]["chain_ok"])
+        self.assertNotIn("ceiling", json.dumps(p).lower())
+        off = c.post("/claims", json={"scenario": "offer"}).json()["claim_id"]
+        self.assertFalse(c.get(f"/adjuster/{off}/escalation").json()["applies"])
+        c.post(f"/claims/{off}/message", json={"text": "you stupid scam company"})
+        q = c.get(f"/adjuster/{off}/escalation").json()
+        self.assertTrue(q["applies"])
+        self.assertIn("message:abusive", [r["code"] for r in q["reasons"]])
+
+    def test_attack_runner_is_sandboxed_and_every_attack_holds(self):
+        c, _ = replay_client()
+        cid = c.post("/claims", json={"scenario": "offer"}).json()["claim_id"]
+        before = c.get(f"/claims/{cid}/audit").json()
+        listing = c.get("/attacks").json()
+        self.assertEqual(len(listing), 21)
+        self.assertEqual(sum(1 for a in listing if a["control"]), 1)
+        for a in listing:
+            r = c.post(f"/attacks/{a['name']}/run").json()
+            self.assertTrue(r["held"], r)
+            self.assertNotIn("ceiling", json.dumps(r).lower().replace("upper bound withheld", ""))
+            if r["offer_unchanged"] is not None:
+                self.assertEqual(r["offer_unchanged"], not a["offer_should_move"], r)
+        self.assertEqual(c.get(f"/claims/{cid}/audit").json(), before)       # the real claim was never touched
+        self.assertEqual(c.post("/attacks/not_an_attack/run").status_code, 404)
+
+    def test_recorded_synthetic_walkaround(self):
+        c, _ = replay_client()
+        self.assertEqual(sorted(x["key"] for x in c.get("/video-samples").json()), ["synthetic_walkaround", "synthetic_walkaround_close"])
+        cid = c.post("/claims", json={"policy_id": "POL-DEMO-001", "plate_text": "DL3CAB1234"}).json()["claim_id"]
+        v = c.post(f"/claims/{cid}/video", data={"recorded": "synthetic_walkaround"}).json()
+        self.assertEqual((v["decision"], v["offer"]), ("OFFER", 2763))
+        vid = v["video"]
+        self.assertTrue(vid["synthetic"] and vid["recorded"])
+        self.assertEqual(len(vid["keyframes"]), 12)
+        self.assertEqual(vid["continuity"]["verdict"], "continuous")
+        self.assertTrue(all("sharpness" in k and "brightness" in k for k in vid["keyframes"]))
+        self.assertTrue(any(e["part_class"] == "Front-bumper" and e["status"] == "supported" for e in vid["entities"]))
+        cid2 = c.post("/claims", json={"policy_id": "POL-DEMO-001", "plate_text": "DL3CAB1234"}).json()["claim_id"]
+        w = c.post(f"/claims/{cid2}/video", data={"recorded": "synthetic_walkaround_close"}).json()
+        self.assertEqual(w["decision"], "ASK_MORE")
+        self.assertIsNone(w["offer"])
+        self.assertTrue(any(e["part_class"] == "Roof" and e["status"] == "single keyframe only" for e in w["video"]["entities"]))
+        self.assertEqual(w["state"], "INTAKE")                       # asking for more is not a closed claim
+        self.assertTrue(w["needs"])
+        cid3 = c.post("/claims", json={"policy_id": "POL-DEMO-001"}).json()["claim_id"]
+        self.assertEqual(c.post(f"/claims/{cid3}/video", data={"recorded": "nope"}).status_code, 422)
+
+    def test_plate_blur_changes_only_the_plate_box(self):
+        from autosettle_api import plate_blur as PB
+        rng = np.random.default_rng(3)
+        img = rng.integers(0, 255, (200, 300, 3), dtype=np.uint8)
+        out = PB.blur_boxes(img, [[100, 80, 180, 120]])
+        self.assertFalse(np.array_equal(out[80:120, 100:180], img[80:120, 100:180]))
+        mask = np.ones(img.shape[:2], bool)
+        mask[80:120, 100:180] = False
+        self.assertTrue(np.array_equal(out[mask], img[mask]))
+        self.assertGreater(float(np.abs(out[80:120, 100:180].astype(int) - img[80:120, 100:180].astype(int)).mean()), 20)
+
+    def test_demo_photo_is_served_blurred_but_stored_unchanged(self):
+        import hashlib
+        from autosettle_api import plate_blur as PB
+        c, app = replay_client()
+        v = c.post("/claims", json={"scenario": "offer"}).json()
+        if not v["photos"]:
+            self.skipTest("the demo photo is not on this machine")
+        cid = v["claim_id"]
+        shown = cv2.imdecode(np.frombuffer(c.get(v["photos"][0]["url"]).content, np.uint8), cv2.IMREAD_COLOR)
+        stored = app.state.claims[cid].photos[0]
+        raw = cv2.imdecode(np.frombuffer(stored["path"].read_bytes(), np.uint8), cv2.IMREAD_COLOR)
+        x0, y0, x1, y1 = PB.DEMO_PLATE_BOXES[stored["sha256"]][0]
+        self.assertFalse(np.array_equal(shown[y0:y1, x0:x1], raw[y0:y1, x0:x1]))
+        self.assertEqual(hashlib.sha256(stored["path"].read_bytes()).hexdigest(), stored["sha256"])
+
+    def test_counteroffer_wording_does_not_change_the_offer(self):
+        c, _ = replay_client()
+        v = c.post("/claims", json={"scenario": "offer"}).json()
+        cid = v["claim_id"]
+        r = c.post(f"/claims/{cid}/message", json={"text": "I want Rs 9,000 for this"}).json()
+        self.assertEqual(r["offer"], v["offer"])
+        self.assertIn("₹2,763", r["reply"])
+        self.assertNotIn("9,000", r["reply"])
+        r2 = c.post(f"/claims/{cid}/message", json={"text": "Thanks, noted"}).json()
+        self.assertNotIn("current offer", r2["reply"])

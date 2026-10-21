@@ -16,6 +16,9 @@ def main():
     files = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True).stdout.split("\n")
     n = 0
     for f in filter(None, files):
+        if (root / f).is_file() and (root / f).stat().st_size > 10 * 1024 * 1024:
+            n += 1
+            print(f"{'big_file':<10} {f}  {(root / f).stat().st_size // 1024} KiB")
         if f.endswith(SKIP) or f == "tools/scan_tree.py":
             continue
         t = (root / f).read_text(encoding="utf-8", errors="ignore")

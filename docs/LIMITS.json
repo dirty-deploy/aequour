@@ -43,6 +43,30 @@
    "source": "`run1/DECK_NUMBERS.md`"
   },
   {
+   "id": "scratch",
+   "label": "Scratches",
+   "value": "not detected as a class",
+   "detail": "the damage detectors used at run time have no scratch class",
+   "caveat": "a scratch-only photo gets ASK_MORE twice, then ESCALATE; a scratch beside other damage is left out of the offer (under-payment, never over-payment)",
+   "source": "`autosettle_vision/pipeline.py`, `docs/FEATURE_COVERAGE.md`"
+  },
+  {
+   "id": "severity",
+   "label": "Severity",
+   "value": "not measured",
+   "detail": "bands from the share of the part covered by damage (an assumption); they agree with hand labels on 20 of 32 correctly located parts",
+   "caveat": "no public dataset labels severity; the labels are Claude's, by eye",
+   "source": "`autosettle_vision/pipeline.py`"
+  },
+  {
+   "id": "plates",
+   "label": "Number plates",
+   "value": "typed, not read",
+   "detail": "the claim takes the plate as typed text; reading a plate photo needs the language model",
+   "caveat": "plate reading was not measured on real plates; a typed plate is weaker evidence than a plate photo",
+   "source": "`autosettle_api/app.py`"
+  },
+  {
    "id": "crops",
    "label": "Per-panel crop detection",
    "value": "found 22 to 34; not adopted",

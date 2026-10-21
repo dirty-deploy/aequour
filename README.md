@@ -1,54 +1,61 @@
 # Aequour
 
-**Aequour** (from Latin *aequus*, "fair, level") settles small motor-insurance claims from photos of the damage. Vision models identify the part and the damage. A deterministic engine prices it from a sourced genuine-parts rate card, inside hard limits the AI cannot cross. A garage quote is checked line by line against the evidence, and every event goes into a hash-chained audit log.
+**Aequour** (Latin *aequus*, "fair, level") settles small motor-insurance claims from photos or a short video of the damage. Vision models find the damaged panel and the damage. A deterministic engine prices it from a sourced genuine-parts rate card, inside hard limits the AI cannot cross. A garage quote is checked line by line against the photos, and every event goes into a hash-chained audit log. The result is either an itemised cash offer or a human-escalation decision.
 
-> **Status:** hackathon prototype (Confluentia 2026 x Tredence). On 8 unseen real-world photos it made 0 offers, because plate and parts checks stopped them; recall on damaged parts was about 30% on the dev photos; labour and paint prices are estimates. See `docs\` and `run1\DECK_NUMBERS.md` for measured numbers and limits.
+**Design rule: the AI perceives and talks; deterministic code decides every rupee.** The language model never sees the upper bound or the internal what-if analysis, and free text from the customer can never change an amount.
 
-Package names keep the `autosettle_` prefix from the project's earlier working name.
+> **Status: hackathon prototype** (Confluentia 2026 x Tredence). On 41 public dev photos the vision models find 22 of 74 labelled damaged parts (hard, mostly non-Indian, wide photos; labels made by Claude by eye); on 8 unseen photos the system made 0 offers, because plate and parts checks stopped them. There is no scratch class in the damage detector. Severity bands, labour and paint prices and several thresholds are assumptions. Video is validated on synthetic clips only. Every figure is in `docs/DECK_NUMBERS_FINAL.md` with its source and caveat, and the app's Limits page is generated from it.
 
-## Design rule
-The AI perceives and talks; deterministic code decides every rupee. The language model never receives the ceiling, the ceiling lines or the internal pivots, and the chat path never changes a number.
-
-## Layout
-- `autosettle_engine/`: the money logic (`engine.py`, `rationale.py`, `dispute.py`, `config.py`), rate cards, tests and the attack suite (`exploit_suite.py`). Unchanged by the API, UI and video work.
-- `autosettle_vision/`: YOLO pipeline, Qwen layer, the video path (`video.py`, `video_integrity.py`, `video_claim.py`, `tracker.py`), two evaluated-and-not-adopted experiments (`crops.py`, `surface_check.py`), the Gradio app (kept as a fallback) and evals.
-- `autosettle_api/`: FastAPI backend (`python -m autosettle_api`), recorded REPLAY data for the demo scenarios, API tests and the built web app (`static/`, committed so the demo needs no npm).
-- `web/`: source of the web app (Vite, React, TypeScript, plain CSS). `npm install --ignore-scripts && npm run build` writes `autosettle_api/static/`.
-- `tools/`: `eval_dev.py` (the one command every dev-photo number comes from), `demo_check.py`, `make_limits.py`, rate-card builders, the thermal guard.
-- `docs/`: `ARCHITECTURE.md`, `DECK_NUMBERS_FINAL.md` (every number with source, sample, caveat), `LIMITS.json`, experiment write-ups. `DEMO_RUNBOOK.md`: start commands, timings, what to do if a model fails.
-- `run1/`: logs, reports, caches and numbers from the frozen Run 1 state. `results_heldout.md`: the 8-photo held-out result, kept unmodified.
-- `THIRD_PARTY_NOTICES.md`: code adapted from a teammate's repository, licences of dependencies.
-
-## Run
-Python 3.10+ with the packages the vision README lists; model weights are not in this repository (see `weights/README.md`); put them in `backup/` (`parts_s_best.pt`, `dent_det_best.pt`, `damage_merged_s_best.pt`).
+## Five minutes, replay mode (no GPU, no weights, no torch)
+Replay mode serves vision output that was recorded earlier from the real pipeline and labels every response and the page `REPLAY`. The engine, the dispute logic, the audit chain, the attack console and the web app all run live.
 
 ```
-python -m autosettle_api --replay                 # demo without a GPU: recorded vision output, labelled REPLAY, http://127.0.0.1:8000
-python -m autosettle_api --no-qwen --fresh-seen   # live photo pipeline, template wording
-python -m autosettle_api --fresh-seen             # live, with the language model (first offer takes about a minute)
-python -m autosettle_vision.app                   # the older Gradio app, http://127.0.0.1:7860
+python -m venv .venv
+.venv\Scripts\activate            # macOS / Linux: source .venv/bin/activate
+python -m pip install -r requirements-replay.txt
+python -m autosettle_api --replay
 ```
+Open <http://127.0.0.1:8000>. A click path for someone with no documents is in `docs/TEST_GUIDE.md`. `python tools/smoke.py` (or `run.ps1 smoke`, `./run.sh smoke`) checks the whole replay path in one go and prints PASS or FAIL per step.
+
+The demo photos are public Wikimedia Commons files and are not in this repository; without them the scenario pages draw the recorded detections on a blank canvas. If the web app needs rebuilding: `cd web && npm install --ignore-scripts && npm run build` (the built output is committed, so npm is not needed to run it). `--ui v1` serves the earlier build.
+
+## What needs the weights and a GPU
+Live photo and video analysis, the language model (Qwen3-VL-8B 4-bit, which rewords the offer text and reads quote or plate photos) and `tools/eval_dev.py --live`. Weights are **not** in this repository; they go in `backup/` (`parts_s_best.pt`, `dent_det_best.pt`, `damage_merged_s_best.pt`, see `weights/README.md`). Install with `requirements-live.txt`, then `python -m autosettle_api --no-qwen --fresh-seen` (live pipeline, template wording) or `python -m autosettle_api --fresh-seen` (with the language model; the first offer takes about a minute). It was developed on an 8 GB laptop GPU.
 
 ## Tests (each count was measured with the command shown)
 ```
-python -m unittest discover -s autosettle_engine/tests -t .     # 48 tests
-python -m unittest discover -s autosettle_api/tests -t .        # 18 tests (no GPU)
-python -m unittest discover -s autosettle_vision/tests -t .     # 9 tests (1 skipped unless AEQUOUR_ISHAN_VIDEOS is set)
-python -m autosettle_engine.exploit_suite                       # 20 attack scripts + 1 control
-python -m autosettle_vision.video_attacks                       # 6 video attack scripts + 1 control (synthetic clips)
-python tools/eval_dev.py                                        # replays the 41-dev-photo table from the cache (22 of 74 found)
+python -m unittest discover -s autosettle_engine/tests -t .     # 48 tests (money logic, 5,000-claim fuzz)
+python -m unittest discover -s autosettle_api/tests -t .        # 26 tests, no GPU (1 is skipped when the demo photo is not on the machine)
+python -m unittest discover -s autosettle_vision/tests -t .     # 9 tests, needs the live stack (1 skipped unless AEQUOUR_ISHAN_VIDEOS is set)
+python -m autosettle_engine.exploit_suite                       # 20 attack scripts held, plus 1 control
+python -m autosettle_vision.video_attacks                       # 6 video attack scripts held, plus 1 control (synthetic clips)
+python tools/smoke.py                                           # replay demo path, PASS or FAIL per step
+python tools/eval_dev.py                                        # replays the dev-photo table from the cache (22 of 74 found)
 ```
-`tools/eval_dev.py --live` needs the weights and the dev photos (`AEQUOUR_DEV_PHOTOS`); `--variant crops|fusion` counts against a 3-evaluation limit.
+The engine tests, API tests and attack suite pass in a fresh virtual environment that has only `requirements-replay.txt` installed, on Python 3.12 and 3.14. "Passed" means these tests, written against the same code, pass; it does not mean no attack exists.
 
-## Video
-`POST /claims/{id}/video` (on by default; `--video off` disables it). Keyframes (at most 12, at most 60 s) go through the photo pipeline; a cut or a different car escalates; damage seen in one keyframe only becomes a request for a clearer view. Implemented and tested on synthetic cases; not validated on real walk-around video.
+## Where to read
+| Question | File |
+|---|---|
+| What is built and what is not, against the problem statement | `docs/FEATURE_COVERAGE.md` |
+| Solution design, flow, decision table | `docs/SOLUTION_DESIGN.md` |
+| Technology stack and versions | `docs/TECH_STACK.md` |
+| Guardrails, thresholds, known limitations | `docs/GUARDRAILS.md` |
+| Assumptions (OBSERVED, IMPUTED, UNRESOLVED) | `docs/ASSUMPTIONS.md` |
+| Likely questions and honest answers | `docs/QA.md` |
+| Every number with source | `docs/DECK_NUMBERS_FINAL.md` |
+| Repository map | `docs/REPO_MAP.md` |
+| Presenting and fallbacks | `docs/DEMO_SCRIPT.md`, `DEMO_RUNBOOK.md` |
+| Licences | `LICENSE` (MIT, our files), `LICENSE_NOTES.md`, `THIRD_PARTY_NOTICES.md` |
 
-## Honest limits
-- Measured: engine invariants (fuzz, 5,000 claims), attack scripts, detector scores on its own test split, pipeline recall and precision on 41 dev photos, 0 offers on the 8-photo held-out set, quote reading on synthetic images.
-- Assumed, not measured: labour and paint prices, severity bands, review and total-loss thresholds, GST treatment, base-variant prices for higher trims, simulated policy records and plates.
-- Not measured: handwritten quotes, real Indian claim photos at scale, severity accuracy, real walk-around video.
-- Tried and not adopted (written up in `docs/`): retraining the parts model (Run 3), per-panel crop detection (found 22 to 34 of 74 but more false alarms), the teammate's surface heuristic.
-- Dev-photo labels in `test_photos/commons/ground_truth.csv` were made by Claude by eye, not by a person.
+## Honest limits, in short
+- **Measured:** engine invariants (fuzz of 5,000 claims, attack scripts), detector scores on their own test splits, pipeline recall and precision on 41 dev photos, 0 offers on the 8-photo held-out set, quote reading on synthetic printed quotes, speed on the development laptop.
+- **Assumed, not measured:** labour and paint prices, severity bands, the review and total-loss thresholds, GST treatment, simulated policy records and plates.
+- **Not measured:** handwritten quotes, real Indian claim photos at scale, severity accuracy, real walk-around video, hosting cost, regulation.
+- **Tried and not adopted** (written up in `docs/`): retraining the parts model, per-panel crop detection (found 22 to 34 of 74 but more false alarms), the teammate's surface heuristic.
+
+## Licence
+Our own files are MIT (`LICENSE`). The vision modules use Ultralytics, which is AGPL-3.0; no model weights are distributed. See `LICENSE_NOTES.md`.
 
 ## Credits
-Built for the Confluentia 2026 x Tredence hackathon. Photos and datasets keep their own licences (see `test_photos/commons/SOURCES.csv` and `scripts/download_data.py`).
+Built for the Confluentia 2026 x Tredence hackathon. Photos and datasets keep their own licences (`test_photos/commons/SOURCES.csv`, `scripts/download_data.py`). The video sampler and tracker adapt ideas and code from a teammate's MIT-licensed repository (`THIRD_PARTY_NOTICES.md`).

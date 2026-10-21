@@ -1,0 +1,19 @@
+# Live mode: real vision pipeline, the language model, video upload. Needs an NVIDIA GPU (developed on 8 GB VRAM) and the
+# model weights, which are NOT in this repository (see README "What needs the weights").
+#   python -m pip install -r requirements-live.txt
+# Top-level pins are the versions installed on the development laptop (Windows 11, Python 3.12.10, CUDA 12.8 build of
+# PyTorch). Their dependencies were left to pip. Install PyTorch from the CUDA 12.8 index if pip picks a CPU build:
+#   python -m pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
+-r requirements-replay.txt
+torch==2.11.0
+torchvision==0.26.0
+ultralytics==8.4.182
+transformers==5.20.2
+bitsandbytes==0.50.2
+accelerate==1.15.0
+safetensors==0.8.0
+scipy==1.18.1
+lap==0.5.13
+psutil==7.2.2
+# Optional: the earlier Gradio app (autosettle_vision/app.py)
+gradio==6.30.0

@@ -14,10 +14,10 @@ a header saying so.
 Nothing from his panel-snapping, severity estimation, CarDD mapping or point-cloud code is used.
 
 ## Python and JavaScript dependencies
-Ultralytics (AGPL-3.0), PyTorch, OpenCV, FastAPI, uvicorn, Gradio, Transformers and Qwen3-VL (Apache-2.0 model licence, check before redistribution),
+Ultralytics (AGPL-3.0), PyTorch, OpenCV, Pillow, NumPy, FastAPI, uvicorn, httpx, python-multipart, Gradio, Transformers and Qwen3-VL (Apache-2.0 model licence, check before redistribution),
 React, Vite, TypeScript (MIT, Apache-2.0), Inter Variable via `@fontsource-variable/inter` (SIL Open Font Licence 1.1, bundled in
 `autosettle_api/static/assets`). The licence questions for Ultralytics AGPL-3.0 and for the training datasets are listed in
-`final/QUESTIONS_FOR_ASH.md` and are not decided here.
+`LICENSE_NOTES.md` and are not decided here. The vision modules that import Ultralytics (`pipeline.py`, `tracker.py`, `crops.py`, `surface_check.py`) are subject to AGPL-3.0 when combined with it; no weights are distributed.
 
 ## Not included
 Third-party UI code (ThreeUI) is in no commit. Demo photos are Wikimedia Commons files kept outside the repository (licences in `test_photos/commons/SOURCES.csv`).

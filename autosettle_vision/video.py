@@ -38,6 +38,26 @@ def _usable(fr):
     return float(cv2.Laplacian(g, cv2.CV_64F).var()) >= BLUR_MIN and float(g.mean()) >= DARK_MIN
 
 
+def keyframe_scores(fr, index, fps):
+    """What the UI shows under each keyframe: where it is in the clip and the two numbers the usability filter used."""
+    g = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
+    return {"frame": int(index), "seconds": round(index / fps, 2), "sharpness": round(float(cv2.Laplacian(g, cv2.CV_64F).var()), 1),
+            "brightness": round(float(g.mean()), 1)}
+
+
+def thumbnails(frames, max_side=192, quality=70):
+    """Small JPEG data URIs for the keyframe strip (display only; the pipeline reads the full frames)."""
+    import base64
+    out = []
+    for _, fr in frames:
+        h, w = fr.shape[:2]
+        f = max_side / max(h, w)
+        small = cv2.resize(fr, (max(1, int(w * f)), max(1, int(h * f))), interpolation=cv2.INTER_AREA) if f < 1 else fr
+        ok, buf = cv2.imencode(".jpg", small, [cv2.IMWRITE_JPEG_QUALITY, quality])
+        out.append("data:image/jpeg;base64," + base64.b64encode(buf.tobytes()).decode("ascii") if ok else None)
+    return out
+
+
 def probe(path):
     """(fps, frame_count, duration_s) or raises VideoRejected."""
     cap = cv2.VideoCapture(str(path))
@@ -89,4 +109,5 @@ def sample_keyframes(path, max_keyframes=MAX_KEYFRAMES):
     if len(good) < 2:
         raise VideoRejected("a video needs at least two usable frames; send photos instead")
     info["keyframes"] = len(good)
+    info["keyframe_scores"] = [keyframe_scores(f, i, fps) for i, f in good]
     return [(f"{path.name}#f{k}", fr) for k, (_, fr) in enumerate(good)], info

@@ -39,6 +39,13 @@ class ReplayVision:
             rec = json.loads(f.read_text(encoding="utf-8"))
             self.records[rec["sha256"]] = rec
         self.by_key = {r["key"]: r for r in self.records.values()}
+        self.videos = {}                      # recorded SYNTHETIC walk-arounds (replay_data/video/*.json)
+        for f in sorted((Path(replay_dir) / "video").glob("*.json")):
+            rec = json.loads(f.read_text(encoding="utf-8"))
+            self.videos[rec["key"]] = rec
+
+    def video_record(self, key):
+        return self.videos.get(key)
 
     def run_video(self, path, claim_id):
         raise ReplayMiss("REPLAY mode has no recorded video output")

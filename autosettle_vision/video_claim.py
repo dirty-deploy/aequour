@@ -12,6 +12,9 @@ def run_video_claim(path, claim_id=None, seen=None, analyse=None):
     frames, info = V.sample_keyframes(path)
     cont = VI.check_video(path)
     v = P.run_claim([], claim_id=claim_id or "video", seen=seen, frames=frames, extra_integrity=VI.flags(cont), analyse=analyse)
+    tr = sorted(cont["transitions"])
     v["video"] = {**info, "continuity_frames_checked": cont["frames_checked"], "continuity_breaks": cont["breaks"],
-                  "min_inliers": VI.MIN_INLIERS}
+                  "min_inliers": VI.MIN_INLIERS, "continuity_lowest": tr[0] if tr else None,
+                  "continuity_median": tr[len(tr) // 2] if tr else None, "thumbnails": V.thumbnails(frames),
+                  "keyframe_names": [n for n, _ in frames]}
     return v
