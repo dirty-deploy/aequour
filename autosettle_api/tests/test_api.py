@@ -438,3 +438,27 @@ class TestLanguageModelLoading(unittest.TestCase):
         self.assertEqual(r["decision"], "OFFER")
         self.assertEqual(r["message_source"], "template")
         self.assertFalse(loads)
+
+
+class TestRecordedVisionIsLabelled(unittest.TestCase):
+    def test_a_scenario_without_its_photo_is_labelled_replay_even_on_a_live_server(self):
+        import os
+        old = os.environ.get("AEQUOUR_DEV_PHOTOS")
+        os.environ["AEQUOUR_DEV_PHOTOS"] = tempfile.mkdtemp()          # the demo photo is "not on this machine"
+        try:
+            app = create_app(Settings(runtime=Path(tempfile.mkdtemp()), qwen=False), vision=FakeVision())
+            c = TestClient(app)
+            if (Path(__file__).resolve().parent.parent.parent / "test_photos" / "commons" / "c05_Abandoned_Suzuki_Osidge_London_2.jpg").exists():
+                self.skipTest("the repository fallback photo folder holds the demo photo")
+            v = c.post("/claims", json={"scenario": "offer"}).json()
+            self.assertEqual(v["mode"], "REPLAY")
+            self.assertIn("REPLAY", v["notice"])
+            self.assertEqual(c.get(f"/adjuster/{v['claim_id']}").json()["mode"], "REPLAY")
+            self.assertEqual(c.get(f"/claims/{v['claim_id']}/audit").json()["mode"], "REPLAY")
+            own = c.post("/claims", json={"policy_id": "POL-DEMO-001"}).json()
+            self.assertEqual(own["mode"], "LIVE")                         # a claim with the user's own photos stays LIVE
+        finally:
+            if old is None:
+                os.environ.pop("AEQUOUR_DEV_PHOTOS", None)
+            else:
+                os.environ["AEQUOUR_DEV_PHOTOS"] = old

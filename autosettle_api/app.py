@@ -101,6 +101,7 @@ class Claim:
         self.lock = threading.RLock()
         self.assessed = False
         self.chat = []
+        self.recorded = False           # the vision output came from replay data, whatever mode the server is in
         self.silent = False             # a data claim made by the landing page: never loads the language model
         self.turns = []
         self.video_view = None
@@ -174,7 +175,7 @@ def create_app(settings=None, vision=None, qwen=None):
 
     def persist(c):
         try:
-            (runtime / f"{c.id}.json").write_text(json.dumps({"claim_id": c.id, "mode": mode_label, "log": c.session.log,
+            (runtime / f"{c.id}.json").write_text(json.dumps({"claim_id": c.id, "mode": claim_mode(c), "log": c.session.log,
                                                               "verified": ClaimSession.verify_log(c.session.log)}, default=str))
         except OSError:
             pass
@@ -343,6 +344,7 @@ def create_app(settings=None, vision=None, qwen=None):
             if c.replay_key and not c.photos:      # scenario without a local photo: recorded output only
                 from .backends import remap
                 rec = replay.lookup(c.replay_key)
+                c.recorded = True
                 return remap(rec["vision"], (rec["vision"].get("images") or ["photo"])[0], c.id)
             return backend.run([p["path"] for p in c.photos], c.id)
         except ReplayMiss as e:
@@ -376,14 +378,18 @@ def create_app(settings=None, vision=None, qwen=None):
         return [{"index": i, "url": f"/claims/{c.id}/photos/{i}", "width": p["width"], "height": p["height"]}
                 for i, p in enumerate(c.photos)]
 
+    def claim_mode(c):
+        """REPLAY whenever this claim's vision output was recorded, even on a live server (a scenario without its photo)."""
+        return "REPLAY" if (mode_label == "REPLAY" or c.recorded) else "LIVE"
+
     def customer_view(c):
         s, res = c.session, c.session.result
-        out = {"claim_id": c.id, "mode": mode_label, "state": s.state, "status": "assessed" if c.assessed else "collecting",
+        out = {"claim_id": c.id, "mode": claim_mode(c), "state": s.state, "status": "assessed" if c.assessed else "collecting",
                "policy": {"policy_id": c.policy.policy_id, "vehicle": f"{c.policy.make} {c.policy.model}"},
                "plate_given": bool(c.plate_text), "photos": photo_urls(c), "decision": None, "message": None,
                "offer": None, "lines": [], "deductible": None, "gross": None, "needs": [], "options": [],
                "closed": s.state in TERMINAL}
-        if mode_label == "REPLAY":
+        if claim_mode(c) == "REPLAY":
             out["notice"] = "REPLAY: vision output was recorded earlier from the real pipeline; the engine runs live."
         if res is not None:
             out["decision"] = res["decision"]
@@ -578,6 +584,7 @@ def create_app(settings=None, vision=None, qwen=None):
                 v = json.loads(json.dumps(rec["vision"], default=str))
                 v["image_id"] = c.id
                 c.session._log("video_recorded_sample", {"key": rec["key"], "synthetic": True})
+                c.recorded = True
                 c.video_view = build_video_view(c, v, rec)
                 assess(c, v)
                 return customer_view(c)
@@ -681,7 +688,7 @@ def create_app(settings=None, vision=None, qwen=None):
     def audit(cid: str):
         c = need(cid)
         return {"claim_id": c.id, "chain_ok": ClaimSession.verify_log(c.session.log), "state": c.session.state,
-                "log": c.session.log, "mode": mode_label}
+                "log": c.session.log, "mode": claim_mode(c)}
 
     @app.get("/claims/{cid}/photos/{n}")
     def photo(cid: str, n: int):
@@ -712,7 +719,7 @@ def create_app(settings=None, vision=None, qwen=None):
     def adjuster(cid: str):
         c = need(cid)
         s, res, v = c.session, c.session.result, c.vision
-        out = {"label": "ADJUSTER VIEW (demo only; no authentication is claimed)", "claim_id": c.id, "mode": mode_label,
+        out = {"label": "ADJUSTER VIEW (demo only; no authentication is claimed)", "claim_id": c.id, "mode": claim_mode(c),
                "state": s.state, "plate_source": c.plate_source, "photos": photo_urls(c),
                "audit": {"chain_ok": ClaimSession.verify_log(s.log), "events": len(s.log)}}
         if res is None or v is None:
@@ -763,7 +770,7 @@ def create_app(settings=None, vision=None, qwen=None):
     @app.get("/claims/{cid}/transcript")
     def transcript(cid: str):
         c = need(cid)
-        return {"claim_id": c.id, "mode": mode_label, "state": c.session.state,
+        return {"claim_id": c.id, "mode": claim_mode(c), "state": c.session.state,
                 "chain_ok": ClaimSession.verify_log(c.session.log), "turns": c.turns}
 
     @app.get("/video-samples")
@@ -801,7 +808,7 @@ def create_app(settings=None, vision=None, qwen=None):
     def adjuster_range(cid: str):
         c = need(cid)
         s, res = c.session, c.session.result
-        out = {"label": ADJ_LABEL, "claim_id": c.id, "mode": mode_label}
+        out = {"label": ADJ_LABEL, "claim_id": c.id, "mode": claim_mode(c)}
         if res is None or res["decision"] != "OFFER":
             return {**out, "applies": False, "decision": res["decision"] if res else None,
                     "note": "No cash offer was made on this claim, so there is no settlement range."}
@@ -831,7 +838,7 @@ def create_app(settings=None, vision=None, qwen=None):
     def adjuster_escalation(cid: str):
         c = need(cid)
         s, res, v = c.session, c.session.result, c.vision
-        out = {"label": ADJ_LABEL, "claim_id": c.id, "mode": mode_label, "state": s.state}
+        out = {"label": ADJ_LABEL, "claim_id": c.id, "mode": claim_mode(c), "state": s.state}
         if res is None or s.state not in ("ESCALATED", "SURVEYOR"):
             return {**out, "applies": False,
                     "note": "This claim is not escalated. A packet is built for ESCALATE and SURVEYOR outcomes."}
