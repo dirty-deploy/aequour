@@ -402,3 +402,16 @@ class TestLaunchOptions(unittest.TestCase):
         self.assertFalse(settings_from(parse(["--no-qwen"])).qwen)
         c, _ = replay_client()
         self.assertEqual(c.get("/health").json()["qwen"], "off")
+
+
+class TestGuardrailsRoute(unittest.TestCase):
+    def test_thresholds_come_from_the_engine_config_and_nothing_leaks(self):
+        from autosettle_engine import config as C
+        c, _ = replay_client()
+        rows = c.get("/guardrails").json()
+        text = json.dumps(rows, ensure_ascii=False)
+        self.assertGreaterEqual(len(rows), 10)
+        self.assertIn(f"{C.SURVEYOR_REQUIRED:,}", text)
+        self.assertIn(f"{C.GROSS_REVIEW:,}", text)
+        self.assertNotIn("ceiling", text.lower())
+        self.assertTrue(all(r["kind"] in ("RULE", "ASSUMPTION", "DESIGN") for r in rows))

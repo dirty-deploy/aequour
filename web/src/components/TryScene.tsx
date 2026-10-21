@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { api, partName, rupees } from "../api";
 import type { Adjuster, ClaimView, GuideStep, Policy, Scenario, Transcript, VideoSample } from "../api";
@@ -41,6 +41,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
   const [plate, setPlate] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [current, setCurrent] = useState("");
+  const panel = useRef<HTMLDivElement>(null);
   const quoteExample = scenarios.find((s) => s.quote_example)?.quote_example as { lines: { unit_price: number; total: number }[] } | undefined;
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
     api.videoSamples().then(setSamples).catch(() => undefined);
   }, []);
   useEffect(() => { if (claim) onClaim?.(claim.claim_id); }, [claim?.claim_id]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (tab === "Conversation" && panel.current) panel.current.scrollTop = panel.current.scrollHeight; }, [tr?.turns.length, tab]);   // the newest turn is in view
 
   const refresh = useCallback(async (c: ClaimView) => {
     setClaim(c);
@@ -67,7 +69,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
     reset(); setCurrent(s.id);
     let c = await api.create({ scenario: s.id });
     if (s.message) { const r = await api.message(c.claim_id, s.message); c = r; if (r.flags_seen) flash(); }
-    await refresh(c); setTab(s.id === "counter" || s.message ? "Conversation" : "Quote");
+    await refresh(c); setTab(s.id === "counter" || s.message || s.expect !== "OFFER" ? "Conversation" : "Quote");
   });
   useEffect(() => {
     if (!auto) return;
@@ -131,7 +133,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
         <ul className="turns" aria-label="Conversation transcript">
           {(tr?.turns ?? []).map((t) => (
             <li key={t.n} className={t.from}>
-              <p>{t.text.length > 420 ? t.text.slice(0, 420) + "..." : t.text}</p>
+              <p>{t.text.length > 190 ? t.text.slice(0, 190).trimEnd() + " ..." : t.text}</p>
               <small>{t.from === "customer" ? "customer" : `system · wording: ${t.wording === "model, checked" ? "model, checked" : "template"}`}{t.audit_seq != null && <> · audit #{t.audit_seq} <code>{t.audit_hash}</code></>}</small>
             </li>
           ))}
@@ -192,7 +194,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
               {claim.video.keyframes.map((k) => (
                 <figure key={k.index} role="listitem" className={k.findings ? "hit" : ""}>
                   {k.thumbnail ? <img src={k.thumbnail} alt={`Keyframe ${k.index + 1}`} /> : <div className="tile" aria-hidden="true" />}
-                  <figcaption>#{k.index + 1} {k.seconds != null && `${k.seconds.toFixed(1)}s`}<br />sharp {k.sharpness?.toFixed(0)} · light {k.brightness?.toFixed(0)}</figcaption>
+                  <figcaption>#{k.index + 1} {k.seconds != null && `${k.seconds.toFixed(1)}s`}<br />sharp {k.sharpness?.toFixed(0)}<br />light {k.brightness?.toFixed(0)}</figcaption>
                 </figure>
               ))}
             </div>
@@ -334,7 +336,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
             <div className="tablist" role="tablist" aria-label="Claim actions">
               {TABS.map((t) => <button key={t} type="button" role="tab" aria-selected={tab === t} className={tab === t ? "on" : ""} onClick={() => setTab(t)}>{t}</button>)}
             </div>
-            <div className="tabpanel" role="tabpanel" aria-label={tab}>{tabBodies[tab]}</div>
+            <div className="tabpanel" role="tabpanel" aria-label={tab} ref={panel}>{tabBodies[tab]}</div>
           </div>
         </div>
       </div>

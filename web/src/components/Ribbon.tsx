@@ -7,7 +7,7 @@ import { useReducedMotion } from "../hooks";
  * a device pixel ratio of 1.5, paused when the tab is hidden or the canvas is off screen, drawn once when the user
  * prefers reduced motion.
  */
-const LINES = 62, POINTS = 130;
+const LINES = 78, POINTS = 130;
 
 export default function Ribbon() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -37,8 +37,8 @@ export default function Ribbon() {
       const span = H - hz;
       const shift = x * 0.18;                                // the cursor leans the whole field a little
       const gr = ctx.createLinearGradient(0, 0, W, 0);       // brighter toward the rising sides, dim in the valley: no hard highlight edge
-      gr.addColorStop(0, "rgb(255,238,200)"); gr.addColorStop(0.34, "rgba(240,236,226,0.38)"); gr.addColorStop(0.5, "rgba(240,236,226,0.24)");
-      gr.addColorStop(0.66, "rgba(240,236,226,0.38)"); gr.addColorStop(1, "rgb(255,238,200)");
+      gr.addColorStop(0, "rgb(255,238,200)"); gr.addColorStop(0.34, "rgba(240,236,226,0.34)"); gr.addColorStop(0.5, "rgba(240,236,226,0.2)");
+      gr.addColorStop(0.66, "rgba(240,236,226,0.34)"); gr.addColorStop(1, "rgb(255,238,200)");
       ctx.strokeStyle = gr; ctx.lineWidth = 0.9;
       for (let i = 0; i < LINES; i++) {
         const d = i / (LINES - 1);                           // 0 far, 1 near
@@ -53,7 +53,7 @@ export default function Ribbon() {
           const px = W / 2 + u * W * 0.6, py = Math.max(2, base - H * 0.62 * h * (0.3 + 0.7 * d));
           if (j) ctx.lineTo(px, py); else ctx.moveTo(px, py);
         }
-        ctx.globalAlpha = 0.1 + 0.62 * d;
+        ctx.globalAlpha = 0.07 + 0.5 * d;
         ctx.stroke();
       }
       ctx.globalAlpha = 1;
