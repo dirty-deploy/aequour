@@ -544,7 +544,7 @@ def create_app(settings=None, vision=None, qwen=None):
         return out
 
     # ------------------------------------------------------------------ static front end
-    ui_dir = Path(__file__).with_name("static_demo" if cfg.ui == "demo" else "static")
+    ui_dir = Path(__file__).with_name({"demo": "static_demo", "v1": "static_v1"}.get(cfg.ui, "static"))
     if ui_dir.exists() and (ui_dir / "index.html").exists():
         app.mount("/assets", StaticFiles(directory=ui_dir / "assets"), name="assets") if (ui_dir / "assets").exists() else None
 
