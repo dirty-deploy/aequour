@@ -7,13 +7,13 @@ held. No weights, training, dataset downloads, deletions or package-version chan
 | Task | Result | One line |
 |---|---|---|
 | 0 Preconditions + thermal guard | done | No GPU job to stop (desktop apps only; LibreHardwareMonitor left alone); AC on; LHM at :8085; `tools/thermal.py` + `tools/run_guarded.py`; self-test passed (suspended about 9 s, resumed, 39 s wall) |
-| 1 Backup, baseline, fuzz | done | Backup at `C:\autosettle_backup_run1` (datasets excluded: 6.6 GB > 3 GB; weights included). 29/29 tests already passed, so the "28 of 29" premise was out of date. 5,000-claim fuzz passes (0.2 s) |
+| 1 Backup, baseline, fuzz | done | Backup at `<project folder>_backup_run1` (datasets excluded: 6.6 GB > 3 GB; weights included). 29/29 tests already passed, so the "28 of 29" premise was out of date. 5,000-claim fuzz passes (0.2 s) |
 | 2 Rate card v3 | done | 25 rows fixed + 1 sum row, all from pages opened this run; engine loads v3; 2023 coverage 70 matched / 22 other-gen / 12 fallback / 0 none (direct 93 → 92); 2 tests added |
 | 3 Low-confidence-severe rule | done | ESCALATE `low_conf_severe` if a severe call has confidence < 0.50; dev photos: offers 9 → 7, removing 2 correct offers and 0 wrong ones |
 | 4 Audit-repair loop | **failed (skipped after 2 THERMAL_KILLs)** | Code + 3 tests done (`safe_reply_repair`); measured on only 6 of 30 claims (0 violations either way). No result claimed |
 | 5 Conversation + quotes | done | 25 messages: no number ever changed; classifier 6/10 injections, 2/5 abuse before keyword fixes. 15 quotes: 42/53 lines exact, 0 offers above ceiling |
 | 6 Documents | done | `DECK_NUMBERS.md`, `HANDOFF_current.md` |
-| 7 Freeze | done | `C:\autosettle_FROZEN_20261021` (155 MB), `FROZEN_HASHES.txt` (19 files, all equal to the working copy) |
+| 7 Freeze | done | `<project folder>_FROZEN_20261021` (155 MB), `FROZEN_HASHES.txt` (19 files, all equal to the working copy) |
 | 8 VGGT spike | skipped | Precondition not met (Task 4 not done). Also, every Qwen job tripped the CPU hard limit, and VGGT is heavier and needs its own torch install and weights |
 
 ## Top three things to look at

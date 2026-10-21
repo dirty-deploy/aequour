@@ -423,6 +423,15 @@ _INJECT = re.compile(r"(ignore (all |the )?(previous|prior|above)|system prompt|
                      r"instructions? ignore|निर्देश.{0,20}(अनदेखा|नज़रअंदाज़|नजरअंदाज))", re.I)
 
 
+# legal / regulator threats (RUN2): a human answers these, like abuse. English, Hinglish and Hindi spellings.
+_LEGAL = re.compile(r"\bombudsm[ae]n|\bombud\b|\blokpal\b|\blegal (notice|action|case|proceedings?)|\bsue\b|\bcourt case|"
+                    r"\b(go|going|take|taking|jaunga|jaungi|jayenge)\b.{0,25}\bcourt\b|\bcourt (mein|me)\b|"
+                    r"\bconsumer (court|forum|commission)|\blawyers?\b|\battorneys?\b|\bsolicitor\b|\b[vw]a?k[ei]+l\b|"
+                    r"\bk[a]+n[o]+ni\b|\bpolice (complaint|report|case|station|mein|me|ko)\b|\bpulis\b|"
+                    r"(?-i:\bFIR\b)|"
+                    r"लोकपाल|ओम्?बड्?समै?न|ओंबड्समैन|कानूनी|उपभोक्ता\s*(अदालत|फोरम|आयोग|कोर्ट)|वकील|पुलिस|कोर्ट|अदालत|मुकदमा", re.I)
+
+
 def classify_message(text):
     """Heuristic flags only. The real protection is structural: no free text reaches any input of assess()."""
     flags = []
@@ -430,4 +439,6 @@ def classify_message(text):
         flags.append("abusive")
     if _INJECT.search(text or ""):
         flags.append("injection_suspected")
+    if _LEGAL.search(text or ""):
+        flags.append("legal_threat")
     return flags

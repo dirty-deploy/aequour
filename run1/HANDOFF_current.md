@@ -3,7 +3,7 @@
 Design rule: the AI perceives and talks; deterministic code decides every rupee. Qwen never receives the ceiling,
 the ceiling lines or the internal pivots.
 
-## Layout (C:\autosettle)
+## Layout (<project folder>)
 | Path | What |
 |---|---|
 | `autosettle_engine/` | Money: `engine.py` (assess, info gate, rules), `rationale.py` (customer text + checker + audit-repair), `dispute.py` (quote check, state machine, hash-chained audit), `config.py` (every tunable, tagged), `exploit_suite.py`, `tests/` |

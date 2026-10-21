@@ -68,6 +68,7 @@ DARK_MIN = 40.0             # [ASSUMPTION] mean grey level below this = too dark
 EDIT_SOFTWARE = ("photoshop", "gimp", "snapseed", "picsart", "lightroom", "canva", "facetune", "pixlr")
 
 _models = {}
+DET_HOOK = None       # set by autosettle_vision.crops.enable(); never set in the default pipeline
 
 
 def models():
@@ -212,7 +213,10 @@ def analyse_image(img, image_id="img"):
         return best
 
     dr = M["det"].predict(img, conf=CONF_DET, imgsz=IMGSZ, verbose=False)[0]
-    for box, c, k in zip(dr.boxes.xyxy.tolist(), dr.boxes.conf.tolist(), dr.boxes.cls.tolist()):
+    dets = list(zip(dr.boxes.xyxy.tolist(), dr.boxes.conf.tolist(), dr.boxes.cls.tolist()))
+    if DET_HOOK is not None:           # optional variant (e.g. per-panel crops); None = the published behaviour
+        dets = DET_HOOK(img, parts, dets, M["det"])
+    for box, c, k in dets:
         name = dr.names[int(k)]
         allowed, dclass = DET_MAP[name]
         dmask = _box_mask(box, shape)
@@ -279,8 +283,10 @@ def _fuse(per_image, min_support):
     return out
 
 
-def run_claim(image_paths=(), video=None, claim_id=None, plate_reader=None, seen=None):
-    """Returns the vision JSON for one claim. plate_reader(crop_bgr) -> str | None (e.g. the Qwen reader)."""
+def run_claim(image_paths=(), video=None, claim_id=None, plate_reader=None, seen=None, frames=None, extra_integrity=(), analyse=None):
+    """Returns the vision JSON for one claim. plate_reader(crop_bgr) -> str | None (e.g. the Qwen reader).
+    frames: [(name, bgr)] keyframes already chosen by autosettle_vision.video (the video path); extra_integrity: flags from
+    video_integrity; analyse: replaces analyse_image (tests)."""
     claim_id = claim_id or hashlib.sha1("|".join(map(str, image_paths)).encode()).hexdigest()[:10]
     seen = seen if seen is not None else SeenStore()
     integrity, flags, imgs = [], [], []
@@ -300,6 +306,10 @@ def run_claim(image_paths=(), video=None, claim_id=None, plate_reader=None, seen
             integrity.append(f"video_not_continuous:frames_{breaks[:5]}")
         imgs += [(f"{Path(video).name}#f{i}", fr) for i, fr in enumerate(frames)]
         min_support = 2 if len(frames) >= 4 else 1   # a real dent shows up in more than one frame
+    elif frames:
+        integrity += list(extra_integrity)
+        imgs += list(frames)
+        min_support = 2 if len(frames) >= 4 else 1
 
     # duplicates inside this claim and against earlier claims
     hashes = {}
@@ -320,9 +330,20 @@ def run_claim(image_paths=(), video=None, claim_id=None, plate_reader=None, seen
         if q["flags"]:
             flags.append(f"low_quality:{name}:{','.join(q['flags'])}")
             continue
-        per_image.append(analyse_image(img, name))
+        per_image.append((analyse or analyse_image)(img, name))
 
     dets = _fuse(per_image, min_support)
+    if min_support > 1:
+        # video: damage seen in a single keyframe is never dropped silently. It becomes a request for a clearer view
+        # (a detection with no severity fails the engine's information gate -> ASK_MORE), never a smaller offer.
+        have = {(d["part_class"], d["damage_class"]) for d in dets}
+        for part in sorted({f["part_class"] for im in per_image for f in im["findings"]
+                            if f["severity"] is not None and f["part_class"] != "unassigned"
+                            and (f["part_class"], f["damage_class"]) not in have}):
+            flags.append(f"single_frame_only:{part}")
+            if part not in {d["part_class"] for d in dets}:
+                dets.append({"part_class": part, "part_conf": 0.0, "damage_class": None, "damage_conf": 0.0, "severity": None,
+                             "damage_area_fraction": None, "damage_source": "one keyframe only", "note": "seen in one keyframe only"})
     if any(f["part_class"] == "unassigned" for im in per_image for f in im["findings"]):
         flags.append("unassigned_damage")
     # heavy front/side crash: hidden damage (radiator support, airbags, pillars) is likely -> surveyor, never auto-offer

@@ -111,7 +111,7 @@ def message(text, st):
         return "Assess a claim first.", ""
     s = st["session"]
     flags = s.message(text)
-    reply = ("Your message has been passed to a claims specialist." if "abusive" in flags else
+    reply = ("Your message has been passed to a claims specialist." if ("abusive" in flags or "legal_threat" in flags) else
              "Thanks. Messages are recorded with the claim, but amounts change only with photos or an itemised quote.")
     return reply + (f"  _(flags: {', '.join(flags)})_" if flags else ""), audit_md(s)
 

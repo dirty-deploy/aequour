@@ -1,0 +1,48 @@
+{
+ "key": "chennai_street",
+ "source_file": "c44_Chennai_damage_1.jpg",
+ "sha256": "fce7b1abe4461cd4d49e50233c3394777c640f97b5171e87b23e45cd47d898e7",
+ "width": 800,
+ "height": 600,
+ "vision": {
+  "image_id": "replay-chennai_street",
+  "plate_read": null,
+  "integrity_flags": [],
+  "flags": [
+   "no_camera_metadata:c44_Chennai_damage_1.jpg",
+   "no_damage_found"
+  ],
+  "detections": [],
+  "images": [
+   "c44_Chennai_damage_1.jpg"
+  ],
+  "quality": {
+   "c44_Chennai_damage_1.jpg": {
+    "blur": 1466.4,
+    "brightness": 148.8,
+    "flags": []
+   }
+  },
+  "findings_by_image": {
+   "c44_Chennai_damage_1.jpg": []
+  },
+  "per_image": [
+   {
+    "image_id": "c44_Chennai_damage_1.jpg",
+    "parts_seen": [
+     "Back-wheel",
+     "License-plate",
+     "Tail-light",
+     "Trunk"
+    ],
+    "plate_box": [
+     320,
+     140,
+     371,
+     164
+    ],
+    "n_findings": 0
+   }
+  ]
+ }
+}

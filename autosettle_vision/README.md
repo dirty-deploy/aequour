@@ -3,7 +3,7 @@
 Perception and language layer for Auto-Settle AI. Photos or video go in; the vision JSON the engine reads comes out.
 Qwen only rewords and reads. Money is decided in `autosettle_engine`.
 
-Run everything from `C:\autosettle` with the project env: `.\env\Scripts\python.exe -m ...`
+Run everything from `<project folder>` with the project env: `.\env\Scripts\python.exe -m ...`
 
 | Command | What it does |
 |---|---|

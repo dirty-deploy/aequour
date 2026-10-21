@@ -11,3 +11,10 @@ runs/
 backup/
 run2/
 test_photos/heldout/
+
+final/runtime/
+autosettle_api/static_demo/
+web/node_modules/
+web/src/third_party/
+web/dist/
+web/.vite/

@@ -1,0 +1,92 @@
+{
+ "generated_by": "tools/make_limits.py from docs/DECK_NUMBERS_FINAL.md",
+ "headline": "What this system measured, and what it has not.",
+ "items": [
+  {
+   "id": "recall",
+   "label": "Damaged parts found",
+   "value": "22 of 74",
+   "detail": "labelled damaged parts on 41 public photos, mostly non-Indian cars and wide shots",
+   "caveat": "labels by Claude by eye; the photos were also used for design choices",
+   "source": "`tools/eval_dev.py` (reproduces the Run 2 table)"
+  },
+  {
+   "id": "never_outlined",
+   "label": "Parts never outlined",
+   "value": "25 of 74",
+   "detail": "the same 41 photos",
+   "caveat": "retraining on 4,937 more images (Run 3) and running at other image sizes moved found parts only from 22 to at most 25",
+   "source": "`tools/eval_dev.py`"
+  },
+  {
+   "id": "silent_misses",
+   "label": "Silent misses inside an offer",
+   "value": "8 of 74",
+   "detail": "the same 41 photos",
+   "caveat": "a labelled damaged part missed in a claim that still ended in an OFFER: the offer under-pays by it",
+   "source": "`tools/eval_dev.py`"
+  },
+  {
+   "id": "offers",
+   "label": "Offers on the dev photos",
+   "value": "7 of 41",
+   "detail": "41 photos",
+   "caveat": "none of the 6 on damaged cars found every labelled damaged part; 1 was on a car with no labelled damage; 7 claims is an anecdote",
+   "source": "`tools/eval_dev.py`"
+  },
+  {
+   "id": "heldout",
+   "label": "Unseen photos",
+   "value": "0 offers",
+   "detail": "8 photos run once",
+   "caveat": "5 asked for more, 3 went to a human, 1 to a surveyor; 3 of the 3 human routes were plate mismatches against simulated policies",
+   "source": "`run1/DECK_NUMBERS.md`"
+  },
+  {
+   "id": "crops",
+   "label": "Per-panel crop detection",
+   "value": "found 22 to 34; not adopted",
+   "detail": "none of the 22 lost and silent misses 8 to 0, but photos with a false-alarm part 1 to 3 of 6 and OFFER claims 7 to 2 (41 photos)",
+   "caveat": "failed the pre-set false-alarm rule (+33 percentage points); not adopted, off by default",
+   "source": "`tools/eval_dev.py --live --variant crops`, `docs/CROPS_EXPERIMENT.md`"
+  },
+  {
+   "id": "video_tests",
+   "label": "Video path",
+   "value": "6 of 6 attacks held",
+   "detail": "plus 1 control and 9 vision tests, on synthetic clips (generated textures, 2 clips from the teammate)",
+   "caveat": "implemented and tested on synthetic cases; not validated on real walk-around video",
+   "source": "`python -m autosettle_vision.video_attacks`, `autosettle_vision/tests`"
+  },
+  {
+   "id": "engine",
+   "label": "Money logic",
+   "value": "20 of 20 attacks held",
+   "detail": "scripted attacks on the claim flow plus 1 control; 48 unit tests including a 5,000-claim fuzz",
+   "caveat": "shows these attacks fail, not that none exist; tests written against the same code",
+   "source": "`python -m unittest discover -s autosettle_engine/tests -t .`, `python -m autosettle_engine.exploit_suite`"
+  },
+  {
+   "id": "prices",
+   "label": "Prices",
+   "value": "labour and paint estimated",
+   "detail": "part prices are listed MRPs (151 rate-card rows)",
+   "caveat": "other-generation and similar-car prices are IMPUTED; Creta front bumper cover ₹2,402 incl. tax matches boodmo (Run 3 spot check, one page)",
+   "source": "`run1/DECK_NUMBERS.md`"
+  },
+  {
+   "id": "quotes",
+   "label": "Garage quotes read by the model",
+   "value": "45 of 53 lines exact, 15 of 15 grand totals",
+   "detail": "15 synthetic printed quotes",
+   "caveat": "synthetic printed quotes only; handwritten quotes not measured",
+   "source": "Run 1 and Run 3 reports"
+  }
+ ],
+ "not_measured": [
+  "Accuracy on real Indian claim photos at scale",
+  "Severity accuracy (no public dataset labels severity)",
+  "Handwritten garage quotes and real garage invoices",
+  "Anything about real walk-around videos"
+ ]
+}

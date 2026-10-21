@@ -93,15 +93,88 @@ class QwenVL:
         return raw if raw and raw != "NONE" and INDIAN_PLATE.match(raw) else None
 
 
+def repair_json(text):
+    """Close brackets or braces a model dropped (e.g. a missing ']' before "gst_percent"). Returns the repaired
+    text, or None when the text cannot be fixed safely (cut off inside a string, wrong nesting, no JSON start).
+    It only adds closers and never invents or changes a value; the caller validates the result with json.loads."""
+    start = (text or "").find("{")
+    if start < 0:
+        return None
+    s, out, stack, in_str, esc = re.sub(r"\s*`{3}\s*$", "", text[start:]), [], [], False, False
+    for i, ch in enumerate(s):
+        if in_str:
+            out.append(ch)
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            if stack and stack[-1] == "[" and re.match(r'"[A-Za-z_]+"\s*:', s[i:]):
+                # an object key where an array element belongs: the array was never closed
+                while out and out[-1] in " \t\r\n,":
+                    out.pop()
+                out.append("],")
+                stack.pop()
+            in_str = True
+            out.append(ch)
+        elif ch in "{[":
+            stack.append(ch)
+            out.append(ch)
+        elif ch in "}]":
+            want = "{" if ch == "}" else "["
+            if not stack:
+                return None
+            if stack[-1] != want:
+                if stack[-1] == "[" and ch == "}" or stack[-1] == "{" and ch == "]":
+                    while out and out[-1] in " \t\r\n,":
+                        out.pop()
+                    out.append("]" if stack[-1] == "[" else "}")
+                    stack.pop()
+                    if not stack or stack[-1] != want:
+                        return None
+                else:
+                    return None
+            stack.pop()
+            out.append(ch)
+            if not stack:
+                break                                   # root object closed; ignore trailing text such as a code fence
+        else:
+            out.append(ch)
+    if in_str:
+        return None
+    while out and out[-1] in " \t\r\n,":
+        out.pop()
+    tail = "".join(out)
+    # cut off mid-value inside a line item (a number half written) is not safe to close; at the root level the last
+    # value is only gst_percent / grand_total, which never set a payment
+    if stack and not (tail[-1:] in '}]"' or (stack == ["{"] and (tail[-1:].isdigit() or tail.endswith("null")))):
+        return None
+    return tail + "".join("}" if b == "{" else "]" for b in reversed(stack))
+
+
 def parse_quote_json(raw):
-    """Strict parse + type clean-up. Anything malformed becomes an empty quote (the engine then moves nothing)."""
+    """Strict parse + type clean-up. A reply with a missing closing bracket or brace is repaired (repair_json) and
+    then goes through exactly the same clean-up and checks. Anything else malformed becomes an empty quote
+    (the engine then moves nothing)."""
     m = re.search(r"\{.*\}", raw or "", re.S)
-    if not m:
-        return {"lines": [], "gst_percent": None, "grand_total": None, "parse_error": "no json"}
+    repaired = False
     try:
+        if not m:
+            raise json.JSONDecodeError("no json", raw or "", 0)
         q = json.loads(m.group(0))
     except json.JSONDecodeError as e:
-        return {"lines": [], "gst_percent": None, "grand_total": None, "parse_error": str(e)}
+        fixed = repair_json(raw)
+        try:
+            q = json.loads(fixed) if fixed else None
+        except json.JSONDecodeError:
+            q = None
+        if not isinstance(q, dict):
+            return {"lines": [], "gst_percent": None, "grand_total": None,
+                    "parse_error": "no json" if not m and "{" not in (raw or "") else str(e)}
+        repaired = True
 
     def num(x):
         if x is None:
@@ -125,4 +198,7 @@ def parse_quote_json(raw):
             continue
         lines.append({"description": str(ln.get("description", ""))[:80], "type": t, "qty": qty,
                       "unit_price": unit, "total": total})
-    return {"lines": lines, "gst_percent": q.get("gst_percent"), "grand_total": num(q.get("grand_total"))}
+    out = {"lines": lines, "gst_percent": q.get("gst_percent"), "grand_total": num(q.get("grand_total"))}
+    if repaired:
+        out["repaired"] = True      # audit marker only; the dispute checker ignores it
+    return out

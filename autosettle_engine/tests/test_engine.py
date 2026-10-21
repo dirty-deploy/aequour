@@ -169,6 +169,33 @@ class MessageFlags(unittest.TestCase):
             self.assertEqual(E.classify_message(t), [], t)
 
 
+class LegalThreatRouting(unittest.TestCase):
+    THREATS = ("I will complain to the Insurance Ombudsman about this", "My lawyer will send you a legal notice",
+               "Main consumer court jaunga", "I will file a police complaint", "vakeel se baat karunga",
+               "kanooni notice bhejunga", "मैं बीमा लोकपाल के पास जाऊंगा", "मैं वकील से बात करूंगा",
+               "उपभोक्ता अदालत में जाऊंगा", "police mein complaint karunga")
+    HARMLESS = ("Can I get the money by UPI?", "OK, I accept the offer", "bhai thoda aur badha do na",
+                "The police officer was kind at the scene", "I parked near the courtyard")
+
+    def test_flagged_in_english_hinglish_and_hindi(self):
+        for t in self.THREATS:
+            self.assertIn("legal_threat", E.classify_message(t), t)
+        for t in self.HARMLESS:
+            self.assertNotIn("legal_threat", E.classify_message(t), t)
+
+    def test_legal_threat_goes_to_a_human_and_changes_no_amount(self):
+        from autosettle_engine.dispute import ClaimSession
+        for t in self.THREATS:
+            s = ClaimSession(policy(), RC)
+            s.submit(vision(det()))
+            self.assertEqual(s.state, "OFFERED")
+            offer = s.current_offer
+            s.message(t)
+            self.assertEqual(s.state, "ESCALATED", t)
+            self.assertEqual(s.current_offer, offer, t)
+            self.assertTrue(ClaimSession.verify_log(s.log))
+
+
 class LowConfidenceSevere(unittest.TestCase):
     def test_low_conf_severe_goes_to_human_before_any_offer(self):
         # the held-out grey Swift: severe hood at 0.339, moderate fender at 0.395, plate matching

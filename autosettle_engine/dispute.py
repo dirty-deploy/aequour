@@ -204,7 +204,7 @@ class ClaimSession:
         """Free text is classified for flags and logged. It can never change an amount or an input."""
         flags = E.classify_message(text)
         self.flags += flags
-        if "abusive" in flags and self.state not in TERMINAL:
+        if ("abusive" in flags or "legal_threat" in flags) and self.state not in TERMINAL:
             self._go("ESCALATED")
         self._log("message", {"flags": flags, "chars": len(text or "")})
         return flags

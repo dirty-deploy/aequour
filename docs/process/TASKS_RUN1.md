@@ -1,6 +1,6 @@
 # TASKS_RUN1.md — unattended run, about 2 hours
 
-Project: Auto-Settle AI (motor-insurance claims adjuster). Folder: `C:\autosettle`. App: `.\env\Scripts\python.exe -m autosettle_vision.app`.
+Project: Auto-Settle AI (motor-insurance claims adjuster). Folder: `<project folder>`. App: `.\env\Scripts\python.exe -m autosettle_vision.app`.
 Design rule: **the AI perceives and talks; deterministic code decides every rupee.** Qwen never receives the ceiling or the internal pivots.
 Hardware: ROG laptop, RTX 5050 **mobile, 8 GB**, Windows. Qwen3-VL-8B (4-bit) uses about 6.4 GB, so only one GPU process may run at a time.
 
@@ -36,7 +36,7 @@ Limits are lower than 90 on purpose: polls are 2 s apart and temperatures can ju
 ---
 
 ## Task 0 — Preconditions and thermal guard (about 10 min)
-1. Check and log: `nvidia-smi` works; AC power is connected (`(Get-CimInstance Win32_Battery).BatteryStatus` is 2); the web app is not running; `C:\autosettle\rate_card_v2_flags.csv` exists (if not, skip Task 2 and log it); LibreHardwareMonitor web server answers at `http://127.0.0.1:8085/data.json` (try `localhost` too, and any other port the user may have set; if none answers, CPU temp is unavailable, use the CPU-limited mode above).
+1. Check and log: `nvidia-smi` works; AC power is connected (`(Get-CimInstance Win32_Battery).BatteryStatus` is 2); the web app is not running; `<project folder>\rate_card_v2_flags.csv` exists (if not, skip Task 2 and log it); LibreHardwareMonitor web server answers at `http://127.0.0.1:8085/data.json` (try `localhost` too, and any other port the user may have set; if none answers, CPU temp is unavailable, use the CPU-limited mode above).
 2. Create `tools\thermal.py`:
    - `read_gpu()`: `nvidia-smi --query-gpu=temperature.gpu,power.draw,utilization.gpu,memory.used,clocks.sm --format=csv,noheader,nounits`.
    - `read_cpu()`: parse the LibreHardwareMonitor JSON (try `127.0.0.1` first, then `localhost`) for the highest value among sensors whose `Type` is `Temperature` and whose `SensorId` starts with `/amdcpu/` or `/intelcpu/` (this laptop has an AMD Ryzen 9 8940HX, where the sensor is usually named "Core (Tctl/Tdie)", not "CPU Package"); the values look like "55.0 °C", so strip the unit; return `None` if unreachable or if no such sensor exists.
@@ -47,7 +47,7 @@ Limits are lower than 90 on purpose: polls are 2 s apart and temperatures can ju
 Acceptance: self-test passes; guard files exist.
 
 ## Task 1 — Backup, baseline, fuzz (about 15 min)
-1. Back up with `robocopy C:\autosettle C:\autosettle_backup_run1 /E /XD env __pycache__`. First run with `/L` to see the size; if it is over 3 GB, also exclude dataset folders but keep code, weights, photos and results. Confirm the weights file is in the backup.
+1. Back up with `robocopy <project folder> <project folder>_backup_run1 /E /XD env __pycache__`. First run with `/L` to see the size; if it is over 3 GB, also exclude dataset folders but keep code, weights, photos and results. Confirm the weights file is in the backup.
 2. Run the test suite. One test fails (28 of 29 passed). Find which, say why, and fix it if it is a test or a clear code bug. If it is not clear, leave it and describe it in the report.
 3. Add `tests\test_fuzz.py` (seeded, CPU only, one thread, under 2 minutes): 5,000 random claims over all models, parts, damage classes, severities and confidences. Assert: offer ≥ 0 and ≤ ceiling; decision is one of OFFER / ASK_MORE / ESCALATE / SURVEYOR; no NaN or inf; a more severe call never lowers a price; duplicate detections of one part never pay twice; the customer text never contains the ceiling figure.
 Acceptance: backup exists; fuzz passes or the failures are reported as real findings.
@@ -88,11 +88,11 @@ Acceptance: `run1\conversation_report.md` with both tables.
 2. `run1\HANDOFF_current.md`: current file layout, how to run the app and tests, config values, what is verified and what is assumed.
 
 ## Task 7 — Freeze (about 5 min, always runs)
-Copy the code, rate card v3, weights and config to `C:\autosettle_FROZEN_<date>`; write SHA-256 of the main files to `run1\FROZEN_HASHES.txt`. Write `run1\RUN1_REPORT.md`: per task, done / skipped / failed, one line each, then the top three things the user must look at, then peak GPU and CPU temperatures from the log.
+Copy the code, rate card v3, weights and config to `<project folder>_FROZEN_<date>`; write SHA-256 of the main files to `run1\FROZEN_HASHES.txt`. Write `run1\RUN1_REPORT.md`: per task, done / skipped / failed, one line each, then the top three things the user must look at, then peak GPU and CPU temperatures from the log.
 
 ## Task 8 — VGGT spike (runs only if Tasks 0 to 5 are done, elapsed < 95 min, and GPU ≤ 65 °C)
 Purpose: find out whether multi-view 3D reconstruction (VGGT) is feasible on this laptop and whether it can support a multi-photo integrity check. This must not change the pipeline, the engine or any decision. Timebox: 25 minutes.
-- Work in `C:\autosettle_vggt_spike`, separate from the project. Do not alter the project env: dry-run first, and abort if torch would change.
+- Work in `<project folder>_vggt_spike`, separate from the project. Do not alter the project env: dry-run first, and abort if torch would change.
 - Check the weights licence on the model card and write what it says; stop if it forbids use.
 - Run the model on 3 to 4 photos of one car (use Wikimedia Commons photos of the same car from the dev set; do not use held-out photos). Run it guarded, in half precision, one forward pass per set, with Qwen and the app closed. Sleep until the GPU is at or below 65 °C between sets.
 - Record: peak VRAM, seconds, peak temperatures, and whether the output (depth, point map, camera poses) looks sensible. Save depth maps as PNGs and one point-cloud render under `run1\vggt\` so they can go in the deck.
