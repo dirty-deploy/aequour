@@ -5,7 +5,7 @@ const pts = (p: number[][]) => p.map((q) => q.join(",")).join(" ");
 /** Detections drawn over the photo in image pixel space. Without a local photo it draws on a blank canvas. */
 export default function Overlay({ url, width, height, findings, label }: { url?: string; width: number; height: number; findings: Finding[]; label: string }) {
   const stroke = Math.max(2, Math.round(Math.max(width, height) / 400));
-  const font = Math.max(14, Math.round(Math.max(width, height) / 55));
+  const font = Math.max(14, Math.round(Math.max(width, height) / 34));
   return (
     <figure className="overlay">
       <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${label}: ${findings.length} findings drawn over the photo`}>

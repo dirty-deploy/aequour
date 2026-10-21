@@ -731,6 +731,28 @@ def create_app(settings=None, vision=None, qwen=None):
                     "findings_by_image": v["findings_by_image"], "engine_detections_after_dedupe": len(dets)})
         return out
 
+    @app.get("/guardrails")
+    def guardrails():
+        """The guardrail table the Guardrails scene shows. Every threshold is read from the engine's config, not retyped."""
+        m = R.money
+        rows = [
+            ("Surveyor required", f"gross loss at or above {m(C.SURVEYOR_REQUIRED)}", "RULE", "autosettle_engine/engine.py assess"),
+            ("Human review", f"gross loss at or above {m(C.GROSS_REVIEW)}", "ASSUMPTION", "autosettle_engine/engine.py assess"),
+            ("Possible total loss", f"gross loss at or above {int(C.TOTAL_LOSS_SHARE_OF_IDV * 100)}% of the insured value", "ASSUMPTION", "autosettle_engine/engine.py assess"),
+            ("Plate match", "a plate that does not match the policy", "DESIGN", "autosettle_engine/engine.py info_gate"),
+            ("Information gate", f"every field known; part confidence {C.MIN_PART_CONF:.2f}, damage confidence {C.MIN_DAMAGE_CONF:.2f}; asks at most {C.K_STALL} times, then a human", "ASSUMPTION", "autosettle_engine/engine.py info_gate"),
+            ("Low-confidence severe", f"a severe call below {C.LOW_CONF_SEVERE:.2f} confidence goes to a human", "ASSUMPTION", "autosettle_engine/engine.py assess"),
+            ("Integrity flags", "an editing tag, a near-duplicate photo or a video that is not continuous goes to a human", "ASSUMPTION", "autosettle_vision/pipeline.py, video_integrity.py"),
+            ("Quote evidence", f"a quote line moves the offer only if the photos show the part and the price is inside the genuine range; up to {int(C.QUOTE_OK_TOLERANCE * 100)}% of our reference counts as ok", "ASSUMPTION", "autosettle_engine/dispute.py check_quote"),
+            ("Evidence rounds", f"at most {C.MAX_EVIDENCE_ROUNDS} distinct quotes may move the offer", "ASSUMPTION", "autosettle_engine/dispute.py dispute"),
+            ("Upper bound", "no quote can lift the offer past the bound fixed before the conversation; the customer never sees it", "DESIGN", "autosettle_engine/dispute.py check_quote"),
+            ("Text never changes an amount", "free text is recorded and flagged; it reaches no input of the pricing code", "DESIGN", "autosettle_engine/dispute.py message"),
+            ("Model wording is checked", "a reply that adds a figure, drops a line, names the bound or promises is replaced by the template", "DESIGN", "autosettle_engine/rationale.py"),
+            ("Closed claims stay closed", "any event after the decision is refused", "DESIGN", "autosettle_engine/dispute.py, autosettle_api/app.py"),
+            ("Hash-chained audit log", "every event carries the hash of the one before; any edit breaks the chain", "DESIGN", "autosettle_engine/dispute.py _log, verify_log"),
+        ]
+        return [{"guardrail": a, "threshold": b, "kind": k, "enforced_in": w} for a, b, k, w in rows]
+
     # ------------------------------------------------------------------ transcript, recorded clips, attack console
     @app.get("/claims/{cid}/transcript")
     def transcript(cid: str):

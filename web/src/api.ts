@@ -11,13 +11,37 @@ export interface ClaimView {
   policy: { policy_id: string; vehicle: string }; plate_given: boolean; photos: PhotoRef[];
   decision: "OFFER" | "ASK_MORE" | "ESCALATE" | "SURVEYOR" | null; message: string | null; message_source?: string;
   offer: number | null; updated_offer: number | null; original_offer: number | null; lines: Line[]; deductible: number | null; gross: number | null;
-  needs: string[]; options: { id: string; label: string }[]; closed: boolean; quote_check?: QuoteCheck;
+  needs: string[]; options: { id: string; label: string }[]; closed: boolean; quote_check?: QuoteCheck; video?: VideoView;
 }
-export interface Scenario { id: string; title: string; blurb: string; expect: string; quote_example?: unknown; message?: string }
+export interface Scenario { id: string; title: string; blurb: string; expect: string; recorded?: boolean; quote_example?: unknown; message?: string; script?: { customer: string }[] }
+export interface Turn { n: number; from: "customer" | "system"; text: string; wording: string | null; state: string; decision: string | null; offer: number | null; audit_seq: number | null; audit_hash: string | null; detail?: Record<string, unknown> }
+export interface Transcript { claim_id: string; mode: string; state: string; chain_ok: boolean; turns: Turn[] }
+export interface VideoKeyframe { index: number; name: string | null; frame?: number; seconds?: number; sharpness?: number; brightness?: number; thumbnail: string | null; findings: number }
+export interface VideoEntity { part_class: string; damage_class: string | null; keyframes: number[]; seen_in: number; of: number; best_conf: number; severity: string | null; status: string }
+export interface VideoView {
+  synthetic: boolean; recorded: boolean; label: string; seconds?: number; fps?: number; frames?: number; candidates?: number; usable?: number; dropped_blur_or_dark?: number;
+  keyframes: VideoKeyframe[]; filter: { sharpness_min: number; brightness_min: number };
+  continuity: { frames_checked?: number; lowest_inliers?: number | null; median_inliers?: number | null; required_inliers?: number; breaks: number[]; verdict: string };
+  entities: VideoEntity[]; note: string;
+}
+export interface VideoSample { key: string; label: string; shows: string; synthetic: boolean }
+export interface AttackInfo { name: string; title: string; attempt: string; held_looks_like: string; control: boolean; offer_should_move: boolean }
+export interface AttackRun { name: string; title: string; attempt: string; control: boolean; held: boolean; system_did: string; offer_before: number | null; offer_after: number | null; decision_after: string | null; offer_unchanged: boolean | null; audit_chain_intact: boolean | null; offer_should_move: boolean; label: string }
+export interface GuardRow { guardrail: string; threshold: string; kind: string; enforced_in: string }
+export interface RangeView {
+  label: string; applies: boolean; note?: string; initial_offer?: number; current_offer?: number; ceiling?: number; ceiling_note?: string; deductible?: number; gross?: number; idv?: number;
+  evidence_rounds_used?: number; evidence_rounds_allowed?: number; which_stops_a_higher_number?: { guardrail: string; rule: string; enforced_in: string }[];
+}
+export interface EscalationView {
+  label: string; applies: boolean; note?: string; decision?: string; reasons?: { code: string; meaning: string }[]; missing?: { field: string; meaning: string }[];
+  flags?: string[]; integrity_flags?: string[]; evidence?: Detection[]; priced_lines?: { part_class: string; damage_class: string; severity: string; action: string; line_total: number }[];
+  gross?: number | null; what_the_human_should_do?: string; audit?: { chain_ok: boolean; events: { seq: number; event: string; state: string; hash: string }[] }; video?: VideoView | null;
+}
 export interface Policy { policy_id: string; vehicle: string; plate: string }
 export interface GuideStep { id: string; title: string; text: string }
 export interface LimitItem { id: string; label: string; value: string; detail: string; caveat: string; source: string }
 export interface Limits { headline: string; items: LimitItem[]; not_measured: string[] }
+export const num = (s: string) => { const m = s.match(/^(\d+) (of \d+|offers)/); return m ? { n: parseInt(m[1], 10), rest: " " + m[2] } : null; };
 export interface AuditEvent { seq: number; event: string; state: string; hash: string; prev: string; data: Record<string, unknown> }
 export interface Audit { chain_ok: boolean; state: string; log: AuditEvent[]; mode: string }
 export interface Finding {
@@ -52,7 +76,7 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 const json = (body: unknown): RequestInit => ({ method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
 
 export const api = {
-  health: () => call<{ ok: boolean; mode: string; qwen: string; video: boolean }>("/health"),
+  health: () => call<{ ok: boolean; mode: "LIVE" | "REPLAY"; qwen: string; video: boolean }>("/health"),
   policies: () => call<Policy[]>("/policies"),
   scenarios: () => call<Scenario[]>("/scenarios"),
   guide: () => call<GuideStep[]>("/capture-guide"),
@@ -68,6 +92,17 @@ export const api = {
     const f = new FormData(); f.append("file", file);
     return call<ClaimView>(`/claims/${id}/video`, { method: "POST", body: f });
   },
+  videoRecorded: (id: string, key: string) => {
+    const f = new FormData(); f.append("recorded", key);
+    return call<ClaimView>(`/claims/${id}/video`, { method: "POST", body: f });
+  },
+  videoSamples: () => call<VideoSample[]>("/video-samples"),
+  transcript: (id: string) => call<Transcript>(`/claims/${id}/transcript`),
+  attacks: () => call<AttackInfo[]>("/attacks"),
+  runAttack: (name: string) => call<AttackRun>(`/attacks/${name}/run`, { method: "POST" }),
+  guardrails: () => call<GuardRow[]>("/guardrails"),
+  range: (id: string) => call<RangeView>(`/adjuster/${id}/range`),
+  escalation: (id: string) => call<EscalationView>(`/adjuster/${id}/escalation`),
   assess: (id: string) => call<ClaimView>(`/claims/${id}/assess`, { method: "POST" }),
   quote: (id: string, quote: unknown) => call<ClaimView>(`/claims/${id}/quote`, json({ quote })),
   quoteImage: (id: string, file: File) => {

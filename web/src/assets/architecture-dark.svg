@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#f1efe8"/></marker></defs>
+<rect width="1600" height="1000" fill="#08080b"/>
+<text x="40" y="38" font-size="26" font-weight="750" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Aequour: the AI looks, code pays</text>
+<text x="40" y="62" font-size="15" font-weight="400" fill="#a5a39c" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Gold lane = deterministic code that owns every rupee. Dashed = AI (can be wrong). Grey = replay mode.</text>
+<rect x="20" y="80" width="1560" height="150" rx="16" fill="none" stroke="#f1efe8" stroke-width="1.2" stroke-opacity=".4"/>
+<text x="40" y="155.0" font-size="18" font-weight="700" fill="#f1efe8" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" transform="rotate(-90 40 155.0)">Browser</text>
+<text x="60" y="155.0" font-size="13" font-weight="400" fill="#a5a39c" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" transform="rotate(-90 60 155.0)">web/ (React)</text>
+<rect x="80" y="108" width="340" height="96" rx="12" fill="#101015" stroke="#3a3a42" stroke-width="1.6"/>
+<text x="96" y="136" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Landing page and scroll scene,</text>
+<text x="96" y="157" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Limits page read from /limits</text>
+<rect x="440" y="108" width="380" height="96" rx="12" fill="#101015" stroke="#3a3a42" stroke-width="1.6"/>
+<text x="456" y="136" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Try a claim</text>
+<text x="456" y="160" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Conversation, Quote, Choices,</text>
+<text x="456" y="181" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Video, Your own photos, Test it</text>
+<rect x="840" y="108" width="360" height="96" rx="12" fill="#101015" stroke="#3a3a42" stroke-width="1.6"/>
+<text x="856" y="136" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Adjuster view</text>
+<text x="856" y="160" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Range, escalation packet, ledger,</text>
+<text x="856" y="181" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">audit chain, detections (demo only)</text>
+<rect x="1220" y="108" width="340" height="96" rx="12" fill="#101015" stroke="#3a3a42" stroke-width="1.6"/>
+<text x="1236" y="136" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Attack console</text>
+<text x="1236" y="160" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">20 attacks plus a control, run on</text>
+<text x="1236" y="181" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">a fresh in-memory claim</text>
+<rect x="20" y="258" width="1560" height="150" rx="16" fill="none" stroke="#f1efe8" stroke-width="1.2" stroke-opacity=".4"/>
+<text x="40" y="333.0" font-size="18" font-weight="700" fill="#f1efe8" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" transform="rotate(-90 40 333.0)">API</text>
+<text x="60" y="333.0" font-size="13" font-weight="400" fill="#a5a39c" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" transform="rotate(-90 60 333.0)">autosettle_api (FastAPI)</text>
+<rect x="80" y="286" width="980" height="106" rx="12" fill="#101015" stroke="#3a3a42" stroke-width="1.6"/>
+<text x="96" y="314" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Routes</text>
+<text x="96" y="338" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">/claims: photos, plate, video, assess, quote, message, choose, transcript, audit</text>
+<text x="96" y="359" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">/adjuster/{id}, /range, /escalation    /attacks    /scenarios    /video-samples    /limits    /health</text>
+<text x="96" y="380" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">customer routes never return the upper bound</text>
+<rect x="1080" y="286" width="480" height="106" rx="12" fill="#101015" stroke="#3a3a42" stroke-width="1.6"/>
+<text x="1096" y="314" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Claim store (in memory)</text>
+<text x="1096" y="338" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">one session per claim: state machine and</text>
+<text x="1096" y="359" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">hash-chained log; JSON copy of the log on disk</text>
+<rect x="20" y="436" width="1560" height="290" rx="16" fill="none" stroke="#f1efe8" stroke-width="1.2" stroke-opacity=".4"/>
+<text x="40" y="581.0" font-size="18" font-weight="700" fill="#f1efe8" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" transform="rotate(-90 40 581.0)">Perception: the AI looks</text>
+<text x="60" y="581.0" font-size="13" font-weight="400" fill="#a5a39c" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" transform="rotate(-90 60 581.0)">autosettle_vision (GPU, weights not in repo)</text>
+<rect x="80" y="464" width="215" height="112" rx="12" fill="#101015" stroke="#f1efe8" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="96" y="492" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Photo checks</text>
+<text x="96" y="516" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">sharpness, brightness,</text>
+<text x="96" y="537" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">edit-software tag,</text>
+<text x="96" y="558" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">duplicate photo</text>
+<rect x="315" y="464" width="215" height="112" rx="12" fill="#101015" stroke="#f1efe8" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="331" y="492" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Parts model</text>
+<text x="331" y="516" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">YOLO11s-seg,</text>
+<text x="331" y="537" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">21 car panels</text>
+<rect x="550" y="464" width="250" height="112" rx="12" fill="#101015" stroke="#f1efe8" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="566" y="492" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Damage models</text>
+<text x="566" y="516" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">14-class box detector plus</text>
+<text x="566" y="537" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">a 4-class model</text>
+<text x="566" y="558" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">(no scratch class)</text>
+<rect x="820" y="464" width="215" height="112" rx="12" fill="#101015" stroke="#f1efe8" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="836" y="492" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Severity</text>
+<text x="836" y="516" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">share of the part</text>
+<text x="836" y="537" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">covered by damage:</text>
+<text x="836" y="558" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">minor, moderate, severe</text>
+<rect x="1055" y="464" width="205" height="112" rx="12" fill="#101015" stroke="#f1efe8" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="1071" y="492" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Vision dictionary</text>
+<text x="1071" y="516" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">parts, damage,</text>
+<text x="1071" y="537" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">severity, flags,</text>
+<text x="1071" y="558" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">integrity flags</text>
+<rect x="80" y="596" width="955" height="106" rx="12" fill="#101015" stroke="#f1efe8" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="96" y="624" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Video path (validated on synthetic clips only)</text>
+<text x="96" y="648" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">clip at most 60 s, at most 12 keyframes; a continuity check (a cut or a different car escalates);</text>
+<text x="96" y="669" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">each keyframe goes through the photo pipeline; fusion across keyframes</text>
+<rect x="1055" y="596" width="165" height="106" rx="12" fill="#17171c" stroke="#3a3a42" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="1071" y="624" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">REPLAY</text>
+<text x="1071" y="648" font-size="15" font-weight="400" fill="#a5a39c" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">recorded output</text>
+<text x="1071" y="669" font-size="15" font-weight="400" fill="#a5a39c" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">replaces this lane</text>
+<rect x="1280" y="464" width="280" height="238" rx="12" fill="#101015" stroke="#f1efe8" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="1296" y="492" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Qwen3-VL-8B, 4-bit</text>
+<text x="1296" y="516" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">rewords the offer text (checked</text>
+<text x="1296" y="537" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">against the engine's numbers);</text>
+<text x="1296" y="558" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">reads a quote or plate photo.</text>
+<text x="1296" y="579" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Never sees the upper bound.</text>
+<line x1="295" y1="520" x2="315" y2="520" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="530" y1="520" x2="550" y2="520" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="800" y1="520" x2="820" y2="520" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="1035" y1="520" x2="1055" y2="520" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="20" y="754" width="1560" height="230" rx="16" fill="none" stroke="#e0b04a" stroke-width="1.2" stroke-opacity=".4"/>
+<text x="40" y="869.0" font-size="18" font-weight="700" fill="#e0b04a" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" transform="rotate(-90 40 869.0)">Decision: code pays</text>
+<text x="60" y="869.0" font-size="13" font-weight="400" fill="#a5a39c" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" transform="rotate(-90 60 869.0)">autosettle_engine (no AI)</text>
+<rect x="80" y="782" width="290" height="180" rx="12" fill="#1d1810" stroke="#e0b04a" stroke-width="1.6"/>
+<text x="96" y="810" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Information gate</text>
+<text x="96" y="834" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">plate, parts, damage and</text>
+<text x="96" y="855" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">severity all known?</text>
+<text x="96" y="876" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">OFFER, ASK_MORE (at most 2),</text>
+<text x="96" y="897" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">ESCALATE or SURVEYOR</text>
+<rect x="390" y="782" width="330" height="180" rx="12" fill="#1d1810" stroke="#e0b04a" stroke-width="1.6"/>
+<text x="406" y="810" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Price each line</text>
+<text x="406" y="834" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">rate card (151 rows), labour,</text>
+<text x="406" y="855" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">paint, depreciation, deductible;</text>
+<text x="406" y="876" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">lesser-of rule; offer and a</text>
+<text x="406" y="897" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">hidden upper bound</text>
+<rect x="740" y="782" width="420" height="180" rx="12" fill="#1d1810" stroke="#e0b04a" stroke-width="1.6"/>
+<text x="756" y="810" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Dispute check</text>
+<text x="756" y="834" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">a quote line moves the offer only if the photos</text>
+<text x="756" y="855" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">show that part and the price is inside the genuine</text>
+<text x="756" y="876" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">range; at most 2 rounds; never past the upper bound;</text>
+<text x="756" y="897" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">free text can never change an amount</text>
+<rect x="1180" y="782" width="380" height="180" rx="12" fill="#1d1810" stroke="#e0b04a" stroke-width="1.6"/>
+<text x="1196" y="810" font-size="16" font-weight="700" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">Hash-chained audit log</text>
+<text x="1196" y="834" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">every event carries the hash of the one</text>
+<text x="1196" y="855" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">before; any edit breaks the chain;</text>
+<text x="1196" y="876" font-size="15" font-weight="400" fill="#f1efe8" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">verified in the API and the adjuster view</text>
+<line x1="370" y1="872" x2="390" y2="872" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="720" y1="872" x2="740" y2="872" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="1160" y1="872" x2="1180" y2="872" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="640" y1="204" x2="640" y2="286" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="648" y="249.0" font-size="13" font-weight="400" fill="#a5a39c" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">photos, video, plate, quote, text</text>
+<line x1="900" y1="286" x2="900" y2="204" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="187" y1="392" x2="187" y2="464" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="195" y="432.0" font-size="13" font-weight="400" fill="#a5a39c" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">image files, clips</text>
+<line x1="1420" y1="392" x2="1420" y2="464" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="1428" y="432.0" font-size="13" font-weight="400" fill="#a5a39c" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">wording, quote reading</text>
+<path d="M1240 576 L1240 740 L225 740 L225 782" fill="none" stroke="#f1efe8" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="700" y="733" font-size="13" font-weight="400" fill="#a5a39c" text-anchor="start" font-family="Inter, Segoe UI, Arial, sans-serif">vision dictionary</text>
+</svg>

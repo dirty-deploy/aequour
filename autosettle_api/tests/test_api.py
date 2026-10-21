@@ -391,3 +391,14 @@ class TestStage2(unittest.TestCase):
         self.assertNotIn("9,000", r["reply"])
         r2 = c.post(f"/claims/{cid}/message", json={"text": "Thanks, noted"}).json()
         self.assertNotIn("current offer", r2["reply"])
+
+
+class TestLaunchOptions(unittest.TestCase):
+    def test_replay_does_not_load_the_language_model_unless_asked(self):
+        from autosettle_api.__main__ import parse, settings_from
+        self.assertFalse(settings_from(parse(["--replay"])).qwen)
+        self.assertTrue(settings_from(parse(["--replay", "--with-qwen"])).qwen)
+        self.assertTrue(settings_from(parse([])).qwen)
+        self.assertFalse(settings_from(parse(["--no-qwen"])).qwen)
+        c, _ = replay_client()
+        self.assertEqual(c.get("/health").json()["qwen"], "off")

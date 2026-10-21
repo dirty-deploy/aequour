@@ -1,60 +1,56 @@
 import { useEffect, useState } from "react";
 import { api } from "./api";
-import type { Adjuster, ClaimView, Limits } from "./api";
+import type { Adjuster, Audit, ClaimView, Limits } from "./api";
 import Nav from "./components/Nav";
-import Mesh from "./components/Mesh";
-import Sequence from "./components/Sequence";
-import Facts from "./components/Facts";
-import ChromeButton from "./components/ChromeButton";
-import ClaimFlow from "./ClaimFlow";
+import Hero from "./components/Hero";
+import Pinned from "./components/Pinned";
+import Pair from "./components/Pair";
+import Minis from "./components/Minis";
+import LimitsScene from "./components/LimitsScene";
+import GuardScene from "./components/GuardScene";
+import TryScene from "./components/TryScene";
+import Glance from "./components/Glance";
 
+/** The customer page: eight scenes, one after another. Data for the scroll scenes comes from one silent recorded claim. */
 export default function Landing({ auto }: { auto?: string }) {
   const [adj, setAdj] = useState<Adjuster | null>(null);
   const [demo, setDemo] = useState<ClaimView | null>(null);
+  const [audit, setAudit] = useState<Audit | null>(null);
   const [lastId, setLastId] = useState<string | undefined>();
   const [limits, setLimits] = useState<Limits | null>(null);
+  const [plate, setPlate] = useState<string | undefined>();
+  const [health, setHealth] = useState<{ mode: "LIVE" | "REPLAY"; video: boolean } | null>(null);
 
   useEffect(() => {
-    // one silent recorded claim feeds the scroll sequence with real detections and the real rupee lines
-    api.create({ scenario: "offer" }).then(async (c) => { setDemo(c); setAdj(await api.adjuster(c.claim_id)); }).catch(() => undefined);
+    // one silent recorded claim (the Swift offer plus the recorded quote) feeds the pinned scene and the miniatures with real output
+    api.create({ scenario: "offer" }).then(async (c0) => {
+      // the recorded Swift claim, then the recorded garage quote, so the miniatures show a supported quote check
+      const q = (await api.scenarios()).find((s) => s.quote_example)?.quote_example;
+      const c = q ? await api.quote(c0.claim_id, q) : c0;
+      setDemo(c);
+      const [a, au, pol] = await Promise.all([api.adjuster(c.claim_id), api.audit(c.claim_id), api.policies()]);
+      setAdj(a); setAudit(au); setPlate(pol.find((p) => p.policy_id === "POL-DEMO-001")?.plate);
+    }).catch(() => undefined);
     api.limits().then(setLimits).catch(() => undefined);
+    api.health().then(setHealth).catch(() => undefined);
   }, []);
-  useEffect(() => { if (auto) document.getElementById("try")?.scrollIntoView(); }, [auto]);
-  const recall = limits?.items.find((i) => i.id === "recall");
-  const jump = (id: string) => () => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const replay = health?.mode === "REPLAY";
 
   return (
     <>
       <Nav adjusterId={lastId ?? demo?.claim_id} />
-      <header className="hero">
-        <div className="wrap">
-          <span className="eyebrow">Motor claims, itemised</span>
-          <h1>The AI looks.<br />Code pays.</h1>
-          <p className="sub">Photos in, an itemised rupee offer out. Models find the damage. Deterministic code prices every line, and declines when it cannot.</p>
-          <div className="cta">
-            <ChromeButton onClick={jump("try")}>Start a claim</ChromeButton>
-            <ChromeButton variant="quiet" onClick={jump("read")}>See how a claim is read</ChromeButton>
-          </div>
-          <p className="fine">Demo on public photos.{recall ? ` In our own tests it found ${recall.value} damaged parts; read the limits.` : ""}</p>
-        </div>
-        <Mesh />
-      </header>
-
-      <section className="sec wrap">
-        <h2>One photo, four steps,<br />no guessing.</h2>
-        <p className="lede">A real recorded claim, drawn from the pipeline's own output. Scroll.</p>
-      </section>
-      <div className="wrap"><Sequence adj={adj} claim={demo} /></div>
-
-      <Facts />
-
-      <section className="sec wrap">
-        <h2>Try one.</h2>
-        <p className="lede">Run a recorded claim, or add your own photos. Nothing leaves this machine.</p>
-        <ClaimFlow auto={auto} onClaim={setLastId} />
-      </section>
-
-      <footer className="foot wrap">Aequour. The AI perceives and talks; deterministic code decides every rupee.</footer>
+      <Hero limits={limits} replay={replay} />
+      <Pinned adj={adj} claim={demo} />
+      <Pair />
+      <Minis claim={demo} adj={adj} audit={audit} plate={plate} />
+      <LimitsScene limits={limits} />
+      <GuardScene />
+      <TryScene auto={auto} onClaim={setLastId} replay={replay} videoLive={!!health && health.mode === "LIVE" && health.video} />
+      <Glance limits={limits} />
+      <footer className="foot wrap">
+        <p>Aequour. The AI perceives and talks; deterministic code decides every rupee.</p>
+        <p>{replay && <><b className="replay-tag">REPLAY</b> Vision output is recorded from the real pipeline; the engine runs live. </>}Source and documents: <a href="https://github.com/dirty-deploy/aequour" rel="noreferrer">github.com/dirty-deploy/aequour</a>.</p>
+      </footer>
     </>
   );
 }

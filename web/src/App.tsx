@@ -3,7 +3,6 @@ import Customer from "./Customer";
 import AdjusterView from "./AdjusterView";
 import Stars from "./components/Stars";
 import Nav from "./components/Nav";
-import ClaimFlow from "./ClaimFlow";
 
 function useRoute() {
   const read = () => window.location.hash.replace(/^#\/?/, "");
@@ -19,12 +18,11 @@ function useRoute() {
 export default function App() {
   const route = useRoute();
   const m = route.match(/^adjuster\/([a-f0-9]+)$/);
-  const d = route.match(/^demo\/([a-z]+)$/);
-  const fl = route.match(/^flow\/([a-z]+)$/);
+  const d = route.match(/^(?:demo|flow)\/([a-z_]+)$/);
   return (
     <>
       <Stars />
-      {fl ? (<main className="wrap" style={{ paddingTop: 40 }}><ClaimFlow auto={fl[1]} /></main>) : m ? (<><Nav adjusterId={m[1]} /><AdjusterView id={m[1]} /></>) : <Customer auto={d ? d[1] : undefined} />}
+      {m ? (<><Nav adjusterId={m[1]} plain /><AdjusterView id={m[1]} /></>) : <Customer auto={d ? d[1] : undefined} />}
     </>
   );
 }
