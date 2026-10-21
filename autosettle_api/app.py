@@ -101,6 +101,7 @@ class Claim:
         self.lock = threading.RLock()
         self.assessed = False
         self.chat = []
+        self.silent = False             # a data claim made by the landing page: never loads the language model
         self.turns = []
         self.video_view = None
 
@@ -141,17 +142,21 @@ def create_app(settings=None, vision=None, qwen=None):
     mode_label = "REPLAY" if backend.mode == "replay" else "LIVE"
 
     # ------------------------------------------------------------------ helpers
+    qlock = threading.Lock()
+
     def get_qwen():
+        """Loads the language model once. Concurrent callers wait for the load instead of seeing "model off"."""
         if not cfg.qwen:
             return None
-        if not qstate["tried"]:
-            qstate["tried"] = True
-            try:
-                from autosettle_vision.qwen import QwenVL
-                qstate["model"] = QwenVL()
-            except Exception as e:      # no GPU, out of memory, model missing: fall back to templates
-                qstate["error"] = str(e)[:200]
-        return qstate["model"]
+        with qlock:
+            if not qstate["tried"]:
+                qstate["tried"] = True
+                try:
+                    from autosettle_vision.qwen import QwenVL
+                    qstate["model"] = QwenVL()
+                except Exception as e:      # no GPU, out of memory, model missing: fall back to templates
+                    qstate["error"] = str(e)[:200]
+            return qstate["model"]
 
     def need(cid):
         c = claims.get(cid)
@@ -358,7 +363,7 @@ def create_app(settings=None, vision=None, qwen=None):
             ev["plate_read"] = c.plate_text
         c.vision, c.ev = v, ev
         res = c.session.submit(ev)
-        text, used, viol = customer_text(res, c.policy, ev, get_qwen() if res["decision"] == "OFFER" else None)
+        text, used, viol = customer_text(res, c.policy, ev, get_qwen() if (res["decision"] == "OFFER" and not c.silent) else None)
         c.session._log("customer_message", {"model_wording_used": used, "violations": [str(x) for x in viol]})
         c.message_text, c.message_source = text, ("model, checked" if used else "template")
         c.assessed = True
@@ -462,6 +467,7 @@ def create_app(settings=None, vision=None, qwen=None):
             if len(claims) >= MAX_CLAIMS:
                 raise HTTPException(429, "claim store is full; restart the demo")
             c = Claim(uuid.uuid4().hex[:12], get_policy(pid), SCENARIOS[sc]["replay"] if sc else None)
+            c.silent = bool(body.get("silent"))
             claims[c.id] = c
         if sc:
             s = SCENARIOS[sc]

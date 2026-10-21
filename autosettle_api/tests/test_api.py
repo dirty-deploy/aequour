@@ -415,3 +415,26 @@ class TestGuardrailsRoute(unittest.TestCase):
         self.assertIn(f"{C.GROSS_REVIEW:,}", text)
         self.assertNotIn("ceiling", text.lower())
         self.assertTrue(all(r["kind"] in ("RULE", "ASSUMPTION", "DESIGN") for r in rows))
+
+
+class TestLanguageModelLoading(unittest.TestCase):
+    def test_silent_data_claims_never_load_the_language_model(self):
+        import threading
+        loads = []
+
+        class Slow:
+            def reword(self, template, res):
+                return template
+
+            def read_quote(self, img):
+                return {"lines": [], "gst_percent": None, "grand_total": None}, ""
+
+        app = create_app(Settings(runtime=Path(tempfile.mkdtemp()), qwen=True), vision=FakeVision(), qwen=None)
+        c = TestClient(app)
+        # a silent claim does not touch the model even in a mode that would load it
+        cid = c.post("/claims", json={"policy_id": "POL-DEMO-001", "plate_text": "DL3CAB1234", "silent": True}).json()["claim_id"]
+        c.post(f"/claims/{cid}/photos", files=[("files", ("a.jpg", jpeg(), "image/jpeg"))])
+        r = c.post(f"/claims/{cid}/assess").json()
+        self.assertEqual(r["decision"], "OFFER")
+        self.assertEqual(r["message_source"], "template")
+        self.assertFalse(loads)

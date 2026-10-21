@@ -23,7 +23,7 @@ export default function Landing({ auto }: { auto?: string }) {
 
   useEffect(() => {
     // one silent recorded claim (the Swift offer plus the recorded quote) feeds the pinned scene and the miniatures with real output
-    api.create({ scenario: "offer" }).then(async (c0) => {
+    api.create({ scenario: "offer", silent: true }).then(async (c0) => {
       // the recorded Swift claim, then the recorded garage quote, so the miniatures show a supported quote check
       const q = (await api.scenarios()).find((s) => s.quote_example)?.quote_example;
       const c = q ? await api.quote(c0.claim_id, q) : c0;
