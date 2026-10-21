@@ -38,8 +38,8 @@
    "id": "heldout",
    "label": "Unseen photos",
    "value": "0 offers",
-   "detail": "8 photos run once",
-   "caveat": "5 asked for more, 3 went to a human, 1 to a surveyor; 3 of the 3 human routes were plate mismatches against simulated policies",
+   "detail": "8 photos, 9 runs (one car was run twice), never re-run or tuned to",
+   "caveat": "of the 9 runs 5 asked for more, 3 went to a human, 1 to a surveyor; 3 of the 3 human routes were plate mismatches against simulated policies",
    "source": "`run1/DECK_NUMBERS.md`"
   },
   {

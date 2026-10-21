@@ -1,0 +1,24 @@
+flowchart TB
+  subgraph Browser["Browser (web/, React)"]
+    L[Landing and scroll scene] --- T[Try a claim: Conversation, Quote, Choices, Video, Photos]
+    A[Adjuster view: range, escalation packet, ledger, audit chain] --- X[Attack console]
+  end
+  subgraph API["API (autosettle_api, FastAPI)"]
+    R["Routes: /claims, /adjuster, /attacks, /limits, /health"]
+    S[("Claim store: state machine + hash-chained log")]
+  end
+  subgraph AI["Perception: the AI looks (autosettle_vision)"]
+    PC[Photo checks] --> PM[Parts model: 21 panels] --> DM[Damage models: 14-class + 4-class] --> SV[Severity from area share] --> VD[Vision dictionary]
+    VP[Video path: sampler, continuity check, keyframes, fusion] --> VD
+    Q["Qwen3-VL-8B 4-bit: wording, quote and plate reading"]
+    RP{{REPLAY: recorded output replaces this lane}}
+  end
+  subgraph Code["Decision: code pays (autosettle_engine, no AI)"]
+    G[Information gate: OFFER, ASK_MORE, ESCALATE, SURVEYOR] --> P[Price each line: rate card, labour, paint, depreciation, deductible] --> D[Dispute check: quote vs photos and genuine range, at most 2 rounds] --> H[Hash-chained audit log]
+  end
+  Browser <--> R
+  R --> PC
+  R <--> Q
+  R --- S
+  VD --> G
+  Code --> R
