@@ -47,18 +47,19 @@ _pool = concurrent.futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix=
 
 # ------------------------------------------------------------------ facts
 def _line_facts(ln):
-    d = {"part": R.pname(ln["part_class"]), "what_is_done": ACTION_WORDS.get(ln["action"], ln["action"]), "line_total": ln["line_total"]}
+    m = R.money          # amounts go to the model as text, exactly as the customer sees them: ₹2,763
+    d = {"part": R.pname(ln["part_class"]), "what_is_done": ACTION_WORDS.get(ln["action"], ln["action"]), "line_total": m(ln["line_total"])}
     if ln["action"] == "replace":
-        d["part_price"] = ln["part_mrp"]
+        d["part_price"] = m(ln["part_mrp"])
         d["depreciation_percent"] = int(round(ln["dep_rate"] * 100))
-        d["depreciation_amount"] = ln["dep_amount"]
-        d["part_price_after_depreciation"] = ln["part_net"]
+        d["depreciation_amount"] = m(ln["dep_amount"])
+        d["part_price_after_depreciation"] = m(ln["part_net"])
     if ln["labour"]:
-        d["labour"] = ln["labour"]
+        d["labour"] = m(ln["labour"])
     if ln["paint_gross"]:
-        d["painting"] = ln["paint_gross"]
-        d["paint_material_deduction"] = ln["paint_dep"]
-        d["painting_after_deduction"] = ln["paint_net"]
+        d["painting"] = m(ln["paint_gross"])
+        d["paint_material_deduction"] = m(ln["paint_dep"])
+        d["painting_after_deduction"] = m(ln["paint_net"])
     b = ln.get("dep_basis")
     if b:
         d["material"] = b["material"]
@@ -75,15 +76,14 @@ def build_facts(c, intent):
     facts = {"claim_state": STATE_WORDS.get(s.state, "in progress")}
     open_offer = bool(res and res["decision"] == "OFFER" and s.state in ("OFFERED", "UPDATED_OFFER"))
     if res and res["decision"] == "OFFER":
-        facts["current_offer"] = s.current_offer
+        facts["current_offer"] = R.money(s.current_offer)
         if s.updated_offer is not None and s.offer is not None:
-            facts["offer_before_garage_quote"] = s.offer
+            facts["offer_before_garage_quote"] = R.money(s.offer)
     if open_offer:
-        facts["choices"] = ["accept the offer", "send the garage's itemised quote (each line is checked against the photos)",
-                            "repair at a partner garage at agreed rates", "ask for a surveyor"]
+        facts["offer_is_open"] = True      # the choices (accept, quote, partner garage, surveyor) are listed by the code-built Next step
     if intent in ("how_calculated", "depreciation") and res and res["decision"] == "OFFER":
-        facts["repair_cost"] = res["gross"]
-        facts["deductible"] = res["deductible"]
+        facts["repair_cost"] = R.money(res["gross"])
+        facts["deductible"] = R.money(res["deductible"])
         facts["lines"] = [_line_facts(ln) for ln in res["lines"]]
     if intent == "depreciation":
         facts["depreciation_rules"] = {"plastic_and_rubber_parts_percent": int(round(C.PLASTIC_DEP * 100)), "glass_percent": 0,
@@ -106,7 +106,7 @@ def build_facts(c, intent):
 
 # ------------------------------------------------------------------ templates (always available, written from the same facts)
 def _m(n):
-    return R.money(n)
+    return n if isinstance(n, str) else R.money(n)
 
 
 def _line_sentence(l):
@@ -140,7 +140,7 @@ def _dep_sentence(l):
 def template(intent, facts):
     """(body, next_step) for an intent, from the facts only. No model."""
     offer = facts.get("current_offer")
-    open_offer = "choices" in facts
+    open_offer = bool(facts.get("offer_is_open"))
     lines = facts.get("lines", [])
     state = facts.get("claim_state", "")
     if intent == "how_calculated":
@@ -163,8 +163,7 @@ def template(intent, facts):
         return "\n".join(body), "ask about any other line, or accept this offer if you are happy with it." if open_offer else G.recorded_step()
     if intent == "what_next":
         if open_offer:
-            return (f"You have four choices.\n\nYou can accept {_m(offer)}, send your garage's itemised quote, repair at a partner garage at agreed rates, or ask for a surveyor.",
-                    G.offer_step())
+            return (f"Your offer is {_m(offer)}. Nothing is decided until you choose.\n\nI can also explain any line of it before you do.", G.offer_step())
         return (f"Right now, {state}.", G.recorded_step())
     if intent == "why_not_more":
         body = "I understand it may feel low.\n\nThe offer comes from the photos, listed part prices and fixed depreciation rules, so I can't raise it on request."

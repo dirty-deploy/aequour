@@ -49,7 +49,7 @@ def probe_port(host, port):
         s.close()
 
 
-QWEN_MIN_FREE_GB = 5.0      # set from the measured footprint of the 4-bit language model (see README, "Language model demo")
+QWEN_MIN_FREE_GB = 6.6      # measured: the 4-bit language model took about 6.55 GB of GPU memory when it loaded (nvidia-smi before and after)
 
 
 def gpu_memory_problem(min_free_gb=None):

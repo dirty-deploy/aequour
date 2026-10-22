@@ -48,18 +48,31 @@ def pick_mode(a, missing=None, gpu=None):
 def settings_from(a, replay=None):
     """Replay mode means no GPU: the language model is loaded only if --with-qwen says so."""
     replay = a.replay if replay is None else replay
-    return Settings(replay=replay, qwen=(not a.no_qwen) and (not replay or a.with_qwen), ui=a.ui, video=a.video == "on", fresh_seen=a.fresh_seen)
+    qwen = (not a.no_qwen) and (not replay or a.with_qwen)
+    return Settings(replay=replay, qwen=qwen, preload=qwen, ui=a.ui, video=a.video == "on", fresh_seen=a.fresh_seen)
 
 
-def banner(a, replay, reason, missing, gpu, build):
+def qwen_line(settings):
+    """What the banner says about the language model: loading in the background, off, or the exact reason it cannot load."""
+    if not settings.qwen:
+        return "off (templates write every reply)"
+    problem = runtime.gpu_memory_problem()
+    if problem:
+        return f"cannot load: {problem}. Replies use templates."
+    return "loading in the background; replies use templates until it is ready"
+
+
+def banner(a, replay, reason, missing, gpu, build, qwen=None):
     other = "--live" if replay else "--replay"
     lines = [f"MODE      {'REPLAY: recorded demo claims only' if replay else 'LIVE: analyses your photos'}",
              f"WHY       {reason}",
              f"URL       http://{a.host}:{a.port}",
              f"UI        {build['ui']}   build {build['build']}   built {build.get('built_at') or 'unknown'}",
              f"WEIGHTS   {'yes' if not missing else 'no (' + ', '.join(missing) + ')'}",
-             f"GPU       {'yes' if gpu else 'no'}",
-             f"SWITCH    python -m autosettle_api {other} --port {a.port + 1}"]
+             f"GPU       {'yes' if gpu else 'no'}"]
+    if qwen:
+        lines.append(f"LANGUAGE  {qwen}")
+    lines += [f"SWITCH   python -m autosettle_api {other} --port {a.port + 1}"]
     w = max(len(x) for x in lines) + 2
     return "\n".join(["+" + "-" * w + "+"] + ["| " + x.ljust(w - 1) + "|" for x in lines] + ["+" + "-" * w + "+"])
 
@@ -74,8 +87,9 @@ def main():
     replay, reason = pick_mode(a, missing, gpu)
     if a.ui == "v1":
         print("WARNING: --ui v1 serves the old build (the 'Four recorded claims' page). Leave it out for the current build.", file=sys.stderr)
-    print(banner(a, replay, reason, missing, gpu, runtime.read_build(a.ui)), flush=True)
-    uvicorn.run(create_app(settings_from(a, replay)), host=a.host, port=a.port, log_level="info")
+    settings = settings_from(a, replay)
+    print(banner(a, replay, reason, missing, gpu, runtime.read_build(a.ui), qwen_line(settings)), flush=True)
+    uvicorn.run(create_app(settings), host=a.host, port=a.port, log_level="info")
 
 
 if __name__ == "__main__":

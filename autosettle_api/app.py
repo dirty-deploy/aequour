@@ -507,6 +507,11 @@ def create_app(settings=None, vision=None, qwen=None):
             item = {kk: s[kk] for kk in ("title", "blurb", "expect")}
             item["id"] = k
             item["recorded"] = True
+            if s.get("needs_model"):
+                item["needs_model"] = True
+                item["available"] = qwen_status() == "ready"
+                item["try"] = s.get("try", [])
+                item["start_command"] = "run.ps1 demo-qwen   (macOS or Linux: ./run.sh demo-qwen)"
             if s.get("script"):
                 item["script"] = [{"customer": st.get("message") or ("a supported garage quote" if not st.get("inflate") else "an inflated garage quote, every line x%d" % st["inflate"])}
                                   for st in s["script"]]

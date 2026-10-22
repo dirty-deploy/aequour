@@ -21,6 +21,7 @@ PROMISE = re.compile(
     r"by (tomorrow|today|tonight|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next week|the end)|"
     r"\d+ (working |business |calendar )?(day|hour|week|month)s?\b|tomorrow|shortly|immediately|right away|as soon as|"
     r"next (day|week|month)|same day|instantly|quickly|soon)\b", re.I)
+FINALITY = re.compile(r"\b(final|non-negotiable|cannot be changed|can'?t be changed|set in stone|fixed offer|no way to|cannot ask|can'?t ask|being processed|under review)\b", re.I)
 ACCUSATION = re.compile(r"\b(fraud\w*|fake\w*|forg\w*|lying|liar|lie|cheat\w*|dishonest\w*|scam\w*|suspicio\w*|false claim|"
                         r"you are (trying|lying|wrong)|you'?re (trying|lying)|manipulat\w*|tamper\w*|mislead\w*)\b", re.I)
 INTERNAL = re.compile(r"\b(ceiling|maxim\w+|limits?|caps?|upper (limit|bound)|maximum we|max(imum)? (we|i|payable|amount)|hidden (range|limit)|internal (limit|range|threshold)|"
@@ -97,6 +98,8 @@ def check_chat(text, facts, result=None, message="", ceiling=None):
         v.append(("banned_words", R.BANNED.search(text).group(0)))
     if PROMISE.search(text):
         v.append(("no_promise", PROMISE.search(text).group(0)))
+    elif FINALITY.search(text):
+        v.append(("no_promise", "an outcome stated as certain: " + FINALITY.search(text).group(0)))
     if ACCUSATION.search(text):
         v.append(("no_accusation", ACCUSATION.search(text).group(0)))
     # a part the claim does not contain

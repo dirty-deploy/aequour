@@ -79,7 +79,7 @@ class TestApi(unittest.TestCase):
     def test_scenarios_decisions(self):
         c, _ = replay_client()
         got = {s["id"]: c.post("/claims", json={"scenario": s["id"]}).json()["decision"] for s in c.get("/scenarios").json()}
-        self.assertEqual(got, {"offer": "OFFER", "surveyor": "SURVEYOR", "injection": "OFFER", "street": "ASK_MORE", "counter": "OFFER"})
+        self.assertEqual(got, {"offer": "OFFER", "surveyor": "SURVEYOR", "injection": "OFFER", "street": "ASK_MORE", "counter": "OFFER", "chat": "OFFER"})
 
     def test_ceiling_and_pivots_never_in_customer_or_adjuster_responses(self):
         c, app = replay_client()
