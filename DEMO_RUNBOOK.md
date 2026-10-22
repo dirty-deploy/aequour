@@ -34,7 +34,7 @@ python -m autosettle_api --ui v1                           # the earlier web bui
 5. The browser shows an old page: hard refresh (Ctrl+F5).
 6. Everything fails: the screen recording (`final2/deck_assets/`).
 
-## The five recorded scenarios (Try one, left column)
+## The five recorded scenarios (Try a claim, left column)
 | scenario | what the judge sees | expected result |
 |---|---|---|
 | A protocol-compliant claim reaches an offer | Swift front-end photo (number plate blurred on screen), plate typed and matching | OFFER ₹2,763 (front bumper, replace, genuine part ₹2,250, 50% depreciation, labour ₹800, paint ₹2,100 less ₹262, deductible ₹1,000); "Use the recorded quote" moves it to ₹3,063 |

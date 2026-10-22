@@ -13,7 +13,7 @@ Start before you walk on: `python -m autosettle_api --replay`, open <http://127.
 - Show: the planes opening, then the receipt: front bumper replace ₹3,763, deductible ₹1,000, **offer ₹2,763**.
 - Scroll to "The whole system on one page" later for the diagram if asked.
 
-**2. Feature coverage (about 100 s).** Go to *Try one*.
+**2. Feature coverage (about 100 s).** Go to *Try a claim*.
 - Click *A protocol-compliant claim*: photo with the detection, decision, itemised lines, offer ₹2,763 (plate blurred on screen).
 - Quote tab, *Use the recorded quote*: ₹2,763 becomes **₹3,063**; the painting line is flagged above range. Say moment 1 here.
 - Conversation tab on *A counteroffer moves the offer only on evidence*: a figure with no evidence changes nothing; the supported quote moves it once; an inflated quote and pressure do nothing. "The engine does not negotiate a number; it moves only on evidence."
@@ -30,7 +30,7 @@ Start before you walk on: `python -m autosettle_api --replay`, open <http://127.
 **5. The complete codebase (about 20 s).** Say: `autosettle_engine` (money, 48 tests, 20 attacks), `autosettle_vision`, `autosettle_api` (31 tests), `web/`, `tools/smoke.py`, `docs/REPO_MAP.md`; replay mode installs from `requirements-replay.txt` and passes the engine, API and attack tests on Python 3.12 and 3.14.
 
 ## Ninety-second version
-Hero line (10 s) -> pinned scene to the receipt: "offer ₹2,763, every line itemised" (20 s) -> *Try one*: offer, recorded quote to ₹3,063 (25 s) -> *Run all* attacks: "21 of 21 held" (15 s) -> Limits: "22 of 74 found, 0 offers on unseen photos; it declines rather than guesses" (15 s) -> one sentence on the two honesty moments (5 s).
+Hero line (10 s) -> pinned scene to the receipt: "offer ₹2,763, every line itemised" (20 s) -> *Try a claim*: offer, recorded quote to ₹3,063 (25 s) -> *Run all* attacks: "21 of 21 held" (15 s) -> Adjuster view, Known limits (no longer a landing-page section): "22 of 74 found, 0 offers on unseen photos; it declines rather than guesses" (15 s) -> one sentence on the two honesty moments (5 s).
 
 ## If the live demo fails
 1. Restart with `python -m autosettle_api --replay` (no GPU, no model).
