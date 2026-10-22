@@ -8,7 +8,7 @@ import { writeFileSync } from "node:fs";
 function gitSha(): string {
   try {
     const sha = execSync("git rev-parse --short HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim();
-    const dirty = execSync("git status --porcelain", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim() !== "";
+    const dirty = execSync("git -C .. status --porcelain -- . \":(exclude)autosettle_api/static\"", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim() !== "";
     return sha + (dirty ? "-dirty" : "");
   } catch { return "unknown"; }
 }
