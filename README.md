@@ -78,8 +78,8 @@ Live photo and video analysis, the language model (Qwen3-VL-8B 4-bit, which rewo
 
 ## Tests (each count was measured with the command shown)
 ```
-python -m unittest discover -s autosettle_engine/tests -t .     # 48 tests (money logic, 5,000-claim fuzz)
-python -m unittest discover -s autosettle_api/tests -t .        # 31 tests, no GPU (1 is skipped when the demo photo is not on the machine)
+python -m unittest discover -s autosettle_engine/tests -t .     # 61 tests (money logic, 5,000-claim fuzz, replies, depreciation facts)
+python -m unittest discover -s autosettle_api/tests -t .        # 51 tests, no GPU (1 is skipped when the demo photo is not on the machine)
 python -m unittest discover -s autosettle_vision/tests -t .     # 9 tests, needs the live stack (1 skipped unless AEQUOUR_ISHAN_VIDEOS is set)
 python -m autosettle_engine.exploit_suite                       # 20 attack scripts held, plus 1 control
 python -m autosettle_vision.video_attacks                       # 6 video attack scripts held, plus 1 control (synthetic clips)
