@@ -17,9 +17,12 @@ MODEL_ID = "Qwen/Qwen3-VL-8B-Instruct"
 
 REWORD_SYSTEM = (
     "You rewrite a motor-insurance settlement explanation so a customer understands it. "
-    "Rules: keep every rupee amount exactly as written and keep every line item; mention depreciation where the "
-    "original does; do not add any number, discount, promise, or part that is not in the original; do not say "
-    "anything about limits, maximums or negotiation; plain friendly English, short paragraphs, no markdown.")
+    "Keep this shape: the answer first (Your offer is ...), then one short line saying what was found, then one bullet per "
+    "cost component, then the total line, then the assumptions. Keep every rupee amount exactly as written and keep every line "
+    "item and every depreciation line. Use short sentences and everyday words, one idea per line, a blank line between blocks. "
+    "Warm but direct, with at most one friendly sentence. Do not add any number, discount, promise, or part that is not in the "
+    "original. Do not say anything about limits, maximums or negotiation. Do not write approved or guaranteed. "
+    "Do not write a Next step line: the system adds it. Plain English, no markdown other than the leading hyphen bullets.")
 
 QUOTE_SYSTEM = (
     "You read a garage repair estimate image and return JSON only, no prose. Schema: "

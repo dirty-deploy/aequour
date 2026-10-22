@@ -9,7 +9,7 @@ import argparse
 import json
 from pathlib import Path
 
-from autosettle_engine import engine as E, rationale as R
+from autosettle_engine import engine as E, guidance as G, rationale as R
 from autosettle_engine.dispute import ClaimSession
 
 from . import pipeline as P
@@ -43,19 +43,9 @@ def customer_text(res, policy, vision, qwen=None):
     return text, used, viol
 
 
-def decision_text(res):
-    d = res["decision"]
-    if d == "ASK_MORE":
-        need = {"plate_verified": "a clear photo of the number plate",
-                "parts_identified": "a wider photo that shows each damaged panel in full",
-                "damage_identified": "a closer, well-lit photo of each damaged area",
-                "coverage_ok": "a photo that shows where the damage is on the car",
-                "integrity_ok": "original photos straight from your camera"}
-        asks = [need[m] for m in res["missing"] if m in need] or ["clearer photos of the damage"]
-        return "We need a little more before we can make an offer: " + "; ".join(asks) + "."
-    if d == "SURVEYOR":
-        return "This claim needs a licensed surveyor to inspect the car. We have booked the request and a surveyor will contact you."
-    return "A claims specialist will review this claim and contact you. You do not need to do anything else for now."
+def decision_text(res, flags=()):
+    """Plain-words reply for ASK_MORE, ESCALATE and SURVEYOR, ending with the code-built Next step line."""
+    return G.decision_reply(res, flags)
 
 
 def main():

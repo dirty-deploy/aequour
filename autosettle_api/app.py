@@ -23,7 +23,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
-from autosettle_engine import config as C, engine as E, rationale as R
+from autosettle_engine import config as C, engine as E, guidance as G, rationale as R
 from autosettle_engine.dispute import TERMINAL, ClaimSession
 from autosettle_vision.claim import POLICIES, RC, customer_text, decision_text, engine_vision, get_policy
 
@@ -211,15 +211,21 @@ def create_app(settings=None, vision=None, qwen=None):
         """Template wording only. It names the current offer (the customer's own number) and the routes that can move it;
         it never changes an amount and never mentions the upper bound."""
         if "abusive" in flags or "legal_threat" in flags:
-            return "Your message has been passed to a claims specialist, who will contact you.", "passed_to_human"
+            return G.message_reply("passed_to_human"), "passed_to_human"
         s = c.session
         if amount is not None and s.state in ("OFFERED", "UPDATED_OFFER"):
             again = sum(1 for t in c.turns[:-1] if t["from"] == "customer" and (t.get("detail") or {}).get("stated_amount") is not None)
-            lead = "The answer stays the same. " if again else "I cannot change an amount because a figure is named in a message. "
-            return (lead + f"Your current offer is {R.money(s.current_offer)}. It moves only with new photos or an itemised garage quote "
-                    "that your photos support. You can accept it, send a quote, repair at a partner garage, or ask for a surveyor."), \
-                "amount_named_no_change"
-        return ("Thank you. Messages are recorded with your claim. An amount changes only with new photos or an itemised garage quote."), "recorded"
+            return G.message_reply("amount_named_no_change", R.money(s.current_offer), bool(again)), "amount_named_no_change"
+        return G.message_reply("recorded"), "recorded"
+
+    def next_step_of(c):
+        """The Next step text of the latest system reply, so the offer card shows exactly what the chat says."""
+        for t in reversed(c.turns):
+            if t["from"] == "system":
+                m = re.search(r"Next step:\s*(.+)\Z", t["text"], re.S)
+                if m:
+                    return m.group(1).strip()
+        return None
 
     def do_message(c, text):
         flags = c.session.message(text)
@@ -257,16 +263,10 @@ def create_app(settings=None, vision=None, qwen=None):
                  detail={"quote_source": source, "quote_lines": [{"description": x["description"], "type": x["type"], "total": x["total"]}
                                                                   for x in quote_obj["lines"]]})
         after = c.session.current_offer
-        verdicts = "; ".join(f"{r['description']}: {r['verdict'].replace('_', ' ')}" for r in qv["lines"])
-        if after is not None and before is not None and after > before:
-            said = (f"I checked each line against your photos and the normal price range. {verdicts}. "
-                    f"The supported lines raise your offer from {R.money(before)} to {R.money(after)}.")
-        elif qv.get("note"):
-            said = qv["note"][0].upper() + qv["note"][1:] + "."
-        else:
-            said = (f"I checked each line against your photos and the normal price range. {verdicts}. "
-                    f"No line raised the offer; it stays at {R.money(after)}.")
-        add_turn(c, "system", said, wording="template", detail={"verdicts": qv["lines"], "moved": bool(after is not None and before is not None and after > before)})
+        moved = bool(after is not None and before is not None and after > before)
+        said = G.quote_reply(moved, R.money(before) if before is not None else "", R.money(after) if after is not None else "",
+                             [(r["description"], r["verdict"]) for r in qv["lines"]], C.MAX_EVIDENCE_ROUNDS - c.session.evidence_rounds, qv.get("note"))
+        add_turn(c, "system", said, wording="template", detail={"verdicts": qv["lines"], "moved": moved})
         return chk
 
     def find_demo_photo(rec):
@@ -377,10 +377,13 @@ def create_app(settings=None, vision=None, qwen=None):
         res = c.session.submit(ev)
         text, used, viol = customer_text(res, c.policy, ev, get_qwen() if (res["decision"] == "OFFER" and not c.silent) else None)
         c.session._log("customer_message", {"model_wording_used": used, "violations": [str(x) for x in viol]})
-        c.message_text, c.message_source = text, ("model, checked" if used else "template")
+        if res["decision"] == "OFFER":
+            text = G.attach(text, G.offer_step())          # the model never writes this line; code adds it afterwards
+            c.message_text, c.message_source = text, ("model, checked" if used else "template")
+        else:
+            c.message_text, c.message_source = decision_text(res, v.get("flags", [])), "template"
         c.assessed = True
-        add_turn(c, "system", c.message_text if res["decision"] == "OFFER" else decision_text(res),
-                 wording=c.message_source if res["decision"] == "OFFER" else "template", detail={"event": "assessment"})
+        add_turn(c, "system", c.message_text, wording=c.message_source, detail={"event": "assessment"})
         persist(c)
         return res
 
@@ -403,8 +406,9 @@ def create_app(settings=None, vision=None, qwen=None):
             out["notice"] = "REPLAY: vision output was recorded earlier from the real pipeline; the engine runs live."
         if res is not None:
             out["decision"] = res["decision"]
-            out["message"] = c.message_text if res["decision"] == "OFFER" else decision_text(res)
-            out["message_source"] = c.message_source if res["decision"] == "OFFER" else "template"
+            out["message"] = c.message_text
+            out["message_source"] = c.message_source
+            out["next_step"] = next_step_of(c)
             if res["decision"] == "OFFER":
                 out["offer"] = s.current_offer
                 out["deductible"], out["gross"] = res["deductible"], res["gross"]
@@ -689,9 +693,7 @@ def create_app(settings=None, vision=None, qwen=None):
             except AssertionError as e:
                 raise HTTPException(409, str(e))
             label = {"accept": "Accept the cash offer", "partner_garage": "Repair at a partner garage", "surveyor": "Ask for a surveyor"}[opt]
-            closing = {"accept": f"Accepted. The claim is settled at {R.money(s.current_offer)}.",
-                       "partner_garage": "A repair at a partner garage at agreed rates has been requested.",
-                       "surveyor": "A surveyor inspection has been requested."}[opt]
+            closing = G.choice_reply(opt, R.money(s.current_offer))
             add_turn(c, "customer", label, detail={"choice": opt})
             add_turn(c, "system", closing, wording="template")
             persist(c)

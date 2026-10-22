@@ -29,51 +29,57 @@ def pname(part):
     return part.replace("-", " ").lower()
 
 
-def _line_text(ln):
-    p = pname(ln["part_class"]).capitalize()
+_ACTION = {"replace": "replace", "repair_dent": "dent repair and repaint", "repaint": "repaint", "polish": "polish and touch-up"}
+
+
+def _line_items(ln):
+    """One bullet per component. Every amount and the depreciation stay in the text, because the checker requires them."""
+    out = []
     act = ln["action"]
     if act == "replace":
-        s = f"{p}: replacement. Genuine part {money(ln['part_mrp'])}"
+        s = f"Part {money(ln['part_mrp'])}"
         if ln["dep_amount"]:
-            s += f", less {int(round(ln['dep_rate'] * 100))}% depreciation ({money(ln['dep_amount'])}) = {money(ln['part_net'])}"
-        s += f". Fitting labour {money(ln['labour'])}."
-        if ln["paint_gross"]:
-            s += f" Painting {money(ln['paint_gross'])}, less {money(ln['paint_dep'])} for paint material depreciation = {money(ln['paint_net'])}."
-    elif act == "repair_dent":
-        s = (f"{p}: dent repair and repaint. Labour {money(ln['labour'])}. "
-             f"Painting {money(ln['paint_gross'])}, less {money(ln['paint_dep'])} for paint material depreciation = {money(ln['paint_net'])}.")
-    elif act == "repaint":
-        s = (f"{p}: repaint. Painting {money(ln['paint_gross'])}, less {money(ln['paint_dep'])} "
-             f"for paint material depreciation = {money(ln['paint_net'])}.")
-    else:  # polish
-        s = f"{p}: polish and touch-up. Labour {money(ln['labour'])}."
-    return s + f" Line total {money(ln['line_total'])}."
+            s += f", less {int(round(ln['dep_rate'] * 100))}% depreciation ({money(ln['dep_amount'])})"
+        out.append(s)
+    if act in ("replace", "repair_dent", "polish") and ln["labour"]:
+        out.append(f"{'Fitting labour' if act == 'replace' else 'Labour'} {money(ln['labour'])}")
+    if ln["paint_gross"]:
+        out.append(f"Painting {money(ln['paint_gross'])}, less {money(ln['paint_dep'])} depreciation on the paint material")
+    return ["- " + x for x in out]
 
 
 def build_rationale(result, safe_pivots=None, extra_lines=None):
-    """Deterministic customer-facing rationale from an OFFER result. Never mentions the ceiling."""
+    """Deterministic customer-facing rationale from an OFFER result. Never mentions the ceiling. No Next step line:
+    guidance.attach adds that in code."""
     assert result["decision"] == "OFFER", "rationale is only built for an offer"
-    out = [f"Here is how your offer of {money(result['offer'])} was worked out."]
-    out += [_line_text(ln) for ln in result["lines"]]
+    lines = result["lines"]
+    names = [pname(ln["part_class"]) for ln in lines]
+    found = names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+    out = [f"Your offer is {money(result['offer'])}.", "", f"We found damage to the {found}."]
+    if len(lines) == 1:
+        out += _line_items(lines[0])
+    else:
+        for ln in lines:
+            out += ["", f"{pname(ln['part_class']).capitalize()}: {_ACTION.get(ln['action'], ln['action'])}"] + _line_items(ln)
+            out.append(f"- Line total {money(ln['line_total'])}")
     for t in (extra_lines or []):
         out.append(t)
-    out.append(f"Total repair cost {money(result['gross'])}. Less the compulsory deductible of "
-               f"{money(result['deductible'])}. Offer: {money(result['offer'])}.")
+    out += ["", f"Repair cost {money(result['gross'])}, less your {money(result['deductible'])} deductible."]
     assumed = [e for e in result["ledger"] if e["status"] == "IMPUTED" and not e["item"].endswith(".action")]
     notes = []
     if any(e["item"].endswith(".labour_and_paint") for e in assumed):
-        notes.append("labour and painting are estimated from typical garage price ranges, not from a quote")
+        notes.append("labour and painting are typical garage prices, not a quote")
     if any(e["item"].endswith(".part_price") for e in assumed):
-        notes.append("some part prices are estimated from similar cars because we have no listing for your model")
+        notes.append("some part prices come from similar cars")
     if any(e["item"] == "gst_treatment" for e in assumed):
-        notes.append("prices are treated as tax-inclusive")
+        notes.append("prices include tax")
+    if notes or safe_pivots:
+        out.append("")
     if notes:
         out.append("What we assumed: " + "; ".join(notes) + ".")
-    for sp in (safe_pivots or []):
+    for sp in (safe_pivots or [])[:1]:
         word = {"up": "the offer would go up", "down": "the offer would go down", "review": "the claim would need a human review"}[sp["direction"]]
         out.append(f"What could change this: {sp['condition']}, {word}.")
-    out.append("If you disagree, you can share your garage's itemised quote, repair at one of our partner garages, "
-               "or ask for a surveyor.")
     return "\n".join(out)
 
 
