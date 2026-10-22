@@ -17,6 +17,12 @@ export function HealthProvider({ children }: { children: ReactNode }) {
     window.addEventListener("focus", load);        // a tab left open over a restart notices when it is looked at again
     return () => window.removeEventListener("focus", load);
   }, []);
+  const loading = h?.qwen === "loading";
+  useEffect(() => {
+    if (!loading) return;
+    const t = window.setInterval(() => { api.health().then(setH).catch(() => undefined); }, 3000);   // while the model loads, the page follows it
+    return () => window.clearInterval(t);
+  }, [loading]);
   return <HealthCtx.Provider value={h}>{children}</HealthCtx.Provider>;
 }
 
@@ -26,8 +32,10 @@ export function ModeBadge() {
   if (!h) return null;
   const live = h.mode === "LIVE";
   return (
-    <span className={`mode-badge ${live ? "live" : "replay"}`} title={`Build ${h.build}`}>
-      <b>{live ? "LIVE" : "REPLAY"}</b><span className="mb-text">{live ? ": analyses your photos" : ": recorded demo claims only"}</span>
+    <span className={`mode-badge ${live ? "live" : "replay"}`} title={`Build ${h.build}${h.qwen_error ? `. Language model: ${h.qwen_error}` : ""}`}>
+      <b>{live ? "LIVE" : "REPLAY"}</b>
+      {h.qwen === "ready" ? <b className="lm-on"> + LANGUAGE MODEL</b> : h.qwen === "loading" ? <span className="lm-wait"> + language model loading</span> : null}
+      <span className="mb-text">{live ? ": analyses your photos" : ": recorded demo claims only"}</span>
     </span>
   );
 }

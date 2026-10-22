@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { api, partName, rupees } from "../api";
-import type { Adjuster, ClaimView, GuideStep, Policy, Scenario, Transcript, Turn, VideoSample } from "../api";
+import type { Adjuster, ClaimView, GuideStep, Policy, Scenario, Transcript, Turn, TurnDetail, VideoSample } from "../api";
 import { useHealth } from "../health";
 import { chipWords } from "../states";
 import ChromeButton, { UploadButton } from "./ChromeButton";
@@ -14,10 +14,62 @@ type MoreTab = (typeof MORE_TABS)[number];
 const ACTION: Record<string, string> = { replace: "Replace", repair_dent: "Repair the dent and repaint", repaint: "Repaint", polish: "Polish and touch up" };
 const LIVE_COMMAND = "python -m autosettle_api --live --fresh-seen";
 
+const INTENT_WORDS: Record<string, string> = {
+  greeting_or_meta: "a greeting or a question about the assistant", how_calculated: "how the offer was calculated", depreciation: "depreciation",
+  what_next: "what to do next", why_not_more: "asking for more, or why not more", payout_timing: "when the money arrives", other: "something else",
+  amount_named: "a figure named in the message", instruction_in_message: "an instruction inside the message", escalation: "an abusive or legal message",
+};
+const CHECK_WORDS: Record<string, string> = {
+  english_only: "Plain English only", length: "No more than 90 words", format: "No list, heading, link, code or emoji", no_next_step_line: "Does not write its own Next step",
+  amounts: "Every rupee figure belongs to this claim", numbers: "Every other number belongs to this claim", ceiling: "Says nothing about internal limits",
+  banned_words: "No word that is not allowed", no_promise: "No promise, timing or finality", no_accusation: "No accusation", parts: "Names only parts in this claim",
+  no_injection_echo: "Does not repeat an instruction",
+};
+const money = (v: unknown) => String(v);
+
+/** The label under a chat reply: who wrote it, and when it is a template, why. */
+function Source({ d }: { d: TurnDetail }) {
+  if (!d.source) return null;
+  return d.source === "model"
+    ? <span className="src model">Written by the language model, checked by code</span>
+    : <span className="src tmpl">Template{d.reason_text ? `: ${d.reason_text}` : ""}</span>;
+}
+
+/** "Behind this reply": the intent code detected, the facts it passed, the model's raw text, each check, and the final text. */
+function Behind({ d, final }: { d: TurnDetail; final: string }) {
+  const facts = d.facts ? Object.entries(d.facts).filter(([k]) => k !== "lines") : [];
+  const lines = (d.facts?.lines as Record<string, unknown>[] | undefined) ?? [];
+  return (
+    <details className="behind">
+      <summary>Behind this reply</summary>
+      <div className="behind-body">
+        <h5>Intent detected by code</h5>
+        <p>{INTENT_WORDS[d.intent ?? ""] ?? d.intent}</p>
+        <h5>Facts passed to the model</h5>
+        {d.facts ? (
+          <dl className="facts">
+            {facts.map(([k, v]) => <div key={k}><dt>{k.replace(/_/g, " ")}</dt><dd>{typeof v === "object" ? JSON.stringify(v) : money(v)}</dd></div>)}
+            {lines.map((l, i) => <div key={"l" + i}><dt>line {i + 1}</dt><dd>{Object.entries(l).map(([k, v]) => `${k.replace(/_/g, " ")}: ${v}`).join("; ")}</dd></div>)}
+          </dl>
+        ) : <p>None. This kind of message always gets fixed wording, so nothing was sent to the model.</p>}
+        {d.model_raw != null && (<><h5>Raw text from the model</h5><p className="raw">{d.model_raw}</p></>)}
+        {!!d.checks?.length && (<>
+          <h5>Checks run by code</h5>
+          <ul className="checks">{d.checks.map((c) => <li key={c.check} className={c.passed ? "pass" : "fail"}><b>{c.passed ? "Passed" : "Failed"}</b> {CHECK_WORDS[c.check] ?? c.check}{c.detail ? <em>: {c.detail}</em> : null}</li>)}</ul>
+        </>)}
+        {d.rejected && (<><h5>Rejected by the checker (the customer never sees this)</h5><p className="raw rejected">{d.rejected}</p></>)}
+        <h5>Final text the customer sees</h5>
+        <p className="raw">{final}</p>
+      </div>
+    </details>
+  );
+}
+
 /** One chat message. The Next step line sits on its own line, in the accent colour. Hash and wording sit behind "Details". */
 function Bubble({ t }: { t: Turn }) {
   const [open, setOpen] = useState(false);
   const mine = t.from === "customer";
+  const d = (t.detail ?? {}) as TurnDetail;
   return (
     <li className={`bub ${mine ? "me" : "them"}`}>
       <span className="who">{mine ? "You" : "Aequour"}</span>
@@ -26,12 +78,16 @@ function Bubble({ t }: { t: Turn }) {
           ? <p key={i} className="ns"><b>Next step:</b>{ln.slice("Next step:".length)}</p>
           : <p key={i}>{ln || " "}</p>)}
       </div>
+      {!mine && <Source d={d} />}
       <button type="button" className="det" aria-expanded={open} onClick={() => setOpen(!open)}>Details</button>
       {open && (
-        <small className="det-body">
-          {mine ? "Sent by you" : `Wording: ${t.wording === "model, checked" ? "written by the language model and checked by code" : "fixed template"}`}
-          {t.audit_seq != null && <> · audit entry {t.audit_seq} <code>{t.audit_hash}</code></>}
-        </small>
+        <div className="det-body">
+          <small>
+            {mine ? "Sent by you" : `Wording: ${t.wording === "model, checked" ? "written by the language model and checked by code" : "fixed template"}`}
+            {t.audit_seq != null && <> · audit entry {t.audit_seq} <code>{t.audit_hash}</code></>}
+          </small>
+          {!mine && d.intent && <Behind d={d} final={t.text} />}
+        </div>
       )}
     </li>
   );
@@ -41,6 +97,7 @@ function Bubble({ t }: { t: Turn }) {
  *  thing on the page. Photo, garage quote, video and samples sit in a tab strip under both. Every figure is what the API returned. */
 export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: string; onClaim?: (id: string) => void; replay: boolean; videoLive: boolean }) {
   const health = useHealth();
+  const qs = health?.qwen ?? "off";
   const [policies, setPolicies] = useState<Policy[]>([]);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [guide, setGuide] = useState<GuideStep[]>([]);
@@ -57,6 +114,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
   const [plate, setPlate] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [current, setCurrent] = useState("");
+  const [pending, setPending] = useState("");      // the customer's message while the reply is being written
   const log = useRef<HTMLUListElement>(null);
   const quoteExample = scenarios.find((s) => s.quote_example)?.quote_example as { lines: { unit_price: number; total: number }[] } | undefined;
 
@@ -66,6 +124,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
     api.guide().then(setGuide).catch(() => undefined);
     api.videoSamples().then(setSamples).catch(() => undefined);
   }, []);
+  useEffect(() => { api.scenarios().then(setScenarios).catch(() => undefined); }, [health?.qwen]);   // the model finishing its load enables its scenario without a reload
   useEffect(() => { if (claim) onClaim?.(claim.claim_id); }, [claim?.claim_id]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     // the newest message is in view: a long one (an itemised offer) from its first line, a short one at the bottom
@@ -122,14 +181,21 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
   });
   const sendQuote = (q: unknown) => claim && run("quote", async () => { await refresh(await api.quote(claim.claim_id, q)); });
   const sendQuoteImage = (f: File) => claim && run("quote", async () => { await refresh(await api.quoteImage(claim.claim_id, f)); });
+  const useSamplePhoto = () => claim && run("quote", async () => {
+    const r = await fetch("/sample-quote.jpg");
+    if (!r.ok) throw new Error("the sample quote photo is not available on this server");
+    await refresh(await api.quoteImage(claim.claim_id, new File([await r.blob()], "sample-quote.jpg", { type: "image/jpeg" })));
+  });
   const inflate = (n: number) => quoteExample ? { lines: quoteExample.lines.map((l) => ({ ...l, unit_price: l.unit_price * n, total: l.total * n })) } : null;
   const choose = (o: string) => claim && run("choose", async () => { await refresh(await api.choose(claim.claim_id, o)); });
   const send = (t?: string) => claim && run("message", async () => {
     const m = (t ?? text).trim(); if (!m) return;
-    setText("");
-    const r = await api.message(claim.claim_id, m);
-    if (r.flags_seen) flash();
-    await refresh(r);
+    setText(""); setPending(m);
+    try {
+      const r = await api.message(claim.claim_id, m);
+      if (r.flags_seen) flash();
+      await refresh(r);
+    } finally { setPending(""); }
   });
 
   const d = claim?.decision ?? null;
@@ -137,7 +203,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
   const im = adj?.images?.[0];
   const findings = im ? adj?.findings_by_image?.[im.name] ?? Object.values(adj?.findings_by_image ?? {})[0] ?? [] : [];
   const firstRun = busy !== "" && !["message", "quote", "choose"].includes(busy);
-  const slowNote = firstRun && !replay && health != null && health.qwen !== "off" && health.qwen !== "loaded";
+  const slowNote = firstRun && !replay && health != null && health.qwen === "loading";
 
   // ---- the three steps and their progress marker
   const step = (i: number): "done" | "now" | "next" => {
@@ -178,8 +244,10 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
             <div className="btns">
               {quoteExample && <ChromeButton variant="quiet" disabled={!!busy || claim.closed} onClick={() => sendQuote(quoteExample)}>Use the recorded quote</ChromeButton>}
               {quoteExample && <ChromeButton variant="quiet" disabled={!!busy || claim.closed} onClick={() => sendQuote(inflate(5))}>Try an inflated quote (x5)</ChromeButton>}
-              <UploadButton quiet multiple={false} label="Send a quote photo" disabled={!!busy || claim.closed || replay} onFiles={(f) => f[0] && sendQuoteImage(f[0])} />
-              {replay && <span className="small">Reading a photo of a quote needs live mode.</span>}
+              <UploadButton quiet multiple={false} label="Send a quote photo" disabled={!!busy || claim.closed || qs !== "ready"} onFiles={(f) => f[0] && sendQuoteImage(f[0])} />
+              <ChromeButton variant="quiet" disabled={!!busy || claim.closed || qs !== "ready"} onClick={useSamplePhoto}>Use a sample quote photo <em className="tagx">SYNTHETIC</em></ChromeButton>
+              {qs !== "ready" && <span className="small">{qs === "loading" ? "The language model is loading; reading a quote photo turns on when it is ready."
+                : "Reading a photo of a quote needs the language model. Start the demo with it (run.ps1 demo-qwen) or run live mode."}</span>}
             </div>
             {claim.quote_check && (
               <table className="qtab">
@@ -238,7 +306,8 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
 
   const chip = chipWords(claim);
   const options = claim && !claim.closed ? claim.options : [];
-  const lead = busy ? "Checking your photos..." : "";
+  const lead = busy === "message" ? "Writing a reply..." : busy ? "Checking your photos..." : "";
+  const QUESTIONS = ["How was this calculated?", "What should I do next?", "Why not more?"];
 
   return (
     <section className="scene try-scene" id="try" aria-labelledby="try-h">
@@ -264,9 +333,17 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
             <ul className="chips-col" aria-label="Recorded claims">
               {scenarios.map((s) => (
                 <li key={s.id}>
-                  <button type="button" className={`schip ${current === s.id ? "on" : ""}`} disabled={!!busy} onClick={() => startScenario(s)} aria-pressed={current === s.id}>
-                    <span>{s.title}</span><i>{s.expect.replace("_", " ").toLowerCase()}</i>
+                  <button type="button" className={`schip ${current === s.id ? "on" : ""} ${s.needs_model ? "lm" : ""}`} disabled={!!busy || (s.needs_model && !s.available)} onClick={() => startScenario(s)} aria-pressed={current === s.id}>
+                    <span>{s.title}</span><i>{s.needs_model ? "language model" : s.expect.replace("_", " ").toLowerCase()}</i>
                   </button>
+                  {s.needs_model && !s.available && (
+                    <p className="small lm-off" role="note">
+                      {qs === "loading" ? "The language model is loading. This scenario turns on when it is ready."
+                        : "The language model is not loaded on this server. To use this scenario, start the demo with the model:"}
+                      {qs !== "loading" && <code>{s.start_command}</code>}
+                    </p>
+                  )}
+                  {s.needs_model && s.try && <p className="small try-hint"><b>What to try:</b> {s.try.join(" ")}</p>}
                 </li>
               ))}
             </ul>
@@ -361,13 +438,23 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
             </div>
 
             <div className="chat card">
+              <p className={`chat-status lm-${qs}`} role="status">
+                {qs === "ready" ? "Language model ready: replies to your questions are written by the model and checked by code."
+                  : qs === "loading" ? "Language model loading. Replies use templates until it is ready."
+                  : qs === "error" ? `Language model unavailable (${health?.qwen_error ?? "it could not start"}). Replies use templates.`
+                  : "Language model off. Replies use templates."}
+              </p>
               <ul className="chat-log" ref={log} role="log" aria-live="polite" aria-label="Conversation">
                 {(tr?.turns ?? []).map((t) => <Bubble key={t.n} t={t} />)}
                 {!tr && !busy && <li className="bub them"><span className="who">Aequour</span><div className="bub-body"><p>Pick a recorded claim, or send your own photos, and the conversation starts here.</p></div></li>}
+                {pending && <li className="bub me"><span className="who">You</span><div className="bub-body"><p>{pending}</p></div></li>}
                 {busy && <li className="bub them working"><span className="who">Aequour</span><div className="bub-body"><p>{lead || "Working on it..."}</p>{slowNote && <p>This can take a minute the first time.</p>}</div></li>}
               </ul>
               {claim && !claim.closed ? (
                 <div className="compose2">
+                  <div className="suggest" role="group" aria-label="Suggested questions">
+                    {QUESTIONS.map((q) => <button key={q} type="button" className="sugg" disabled={!!busy} onClick={() => send(q)}>{q}</button>)}
+                  </div>
                   <p className="small">Text never changes an amount. {blocked && <b className="flash">Flagged and recorded. The amount is unchanged.</b>}</p>
                   <div className="compose-row">
                     <textarea value={text} onChange={(e) => setText(e.target.value)} maxLength={1000} rows={2} aria-label="Your message"

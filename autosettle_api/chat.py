@@ -18,8 +18,8 @@ import threading
 from autosettle_engine import chat_check as K, config as C, guidance as G, rationale as R
 from autosettle_vision import chat_prompt as P
 
-# Seconds to wait for the model before using the template. Chosen from measured reply times (see the README); override with AEQUOUR_CHAT_TIMEOUT.
-CHAT_TIMEOUT_S = float(os.environ.get("AEQUOUR_CHAT_TIMEOUT", "30"))
+# Seconds to wait for the model before using the template. Measured on the development laptop: 48 replies took 2.3 to 6.8 s (median about 3.3 s); 20 s is about three times the slowest. Override with AEQUOUR_CHAT_TIMEOUT.
+CHAT_TIMEOUT_S = float(os.environ.get("AEQUOUR_CHAT_TIMEOUT", "20"))
 
 STATE_WORDS = {"INTAKE": "waiting for more photos or information", "OFFERED": "an offer has been made", "UPDATED_OFFER": "the offer was updated after a garage quote",
                "SETTLED": "the offer was accepted", "PARTNER_GARAGE": "a partner-garage repair was requested", "SURVEYOR": "a surveyor needs to inspect the car",

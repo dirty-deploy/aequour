@@ -524,6 +524,15 @@ def create_app(settings=None, vision=None, qwen=None):
             out.append(item)
         return out
 
+    @app.get("/sample-quote.jpg")
+    def sample_quote():
+        """The recorded SYNTHETIC garage-quote photo that ships with the repository, so the quote-reading path can be tried
+        without a quote of your own. Reading it needs the language model."""
+        p = ROOT / "run1" / "quotes" / "rq00.jpg"
+        if not p.exists():
+            raise HTTPException(404, "sample quote photo not present")
+        return FileResponse(p, media_type="image/jpeg")
+
     @app.get("/capture-guide")
     def capture_guide():
         return CAPTURE_GUIDE

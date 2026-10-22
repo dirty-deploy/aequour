@@ -20,8 +20,13 @@ export interface ClaimView {
   needs: string[]; options: { id: string; label: string }[]; closed: boolean; quote_check?: QuoteCheck; video?: VideoView;
   next_step?: string | null; dep_rules?: DepRules;
 }
-export interface Scenario { id: string; title: string; blurb: string; expect: string; recorded?: boolean; quote_example?: unknown; message?: string; script?: { customer: string }[] }
-export interface Turn { n: number; from: "customer" | "system"; text: string; wording: string | null; state: string; decision: string | null; offer: number | null; audit_seq: number | null; audit_hash: string | null; detail?: Record<string, unknown> }
+export interface Scenario { id: string; title: string; blurb: string; expect: string; recorded?: boolean; quote_example?: unknown; message?: string; script?: { customer: string }[]; needs_model?: boolean; available?: boolean; try?: string[]; start_command?: string }
+export interface CheckResult { check: string; passed: boolean; detail: string }
+export interface TurnDetail {
+  kind?: string; intent?: string; source?: "model" | "template"; reason?: string | null; reason_text?: string; facts?: Record<string, unknown> | null;
+  model_raw?: string | null; checks?: CheckResult[]; rejected?: string | null; final?: string; [k: string]: unknown;
+}
+export interface Turn { n: number; from: "customer" | "system"; text: string; wording: string | null; state: string; decision: string | null; offer: number | null; audit_seq: number | null; audit_hash: string | null; detail?: TurnDetail }
 export interface Transcript { claim_id: string; mode: string; state: string; chain_ok: boolean; turns: Turn[] }
 export interface VideoKeyframe { index: number; name: string | null; frame?: number; seconds?: number; sharpness?: number; brightness?: number; thumbnail: string | null; findings: number }
 export interface VideoEntity { part_class: string; damage_class: string | null; keyframes: number[]; seen_in: number; of: number; best_conf: number; severity: string | null; status: string }
@@ -44,7 +49,7 @@ export interface EscalationView {
   flags?: string[]; integrity_flags?: string[]; evidence?: Detection[]; priced_lines?: { part_class: string; damage_class: string; severity: string; action: string; line_total: number }[];
   gross?: number | null; what_the_human_should_do?: string; audit?: { chain_ok: boolean; events: { seq: number; event: string; state: string; hash: string }[] }; video?: VideoView | null;
 }
-export interface Health { ok: boolean; mode: "LIVE" | "REPLAY"; qwen: string; video: boolean; claims: number; ui: string; build: string; built_at: string | null; weights_found: boolean; gpu: boolean }
+export interface Health { ok: boolean; mode: "LIVE" | "REPLAY"; qwen: "off" | "loading" | "ready" | "error"; qwen_error?: string | null; qwen_load_s?: number | null; video: boolean; claims: number; ui: string; build: string; built_at: string | null; weights_found: boolean; gpu: boolean }
 export interface Policy { policy_id: string; vehicle: string; plate: string }
 export interface GuideStep { id: string; title: string; text: string }
 export interface LimitItem { id: string; label: string; value: string; detail: string; caveat: string; source: string }
