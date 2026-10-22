@@ -3,6 +3,7 @@ import { api, partName, rupees } from "./api";
 import type { Adjuster, Audit, EscalationView, RangeView } from "./api";
 import Overlay from "./components/Overlay";
 import LimitsPanel from "./components/LimitsPanel";
+import DepreciationHelp from "./components/DepreciationHelp";
 
 /** Dense and plain on purpose: a working tool, in the same tokens as the customer page. Demo only; no authentication is claimed. */
 export default function AdjusterView({ id }: { id: string }) {
@@ -113,10 +114,14 @@ export default function AdjusterView({ id }: { id: string }) {
         <section aria-labelledby="ev-h">
           <h2 id="ev-h">Evidence behind each line</h2>
           <table>
-            <thead><tr><th>Line</th><th>Action</th><th>Total</th><th>Part conf</th><th>Damage conf</th><th>Area</th><th>Price basis</th></tr></thead>
+            <thead><tr><th>Line</th><th>Action</th><th>Total</th><th>Depreciation</th><th>Part conf</th><th>Damage conf</th><th>Area</th><th>Price basis</th></tr></thead>
             <tbody>{a.lines.map((l) => (
               <tr key={l.part_class + l.damage_class}><td>{partName(l.part_class)} ({l.damage_class}, {l.severity})</td><td>{l.action}</td>
-                <td>{rupees(l.line_total)}</td><td>{l.evidence.part_conf?.toFixed(2) ?? "-"}</td><td>{l.evidence.damage_conf?.toFixed(2) ?? "-"}</td>
+                <td>{rupees(l.line_total)}</td>
+                <td>{l.dep_basis && l.dep_amount > 0 && <div>Part {rupees(l.dep_amount)} <DepreciationHelp line={l} rules={a.dep_rules} /></div>}
+                  {l.paint_basis && l.paint_dep > 0 && <div>Paint {rupees(l.paint_dep)} <DepreciationHelp line={l} rules={a.dep_rules} kind="paint" /></div>}
+                  {!(l.dep_amount > 0) && !(l.paint_dep > 0) && "-"}</td>
+                <td>{l.evidence.part_conf?.toFixed(2) ?? "-"}</td><td>{l.evidence.damage_conf?.toFixed(2) ?? "-"}</td>
                 <td>{l.evidence.area_fraction?.toFixed(2) ?? "-"}</td><td>{l.price_status ?? "rate card"} {l.price_tier ? `tier ${l.price_tier}` : ""}</td></tr>))}</tbody>
           </table>
           <p>Gross {rupees(a.gross)}, deductible {rupees(a.deductible)}, offer {rupees(a.offer)}.</p>

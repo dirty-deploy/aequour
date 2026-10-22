@@ -78,16 +78,53 @@ PAINT_MATERIAL_DEP = 0.50
 PAINT_NET_FACTOR = 1 - PAINT_MATERIAL_SHARE * PAINT_MATERIAL_DEP   # 0.875
 
 # [RULE] part depreciation (IMT-style): plastic/rubber 50%, glass nil, metal by age.
+PLASTIC_DEP = 0.5     # plastic and rubber parts, whatever the age of the car
 PLASTIC_PARTS = {"Front-bumper", "Back-bumper", "Grille", "Headlight", "Tail-light", "Mirror"}
 GLASS_PARTS = {"Windshield", "Back-windshield"}
 
 
+# [RULE] metal-part depreciation by vehicle age: (age below this many years, rate); a car older than the last limit pays METAL_DEP_OLDEST.
+METAL_DEP_BANDS = ((0.5, 0.0), (1, 0.05), (2, 0.10), (3, 0.15), (4, 0.25), (5, 0.35), (10, 0.40))
+METAL_DEP_OLDEST = 0.50
+
+
 def metal_depreciation(age_years: float) -> float:
     """[RULE] metal-part depreciation by vehicle age."""
-    for limit, rate in ((0.5, 0.0), (1, 0.05), (2, 0.10), (3, 0.15), (4, 0.25), (5, 0.35), (10, 0.40)):
+    for limit, rate in METAL_DEP_BANDS:
         if age_years < limit:
             return rate
-    return 0.50
+    return METAL_DEP_OLDEST
+
+
+def _span(years):
+    """0.5 -> '6 months', 3 -> '3 years' (the words the customer sees in the depreciation help)."""
+    return f"{int(round(years * 12))} months" if years < 1 else f"{years:g} years"
+
+
+def metal_bands():
+    """The age bands as words, read from METAL_DEP_BANDS so the page never hard-codes them: [{label, rate}]."""
+    out, lo = [], 0.0
+    for limit, rate in METAL_DEP_BANDS:
+        if lo == 0.0:
+            label = f"up to {_span(limit)}"
+        else:
+            unit = _span(limit).split(" ", 1)[1]
+            label = f"{(_span(lo).split(' ', 1)[0])} to {_span(limit)}" if _span(lo).endswith(unit) else f"{_span(lo)} to {_span(limit)}"
+            if lo < 1 <= limit and limit == 1:
+                label = f"{int(round(lo * 12))} to 12 months"
+        out.append({"label": label, "rate": rate})
+        lo = limit
+    out.append({"label": f"over {_span(lo)}", "rate": METAL_DEP_OLDEST})
+    return out
+
+
+def metal_band(age_years: float) -> dict:
+    """The band a car of this age falls in: {label, rate}."""
+    bands = metal_bands()
+    for i, (limit, _rate) in enumerate(METAL_DEP_BANDS):
+        if age_years < limit:
+            return bands[i]
+    return bands[-1]
 
 
 def deductible(engine_cc: int) -> int:

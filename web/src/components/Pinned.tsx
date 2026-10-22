@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import type { Adjuster, ClaimView, Finding } from "../api";
 import { partName, rupees } from "../api";
 import { Count } from "./Reveal";
+import DepreciationHelp from "./DepreciationHelp";
 import { clamp01, seg, useReducedMotion, useSmall } from "../hooks";
 
 const STEPS = [
@@ -129,9 +130,9 @@ export default function Pinned({ adj, claim }: { adj: Adjuster | null; claim: Cl
       <h3 style={{ "--k": 0 } as CSSProperties}>Itemised, from the engine</h3>
       <div className="rr" style={{ "--k": 1 } as CSSProperties}><span>{partName(line.part_class)}: replace</span><span>{rupees(line.line_total)}</span></div>
       <div className="rr sub" style={{ "--k": 2 } as CSSProperties}><span>Genuine part</span><span>{rupees(line.part_mrp)}</span></div>
-      {line.dep_amount > 0 && <div className="rr sub" style={{ "--k": 3 } as CSSProperties}><span>Depreciation {Math.round(line.dep_rate * 100)}%</span><span>&minus;{rupees(line.dep_amount)}</span></div>}
+      {line.dep_amount > 0 && <div className="rr sub" style={{ "--k": 3 } as CSSProperties}><span>Depreciation {Math.round(line.dep_rate * 100)}% <DepreciationHelp line={line} rules={claim.dep_rules} /></span><span>&minus;{rupees(line.dep_amount)}</span></div>}
       <div className="rr sub" style={{ "--k": 4 } as CSSProperties}><span>Labour</span><span>{rupees(line.labour)}</span></div>
-      <div className="rr sub" style={{ "--k": 5 } as CSSProperties}><span>Painting, net of material depreciation</span><span>{rupees(line.paint_net)}</span></div>
+      <div className="rr sub" style={{ "--k": 5 } as CSSProperties}><span>Painting, net of material depreciation <DepreciationHelp line={line} rules={claim.dep_rules} kind="paint" /></span><span>{rupees(line.paint_net)}</span></div>
       <div className="rr" style={{ "--k": 6 } as CSSProperties}><span>Deductible</span><span>&minus;{rupees(claim.deductible)}</span></div>
       <div className="rr total" style={{ "--k": 7 } as CSSProperties}>
         <span>Offer</span>

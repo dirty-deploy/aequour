@@ -98,6 +98,17 @@ class TestReplyShape(unittest.TestCase):
         r = c.post(f"/claims/{v['claim_id']}/message", json={"text": "thanks"}).json()
         self.assertEqual(r["next_step"], r["reply"].split("Next step: ")[-1])
 
+    def test_a_priced_claim_returns_the_facts_behind_depreciation(self):
+        c = client()
+        v = c.post("/claims", json={"scenario": "offer", "silent": True}).json()
+        ln = v["lines"][0]
+        self.assertEqual(ln["dep_basis"]["material"], "plastic")
+        self.assertEqual(ln["dep_basis"]["list_price"], ln["part_mrp"])
+        self.assertEqual(ln["paint_basis"]["painting"], ln["paint_gross"])
+        rules = v["dep_rules"]
+        self.assertEqual(rules["metal_bands"][4], {"label": "3 to 4 years", "rate": 0.25})
+        self.assertNotIn("ceiling", str(v).lower())
+
 
 if __name__ == "__main__":
     unittest.main()

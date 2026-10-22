@@ -186,7 +186,8 @@ def _cost_line(det, action, policy, rc, mode, today, part_mrp_override):
     line = {"part_class": part, "damage_class": dc, "severity": sev, "action": action,
             "part_mrp": 0, "dep_rate": 0.0, "dep_amount": 0, "part_net": 0, "labour": 0,
             "paint_gross": 0, "paint_dep": 0, "paint_net": 0, "line_total": 0,
-            "price_tier": None, "price_status": None, "package_proxy": False, "unresolved": []}
+            "price_tier": None, "price_status": None, "package_proxy": False, "unresolved": [],
+            "dep_basis": None, "paint_basis": None}
     if action is None:
         line["unresolved"].append("no_price_basis_for_part")
         return line
@@ -209,12 +210,21 @@ def _cost_line(det, action, policy, rc, mode, today, part_mrp_override):
             line["price_tier"], line["price_status"] = info["tier"], info["status"]
             if part_mrp_override is not None:
                 mrp = part_mrp_override
+            basis = {"material": "metal", "reg_date": policy.reg_date, "loss_date": (today or C.TODAY).isoformat()}
             if part in C.PLASTIC_PARTS:
-                line["dep_rate"] = 0.5
+                line["dep_rate"] = C.PLASTIC_DEP
+                basis["material"] = "plastic"
             elif part in C.GLASS_PARTS:
                 line["dep_rate"] = 0.0
+                basis["material"] = "glass"
             else:
-                line["dep_rate"] = C.metal_depreciation(age_years(policy, today))
+                age = age_years(policy, today)
+                line["dep_rate"] = C.metal_depreciation(age)
+                basis.update(age_years=round(age, 1), band=C.metal_band(age)["label"])
+            # the facts behind dep_rate, for the "?" help in the page; display only, no amount is computed from them
+            basis["rate"] = line["dep_rate"]
+            basis["list_price"] = int(mrp)
+            line["dep_basis"] = basis
             labour = C.FITTING_LABOUR.get(part, C.FITTING_LABOUR_DEFAULT)
         if pk:
             paint_gross = (lo if mode == "offer" else (lo + hi) / 2) * C.PAINT_SHARE
@@ -238,6 +248,8 @@ def _cost_line(det, action, policy, rc, mode, today, part_mrp_override):
     line["paint_gross"] = r(paint_gross)
     line["paint_net"] = r(paint_gross * C.PAINT_NET_FACTOR)
     line["paint_dep"] = line["paint_gross"] - line["paint_net"]
+    if line["paint_gross"]:
+        line["paint_basis"] = {"painting": line["paint_gross"], "share": C.PAINT_MATERIAL_SHARE, "rate": C.PAINT_MATERIAL_DEP}
     line["line_total"] = line["part_net"] + line["labour"] + line["paint_net"]
     return line
 

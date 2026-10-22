@@ -1,7 +1,13 @@
+export interface DepBasis {
+  material: "plastic" | "glass" | "metal"; rate: number; list_price: number; reg_date: string; loss_date: string; age_years?: number; band?: string;
+}
+export interface PaintBasis { painting: number; share: number; rate: number }
+export interface DepRules { plastic_rate: number; glass_rate: number; metal_bands: { label: string; rate: number }[]; paint_share: number; paint_rate: number }
 export interface Line {
   part_class: string; damage_class: string; severity: string; action: string;
   part_mrp: number; dep_rate: number; dep_amount: number; part_net: number;
   labour: number; paint_gross: number; paint_dep: number; paint_net: number; line_total: number;
+  dep_basis?: DepBasis | null; paint_basis?: PaintBasis | null;
 }
 export interface QuoteRow { description: string; quoted: number; verdict: string; reason: string }
 export interface QuoteCheck { lines: QuoteRow[]; moved: boolean; current_offer: number; updated_offer: number; quote_total: number; note?: string }
@@ -12,6 +18,7 @@ export interface ClaimView {
   decision: "OFFER" | "ASK_MORE" | "ESCALATE" | "SURVEYOR" | null; message: string | null; message_source?: string;
   offer: number | null; updated_offer: number | null; original_offer: number | null; lines: Line[]; deductible: number | null; gross: number | null;
   needs: string[]; options: { id: string; label: string }[]; closed: boolean; quote_check?: QuoteCheck; video?: VideoView;
+  next_step?: string | null; dep_rules?: DepRules;
 }
 export interface Scenario { id: string; title: string; blurb: string; expect: string; recorded?: boolean; quote_example?: unknown; message?: string; script?: { customer: string }[] }
 export interface Turn { n: number; from: "customer" | "system"; text: string; wording: string | null; state: string; decision: string | null; offer: number | null; audit_seq: number | null; audit_hash: string | null; detail?: Record<string, unknown> }
@@ -62,7 +69,7 @@ export interface Adjuster {
   audit: { chain_ok: boolean; events: number }; decision?: string; reasons?: string[]; tci?: number; missing?: string[];
   lines?: AdjLine[]; ledger?: LedgerRow[]; offer?: number | null; deductible?: number; gross?: number | null;
   integrity_flags?: string[]; flags?: string[]; images?: { name: string; width: number; height: number; has_photo: boolean }[];
-  recorded_images?: string[]; detections?: Detection[]; findings_by_image?: Record<string, Finding[]>;
+  recorded_images?: string[]; detections?: Detection[]; findings_by_image?: Record<string, Finding[]>; dep_rules?: DepRules;
 }
 
 async function call<T>(path: string, init?: RequestInit): Promise<T> {

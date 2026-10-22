@@ -1,11 +1,12 @@
-import type { Line } from "../api";
+import type { DepRules, Line } from "../api";
+import DepreciationHelp from "./DepreciationHelp";
 import { partName, rupees } from "../api";
 
 const ACTION: Record<string, string> = { replace: "Replace", repair_dent: "Repair the dent and repaint", repaint: "Repaint", polish: "Polish and touch up" };
 
 /** Itemised derivation of the offer. Every figure is the engine's; nothing is computed here except bar widths. */
-export default function Waterfall({ lines, gross, deductible, offer, updated }: {
-  lines: Line[]; gross: number | null; deductible: number | null; offer: number | null; updated?: number | null;
+export default function Waterfall({ lines, gross, deductible, offer, updated, rules }: {
+  rules?: DepRules; lines: Line[]; gross: number | null; deductible: number | null; offer: number | null; updated?: number | null;
 }) {
   const max = Math.max(1, ...lines.map((l) => l.line_total));
   return (
@@ -22,10 +23,10 @@ export default function Waterfall({ lines, gross, deductible, offer, updated }: 
             <div className="wf-bar" aria-hidden="true"><span style={{ width: `${(100 * l.line_total) / max}%` }} /></div>
             <dl className="wf-parts">
               {l.action === "replace" && (<><dt>Genuine part</dt><dd>{rupees(l.part_mrp)}</dd>
-                {l.dep_amount > 0 && (<><dt>Depreciation {Math.round(l.dep_rate * 100)}%</dt><dd>&minus;{rupees(l.dep_amount)}</dd></>)}</>)}
+                {l.dep_amount > 0 && (<><dt>Depreciation {Math.round(l.dep_rate * 100)}% <DepreciationHelp line={l} rules={rules} /></dt><dd>&minus;{rupees(l.dep_amount)}</dd></>)}</>)}
               {l.labour > 0 && (<><dt>Labour</dt><dd>{rupees(l.labour)}</dd></>)}
               {l.paint_gross > 0 && (<><dt>Painting</dt><dd>{rupees(l.paint_gross)}</dd>
-                <dt>Paint material depreciation</dt><dd>&minus;{rupees(l.paint_dep)}</dd></>)}
+                <dt>Paint material depreciation <DepreciationHelp line={l} rules={rules} kind="paint" /></dt><dd>&minus;{rupees(l.paint_dep)}</dd></>)}
             </dl>
           </li>
         ))}

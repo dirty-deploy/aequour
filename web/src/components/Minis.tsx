@@ -2,6 +2,7 @@ import type { PointerEvent, ReactNode } from "react";
 import type { Adjuster, Audit, ClaimView } from "../api";
 import { partName, rupees } from "../api";
 import { Reveal } from "./Reveal";
+import DepreciationHelp from "./DepreciationHelp";
 
 const sheen = (e: PointerEvent<HTMLElement>) => {
   const r = e.currentTarget.getBoundingClientRect();
@@ -38,7 +39,7 @@ export default function Minis({ claim, adj, audit, plate }: { claim: ClaimView |
             {line ? (<div className="ledger-mini">
               <div><span>{partName(line.part_class)}: replace</span><b>{rupees(line.line_total)}</b></div>
               <div className="sub"><span>Genuine part</span><span>{rupees(line.part_mrp)}</span></div>
-              <div className="sub"><span>Depreciation {Math.round(line.dep_rate * 100)}%</span><span>&minus;{rupees(line.dep_amount)}</span></div>
+              <div className="sub"><span>Depreciation {Math.round(line.dep_rate * 100)}% <DepreciationHelp line={line} rules={claim?.dep_rules} /></span><span>&minus;{rupees(line.dep_amount)}</span></div>
               <div className="sub"><span>Labour</span><span>{rupees(line.labour)}</span></div>
               <div className="tot"><span>Offer</span><b>{rupees(claim?.original_offer)}</b></div>
             </div>) : <p className="small">Loading...</p>}

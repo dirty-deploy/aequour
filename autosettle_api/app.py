@@ -62,7 +62,7 @@ VIDEO_SAMPLES = {
 MEDIA = {"JPEG": "image/jpeg", "PNG": "image/png", "WEBP": "image/webp"}
 EXT = {"JPEG": ".jpg", "PNG": ".png", "WEBP": ".webp"}
 CUSTOMER_LINE_KEYS = ("part_class", "damage_class", "severity", "action", "part_mrp", "dep_rate", "dep_amount", "part_net",
-                      "labour", "paint_gross", "paint_dep", "paint_net", "line_total")
+                      "labour", "paint_gross", "paint_dep", "paint_net", "line_total", "dep_basis", "paint_basis")
 NEED_TEXT = {"plate_verified": "A clear number plate: type it, or add a photo of the plate.",
              "parts_identified": "A wider photo that shows each damaged panel in full.",
              "damage_identified": "A closer, well-lit photo of each damaged area.",
@@ -395,6 +395,11 @@ def create_app(settings=None, vision=None, qwen=None):
         """REPLAY whenever this claim's vision output was recorded, even on a live server (a scenario without its photo)."""
         return "REPLAY" if (mode_label == "REPLAY" or c.recorded) else "LIVE"
 
+    def dep_rules():
+        """The depreciation rules as the engine's config holds them, for the "?" help in the page."""
+        return {"plastic_rate": C.PLASTIC_DEP, "glass_rate": 0.0, "metal_bands": C.metal_bands(),
+                "paint_share": C.PAINT_MATERIAL_SHARE, "paint_rate": C.PAINT_MATERIAL_DEP}
+
     def customer_view(c):
         s, res = c.session, c.session.result
         out = {"claim_id": c.id, "mode": claim_mode(c), "state": s.state, "status": "assessed" if c.assessed else "collecting",
@@ -413,6 +418,7 @@ def create_app(settings=None, vision=None, qwen=None):
                 out["offer"] = s.current_offer
                 out["deductible"], out["gross"] = res["deductible"], res["gross"]
                 out["lines"] = [{k: ln[k] for k in CUSTOMER_LINE_KEYS} for ln in res["lines"]]
+                out["dep_rules"] = dep_rules()
                 if s.state in ("OFFERED", "UPDATED_OFFER"):
                     out["options"] = [{"id": "accept", "label": "Accept the cash offer"},
                                       {"id": "partner_garage", "label": "Repair at a partner garage at agreed rates"},
@@ -749,7 +755,7 @@ def create_app(settings=None, vision=None, qwen=None):
                                        "area_fraction": d.get("damage_area_fraction"), "source": d.get("damage_source"),
                                        "support_images": d.get("support_images")}})
         out.update({"decision": res["decision"], "reasons": res["reasons"], "tci": res["tci"], "missing": res["missing"],
-                    "lines": lines, "ledger": res["ledger"], "offer": s.current_offer, "deductible": res["deductible"],
+                    "lines": lines, "dep_rules": dep_rules(), "ledger": res["ledger"], "offer": s.current_offer, "deductible": res["deductible"],
                     "gross": res["gross"], "integrity_flags": v["integrity_flags"], "flags": v["flags"],
                     "quality": v["quality"], "images": recorded_images(c, v),
                     "recorded_images": v.get("images"),
