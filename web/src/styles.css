@@ -410,3 +410,12 @@ button:disabled { cursor: not-allowed; }
   .result { grid-template-columns: 1fr; }
   .iso-fig { height: 200px; }
 }
+
+/* ---------- mode badge and stale-tab banner ---------- */
+.mode-badge { display: inline-flex; align-items: center; gap: 2px; font: 500 12px/1 var(--font); padding: 6px 10px; border-radius: var(--radius-pill); border: 1px solid; white-space: nowrap; }
+.mode-badge b { font-weight: 700; letter-spacing: 0.08em; }
+.mode-badge.live { color: #9be3b4; border-color: rgba(155, 227, 180, 0.55); background: rgba(155, 227, 180, 0.08); }
+.mode-badge.replay { color: var(--accent-ink); border-color: rgba(224, 176, 74, 0.55); background: rgba(224, 176, 74, 0.08); }
+.stale { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; gap: 14px; align-items: center; justify-content: center; padding: 10px 16px; background: #2a1f08; color: var(--ink); border-bottom: 1px solid var(--accent); font-size: 15px; }
+.stale button { font: 600 14px var(--font); color: #1a1405; background: var(--accent); border: 0; border-radius: var(--radius-pill); padding: 7px 16px; cursor: pointer; }
+@media (max-width: 760px) { .mode-badge .mb-text { display: none; } }

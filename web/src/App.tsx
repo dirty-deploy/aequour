@@ -3,6 +3,7 @@ import Customer from "./Customer";
 import AdjusterView from "./AdjusterView";
 import Stars from "./components/Stars";
 import Nav from "./components/Nav";
+import { HealthProvider, StaleBanner } from "./health";
 
 function useRoute() {
   const read = () => window.location.hash.replace(/^#\/?/, "");
@@ -20,9 +21,10 @@ export default function App() {
   const m = route.match(/^adjuster\/([a-f0-9]+)$/);
   const d = route.match(/^(?:demo|flow)\/([a-z_]+)$/);
   return (
-    <>
+    <HealthProvider>
+      <StaleBanner />
       <Stars />
       {m ? (<><Nav adjusterId={m[1]} plain /><AdjusterView id={m[1]} /></>) : <Customer auto={d ? d[1] : undefined} />}
-    </>
+    </HealthProvider>
   );
 }

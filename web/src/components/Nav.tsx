@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "../hooks";
+import { ModeBadge } from "../health";
 
-const LINKS: [string, string][] = [["read", "How a claim is read"], ["limits", "Limits"], ["guard", "Guardrails"], ["try", "Try a claim"]];
+const LINKS: [string, string][] = [["read", "How a claim is read"], ["guard", "Guardrails"], ["try", "Try a claim"]];
 
 /** Floating hairline pill with notched ends. A dark translucent backing and a blur keep content from running through it. */
 export default function Nav({ adjusterId, plain = false }: { adjusterId?: string; plain?: boolean }) {
@@ -37,6 +38,7 @@ export default function Nav({ adjusterId, plain = false }: { adjusterId?: string
         ))}
         <li>{adjusterId ? <a href={`#/adjuster/${adjusterId}`} className={plain ? "on" : ""}>Adjuster view</a> : <a href="#try" onClick={go("try")}>Adjuster view</a>}</li>
       </ul>
+      <ModeBadge />
       <a className="pill-out" href="#try" onClick={go("try")}>Start a claim</a>
     </nav>
   );

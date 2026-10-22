@@ -37,6 +37,7 @@ export interface EscalationView {
   flags?: string[]; integrity_flags?: string[]; evidence?: Detection[]; priced_lines?: { part_class: string; damage_class: string; severity: string; action: string; line_total: number }[];
   gross?: number | null; what_the_human_should_do?: string; audit?: { chain_ok: boolean; events: { seq: number; event: string; state: string; hash: string }[] }; video?: VideoView | null;
 }
+export interface Health { ok: boolean; mode: "LIVE" | "REPLAY"; qwen: string; video: boolean; claims: number; ui: string; build: string; built_at: string | null; weights_found: boolean; gpu: boolean }
 export interface Policy { policy_id: string; vehicle: string; plate: string }
 export interface GuideStep { id: string; title: string; text: string }
 export interface LimitItem { id: string; label: string; value: string; detail: string; caveat: string; source: string }
@@ -76,7 +77,7 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 const json = (body: unknown): RequestInit => ({ method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
 
 export const api = {
-  health: () => call<{ ok: boolean; mode: "LIVE" | "REPLAY"; qwen: string; video: boolean }>("/health"),
+  health: () => call<Health>("/health"),
   policies: () => call<Policy[]>("/policies"),
   scenarios: () => call<Scenario[]>("/scenarios"),
   guide: () => call<GuideStep[]>("/capture-guide"),

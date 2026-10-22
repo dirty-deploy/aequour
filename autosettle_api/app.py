@@ -28,6 +28,7 @@ from autosettle_engine.dispute import TERMINAL, ClaimSession
 from autosettle_vision.claim import POLICIES, RC, customer_text, decision_text, engine_vision, get_policy
 
 from . import attack_runner, plate_blur
+from . import runtime as rt
 from .backends import LiveVision, ReplayMiss, ReplayVision
 from .scenarios import SCENARIOS
 
@@ -141,6 +142,15 @@ def create_app(settings=None, vision=None, qwen=None):
     glock = threading.Lock()
     app = FastAPI(title="Aequour", docs_url="/api-docs", redoc_url=None)
     mode_label = "REPLAY" if backend.mode == "replay" else "LIVE"
+    build_info = rt.read_build(cfg.ui)
+    gpu_cache = {}
+
+    @app.middleware("http")
+    async def cache_headers(request, call_next):
+        """Hashed build files never change; every page, API and JSON response is never cached, so a stale tab cannot happen."""
+        resp = await call_next(request)
+        resp.headers["Cache-Control"] = "public, max-age=31536000, immutable" if request.url.path.startswith("/assets/") else "no-store"
+        return resp
 
     # ------------------------------------------------------------------ helpers
     qlock = threading.Lock()
@@ -422,8 +432,11 @@ def create_app(settings=None, vision=None, qwen=None):
     # ------------------------------------------------------------------ meta
     @app.get("/health")
     def health():
+        if "gpu" not in gpu_cache:
+            gpu_cache["gpu"] = rt.gpu_available() if mode_label == "LIVE" else False
         return {"ok": True, "mode": mode_label, "qwen": "off" if not cfg.qwen else ("loaded" if qstate["model"] else "lazy"),
-                "video": cfg.video, "claims": len(claims)}
+                "video": cfg.video, "claims": len(claims), "ui": build_info["ui"], "build": build_info["build"],
+                "built_at": build_info.get("built_at"), "weights_found": not rt.missing_weights(), "gpu": gpu_cache["gpu"]}
 
     @app.get("/limits")
     def limits():
@@ -863,7 +876,7 @@ def create_app(settings=None, vision=None, qwen=None):
         return out
 
     # ------------------------------------------------------------------ static front end
-    ui_dir = Path(__file__).with_name({"demo": "static_demo", "v1": "static_v1"}.get(cfg.ui, "static"))
+    ui_dir = Path(__file__).with_name(rt.UI_DIRS.get(cfg.ui, "static"))
     if ui_dir.exists() and (ui_dir / "index.html").exists():
         app.mount("/assets", StaticFiles(directory=ui_dir / "assets"), name="assets") if (ui_dir / "assets").exists() else None
 
