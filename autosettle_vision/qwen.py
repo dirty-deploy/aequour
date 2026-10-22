@@ -11,6 +11,7 @@ res["ceiling_lines"] or engine.pivots() output (guarded in reword()).
 """
 import json
 import re
+import threading
 import time
 
 MODEL_ID = "Qwen/Qwen3-VL-8B-Instruct"
@@ -48,11 +49,16 @@ class QwenVL:
             model_id, quantization_config=q, dtype=torch.bfloat16, device_map="cuda:0")
         # cap image tokens so an 8 GB card does not run out of memory on phone photos
         self.processor = AutoProcessor.from_pretrained(model_id, min_pixels=256 * 28 * 28, max_pixels=768 * 28 * 28)
+        self._gen_lock = threading.Lock()
         self.model_id, self.load_s = model_id, round(time.time() - t0, 1)
         self.vram_gb = round(torch.cuda.max_memory_allocated() / 1e9, 2)
 
     # ------------------------------------------------------------------ core call
     def chat(self, messages, max_new_tokens=512, temperature=None):
+        with self._gen_lock:                  # one generation at a time on the GPU: wording, quote reading and chat replies take turns
+            return self._chat(messages, max_new_tokens, temperature)
+
+    def _chat(self, messages, max_new_tokens, temperature):
         import torch
         inputs = self.processor.apply_chat_template(messages, tokenize=True, add_generation_prompt=True,
                                                     return_dict=True, return_tensors="pt").to(self.model.device)
