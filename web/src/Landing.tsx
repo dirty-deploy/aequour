@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { api } from "./api";
 import type { Adjuster, Audit, ClaimView, Limits } from "./api";
+import { PAGE_BUILD } from "./health";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Pinned from "./components/Pinned";
 import Pair from "./components/Pair";
 import Minis from "./components/Minis";
-import LimitsScene from "./components/LimitsScene";
 import GuardScene from "./components/GuardScene";
 import TryScene from "./components/TryScene";
 import Glance from "./components/Glance";
@@ -43,13 +43,12 @@ export default function Landing({ auto }: { auto?: string }) {
       <Pinned adj={adj} claim={demo} />
       <Pair />
       <Minis claim={demo} adj={adj} audit={audit} plate={plate} />
-      <LimitsScene limits={limits} />
       <GuardScene />
       <TryScene auto={auto} onClaim={setLastId} replay={replay} videoLive={!!health && health.mode === "LIVE" && health.video} />
       <Glance limits={limits} />
       <footer className="foot wrap">
         <p>Aequour. The AI perceives and talks; deterministic code decides every rupee.</p>
-        <p>{replay && <><b className="replay-tag">REPLAY</b> Vision output is recorded from the real pipeline; the engine runs live. </>}Source and documents: <a href="https://github.com/dirty-deploy/aequour" rel="noreferrer">github.com/dirty-deploy/aequour</a>.</p>
+        <p>{replay && <><b className="replay-tag">REPLAY</b> Vision output is recorded from the real pipeline; the engine runs live. </>}Source and documents: <a href="https://github.com/dirty-deploy/aequour" rel="noreferrer">github.com/dirty-deploy/aequour</a>. Build <code>{PAGE_BUILD}</code>.</p>
       </footer>
     </>
   );

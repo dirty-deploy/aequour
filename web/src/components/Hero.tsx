@@ -40,7 +40,7 @@ export default function Hero({ limits, replay }: { limits: Limits | null; replay
           <ChromeButton variant="quiet" onClick={go("read")}>See how a claim is read</ChromeButton>
         </div>
         <p className="fine rise-in" style={{ "--i": 5 } as React.CSSProperties}>
-          Demo on public photos.{recall ? ` In our own tests it found ${recall.value} damaged parts on hard photos; read the limits.` : ""}
+          Demo on public photos.{recall ? ` In our own tests it found ${recall.value} damaged parts on hard photos.` : ""}
           {replay && <> <b className="replay-tag">REPLAY</b> recorded vision output, live engine.</>}
         </p>
       </div>
