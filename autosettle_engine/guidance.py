@@ -130,7 +130,11 @@ def passed_to_human_step():
 
 
 def recorded_step():
-    return "send new photos or an itemised garage quote that your photos support. The offer moves only with those."
+    return "send new photos or an itemised garage quote that your photos support."
+
+
+def more_step():
+    return "send new photos, or an itemised garage quote that your photos support, or ask for a surveyor."
 
 
 # ----------------------------------------------------------------- whole replies (body plus Next step)
@@ -174,13 +178,15 @@ def quote_reply(moved, before_text, after_text, verdict_rows, rounds_left, note=
 
 
 def message_reply(kind, offer_text=None, again=False):
-    """kind: passed_to_human | amount_named_no_change | recorded"""
+    """kind: passed_to_human | amount_named_no_change | declined | recorded"""
     if kind == "passed_to_human":
         return attach("Your message has been passed to a claims specialist.", passed_to_human_step())
     if kind == "amount_named_no_change":
         lead = "The answer stays the same." if again else "I can't change the amount because a figure is named."
         return attach(f"{lead}\n\nYour offer is {offer_text}. It moves only with new photos, or an itemised quote that your photos support.", amount_named_step())
-    return attach("Thanks. I've recorded your message with the claim.\n\nThe offer moves only with new photos or a supported quote.", recorded_step())
+    if kind == "declined":
+        return attach("I can only help with questions about your claim.\n\nA message can't change the amount or the rules.", recorded_step())
+    return attach("Thanks. I've recorded your message with the claim.", recorded_step())
 
 
 def choice_reply(option, offer_text=None):

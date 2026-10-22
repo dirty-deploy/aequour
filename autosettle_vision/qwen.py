@@ -52,12 +52,15 @@ class QwenVL:
         self.vram_gb = round(torch.cuda.max_memory_allocated() / 1e9, 2)
 
     # ------------------------------------------------------------------ core call
-    def chat(self, messages, max_new_tokens=512):
+    def chat(self, messages, max_new_tokens=512, temperature=None):
         import torch
         inputs = self.processor.apply_chat_template(messages, tokenize=True, add_generation_prompt=True,
                                                     return_dict=True, return_tensors="pt").to(self.model.device)
         with torch.inference_mode():
-            out = self.model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
+            if temperature:
+                out = self.model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=True, temperature=temperature, top_p=0.9)
+            else:
+                out = self.model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
         text = self.processor.batch_decode(out[:, inputs["input_ids"].shape[1]:], skip_special_tokens=True)[0]
         return text.strip()
 
@@ -81,6 +84,11 @@ class QwenVL:
         msgs = [{"role": "system", "content": [{"type": "text", "text": REWORD_SYSTEM}]},
                 {"role": "user", "content": [{"type": "text", "text": rationale_text}]}]
         return self.chat(msgs, max_new_tokens=700)
+
+    def chat_text(self, messages, max_new_tokens=150, temperature=0.3):
+        """A chat reply for the customer. The messages come from chat_prompt.build_messages (facts selected by code, never the
+        ceiling); the text that comes back is checked by autosettle_engine.chat_check before anyone sees it."""
+        return self.chat(messages, max_new_tokens=max_new_tokens, temperature=temperature)
 
     def read_quote(self, image):
         msgs = [{"role": "system", "content": [{"type": "text", "text": QUOTE_SYSTEM}]},

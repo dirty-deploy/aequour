@@ -47,3 +47,22 @@ def probe_port(host, port):
         return "another program" if s.connect_ex((host, port)) == 0 else None
     finally:
         s.close()
+
+
+QWEN_MIN_FREE_GB = 5.0      # set from the measured footprint of the 4-bit language model (see README, "Language model demo")
+
+
+def gpu_memory_problem(min_free_gb=None):
+    """None if the language model can be loaded; otherwise a plain reason. Checked before loading, so a full GPU gives
+    a clear message and a template-only server instead of a crash."""
+    try:
+        import torch
+    except Exception:
+        return "torch is not installed (live mode needs requirements-live.txt)"
+    if not torch.cuda.is_available():
+        return "no CUDA GPU was found"
+    free = torch.cuda.mem_get_info()[0] / 1e9
+    need = QWEN_MIN_FREE_GB if min_free_gb is None else min_free_gb
+    if free < need:
+        return f"not enough free GPU memory ({free:.1f} GB free, about {need:.0f} GB needed): close other GPU programs"
+    return None

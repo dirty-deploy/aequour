@@ -27,7 +27,8 @@ from autosettle_engine import config as C, engine as E, guidance as G, rationale
 from autosettle_engine.dispute import TERMINAL, ClaimSession
 from autosettle_vision.claim import POLICIES, RC, customer_text, decision_text, engine_vision, get_policy
 
-from . import attack_runner, plate_blur
+from . import attack_runner, chat as CHAT, plate_blur
+from .intents import classify
 from . import runtime as rt
 from .backends import LiveVision, ReplayMiss, ReplayVision
 from .scenarios import SCENARIOS
@@ -86,6 +87,7 @@ class Settings:
     demo_photos: tuple = ()
     fresh_seen: bool = False
     video: bool = True      # on only because every video test passes (Stage B gate); `--video off` turns it off
+    preload: bool = False   # start loading the language model in the background at server start (the command line sets this)
 
 
 class Claim:
@@ -162,12 +164,32 @@ def create_app(settings=None, vision=None, qwen=None):
         with qlock:
             if not qstate["tried"]:
                 qstate["tried"] = True
+                qstate["loading"] = True
                 try:
+                    reason = rt.gpu_memory_problem()
+                    if reason:
+                        raise RuntimeError(reason)
                     from autosettle_vision.qwen import QwenVL
                     qstate["model"] = QwenVL()
+                    qstate["load_s"], qstate["vram_gb"] = qstate["model"].load_s, qstate["model"].vram_gb
                 except Exception as e:      # no GPU, out of memory, model missing: fall back to templates
                     qstate["error"] = str(e)[:200]
+                finally:
+                    qstate["loading"] = False
             return qstate["model"]
+
+    def qwen_status():
+        """off | loading | ready | error. The page and /health read this; the chat uses the model only when it is ready."""
+        if qstate["model"] is not None:
+            return "ready"
+        if qstate.get("error"):
+            return "error"
+        if qstate.get("loading") or (cfg.preload and cfg.qwen and not qstate["tried"]):
+            return "loading"
+        return "off"
+
+    if cfg.preload and cfg.qwen and qwen is None:
+        threading.Thread(target=get_qwen, name="qwen-load", daemon=True).start()
 
     def need(cid):
         c = claims.get(cid)
@@ -207,16 +229,32 @@ def create_app(settings=None, vision=None, qwen=None):
                         "audit_seq": log[-1]["seq"] if log else None, "audit_hash": log[-1]["hash"][:12] if log else None,
                         **({"detail": detail} if detail else {})})
 
-    def reply_for(c, flags, amount):
-        """Template wording only. It names the current offer (the customer's own number) and the routes that can move it;
-        it never changes an amount and never mentions the upper bound."""
+    def fixed(text, kind, intent, why="not_for_model"):
+        """A reply that always uses fixed wording (money, abuse, injection): never sent to the model."""
+        return text, kind, {"intent": intent, "source": "template", "reason": why, "reason_text": CHAT.REASONS[why], "facts": None,
+                            "model_raw": None, "checks": [], "rejected": None}, "template"
+
+    def reply_for(c, flags, amount, text):
+        """Returns (reply, kind, detail, wording). Code decides the intent and picks the facts; the model, when it is ready, only phrases
+        the reply and code checks it; anything doubtful uses the template. Money, abuse and injection never reach the model.
+        No path changes an amount or mentions the upper bound."""
         if "abusive" in flags or "legal_threat" in flags:
-            return G.message_reply("passed_to_human"), "passed_to_human"
+            return fixed(G.message_reply("passed_to_human"), "passed_to_human", "escalation")
         s = c.session
-        if amount is not None and s.state in ("OFFERED", "UPDATED_OFFER"):
+        open_offer = s.state in ("OFFERED", "UPDATED_OFFER")
+        intent, _ = classify(text)
+        if intent == "amount_named" and open_offer:
             again = sum(1 for t in c.turns[:-1] if t["from"] == "customer" and (t.get("detail") or {}).get("stated_amount") is not None)
-            return G.message_reply("amount_named_no_change", R.money(s.current_offer), bool(again)), "amount_named_no_change"
-        return G.message_reply("recorded"), "recorded"
+            return fixed(G.message_reply("amount_named_no_change", R.money(s.current_offer), bool(again)), "amount_named_no_change", "amount_named")
+        if "injection_suspected" in flags:
+            return fixed(G.message_reply("declined"), "declined", "instruction_in_message")
+        if intent == "amount_named":
+            intent = "other"
+        ceiling = s.result.get("ceiling") if s.result else None
+        r = CHAT.reply(c, intent, text, qwen_status, lambda: qstate["model"], ceiling=ceiling)
+        detail = {k: r.get(k) for k in ("intent", "source", "reason", "reason_text", "facts", "model_raw", "checks", "rejected")}
+        detail["final"] = r["text"]
+        return r["text"], "chat_" + intent, detail, ("model, checked" if r["source"] == "model" else "template")
 
     def next_step_of(c):
         """The Next step text of the latest system reply, so the offer card shows exactly what the chat says."""
@@ -232,10 +270,11 @@ def create_app(settings=None, vision=None, qwen=None):
         amount = stated_amount(text)
         c.chat.append({"from": "customer", "text": text[:MAX_MESSAGE_CHARS]})
         add_turn(c, "customer", text[:MAX_MESSAGE_CHARS], detail={"stated_amount": amount, "flags": flags})
-        reply, kind = reply_for(c, flags, amount)
-        c.session._log("reply", {"kind": kind, "stated_amount": amount})
+        reply, kind, detail, wording = reply_for(c, flags, amount, text)
+        c.session._log("reply", {"kind": kind, "stated_amount": amount, "intent": detail.get("intent"), "source": detail.get("source"),
+                                 "reason": detail.get("reason")})
         c.chat.append({"from": "system", "text": reply})
-        add_turn(c, "system", reply, wording="template", detail={"kind": kind})
+        add_turn(c, "system", reply, wording=wording, detail={"kind": kind, **detail})
         return reply, flags
 
     def clean_quote(q):
@@ -444,7 +483,8 @@ def create_app(settings=None, vision=None, qwen=None):
     def health():
         if "gpu" not in gpu_cache:
             gpu_cache["gpu"] = rt.gpu_available() if mode_label == "LIVE" else False
-        return {"ok": True, "mode": mode_label, "qwen": "off" if not cfg.qwen else ("loaded" if qstate["model"] else "lazy"),
+        return {"ok": True, "mode": mode_label, "qwen": qwen_status(), "qwen_error": qstate.get("error"),
+                "qwen_load_s": qstate.get("load_s"),
                 "video": cfg.video, "claims": len(claims), "ui": build_info["ui"], "build": build_info["build"],
                 "built_at": build_info.get("built_at"), "weights_found": not rt.missing_weights(), "gpu": gpu_cache["gpu"]}
 
