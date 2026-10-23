@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# Entry points:  ./run.sh demo | demo-qwen | demo-live | test | attacks | eval | api | smoke      (set AEQUOUR_PY to pick a Python)
+# Entry points:  ./run.sh demo | demo-qwen | demo-live | test | attacks | eval | api | smoke | preflight      (set AEQUOUR_PY to pick a Python)
 PY="${AEQUOUR_PY:-python3}"
 cd "$(dirname "$0")" || exit 1
 task="${1:-test}"
@@ -13,5 +13,6 @@ case "$task" in
   eval)    "$PY" tools/eval_dev.py ;;
   api)     "$PY" -m autosettle_api "$@" ;;
   smoke)   "$PY" tools/smoke.py ;;
-  *)       echo "usage: ./run.sh demo|demo-qwen|demo-live|test|attacks|eval|api|smoke"; exit 2 ;;
+  preflight) "$PY" tools/preflight.py "$@" ;;
+  *)       echo "usage: ./run.sh demo|demo-qwen|demo-live|test|attacks|eval|api|smoke|preflight"; exit 2 ;;
 esac
