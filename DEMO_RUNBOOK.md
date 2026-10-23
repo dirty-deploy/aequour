@@ -28,6 +28,19 @@ python -m autosettle_api --ui v1                           # the earlier web bui
 | live with the language model: the first OFFER loads Qwen3-VL (4-bit) and rewords | about 44 to 55 s; GPU memory about 7.5 to 7.8 GB of 8 GB, so close other GPU programs and do not run a benchmark at the same time |
 | a quote photo read by the language model | about 8 s (two synthetic quotes, `final2/REAL_MEDIA.md`) |
 
+## Demo morning, 10 steps
+Run these from `C:\autosettle\aequour_demo` on the demo laptop, in this order.
+1. `git branch --show-current` should print `finals-video-price`.
+2. `.\run.ps1 preflight` should end with `READY`. It changes nothing and loads no model; read every WARN (GPU memory and temperature, weights, a port already in use).
+3. Close other GPU programs (browsers with video, games, other Python servers). The pre-flight line for the GPU should show at least 6,000 MiB free.
+4. `.\run.ps1 demo-live` starts live mode with an empty duplicate-photo store each time (wait for the line saying the server is up; the first photo takes a few seconds longer).
+5. Open http://127.0.0.1:8000 and confirm the badge says **LIVE**, not REPLAY.
+6. In **Try a claim**, run the recorded clean claim ("A protocol-compliant claim reaches an offer") and see the offer of ₹2,763; press "Use the recorded quote" and see it move to ₹3,063.
+7. Upload the Swift demo photo live (`test_photos\commons\c05_Abandoned_Suzuki_Osidge_London_2.jpg`) with the plate `DL3CAB1234` and confirm the same offer of ₹2,763.
+8. Open **Adjuster view** for that claim, then scroll to the **Estimate from what the system can see** panel (adjuster only; it says "not an offer").
+9. If something fails, in this order: restart with `python -m autosettle_api --replay --fresh-seen`; then `python -m autosettle_api --ui v1`; then the screen recording (the folder `C:\autosettle\final2\deck_assets`, outside this repository).
+10. Uploading the same photo twice escalates by design ("photo seen in an earlier claim"), so restart the server (step 4) before the show, and again after any rehearsal.
+
 ## If something fails (in this order)
 1. GPU or a model error ("the vision pipeline failed"): restart with `--replay`.
 2. The new page misbehaves: `--ui v1` serves the earlier build.
