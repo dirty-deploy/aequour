@@ -24,6 +24,7 @@ from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
 from autosettle_engine import config as C, engine as E, guidance as G, rationale as R
+from autosettle_engine.estimate import estimate_from_evidence
 from autosettle_engine.dispute import TERMINAL, ClaimSession
 from autosettle_vision.claim import POLICIES, RC, customer_text, decision_text, engine_vision, get_policy
 
@@ -789,12 +790,22 @@ def create_app(settings=None, vision=None, qwen=None):
             return [{"name": (v.get("images") or ["photo"])[0], "width": rec["width"], "height": rec["height"], "has_photo": False}]
         return []
 
+    def estimate_of(c):
+        """Adjuster-only estimate from the detections. Read-only: the session, the vision data and the log are not touched."""
+        res = c.session.result
+        if c.ev is None:
+            return {"applies": False, "decision": res["decision"] if res else None, "note": "No photos or video have been analysed yet, so there is nothing to estimate."}
+        try:
+            return estimate_from_evidence(c.policy, c.ev, RC, decision=res["decision"] if res else None)
+        except Exception as e:                      # the page must never fail because of the estimate
+            return {"applies": False, "decision": res["decision"] if res else None, "note": f"The estimate could not be made ({type(e).__name__})."}
+
     # ------------------------------------------------------------------ adjuster (demo only: no authentication is claimed)
     @app.get("/adjuster/{cid}")
     def adjuster(cid: str):
         c = need(cid)
         s, res, v = c.session, c.session.result, c.vision
-        out = {"label": "ADJUSTER VIEW (demo only; no authentication is claimed)", "claim_id": c.id, "mode": claim_mode(c),
+        out = {"estimate": estimate_of(c), "label": "ADJUSTER VIEW (demo only; no authentication is claimed)", "claim_id": c.id, "mode": claim_mode(c),
                "state": s.state, "plate_source": c.plate_source, "photos": photo_urls(c),
                "audit": {"chain_ok": ClaimSession.verify_log(s.log), "events": len(s.log)}}
         if res is None or v is None:
@@ -878,6 +889,11 @@ def create_app(settings=None, vision=None, qwen=None):
             if code.startswith(k):
                 return t + (f" ({code.split(':', 1)[1]})" if ":" in code else "")
         return code
+
+    @app.get("/adjuster/{cid}/estimate")
+    def adjuster_estimate(cid: str):
+        c = need(cid)
+        return {"label": ADJ_LABEL, "claim_id": c.id, "mode": claim_mode(c), **estimate_of(c)}
 
     @app.get("/adjuster/{cid}/range")
     def adjuster_range(cid: str):

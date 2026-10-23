@@ -40,6 +40,18 @@ export interface VideoSample { key: string; label: string; shows: string; synthe
 export interface AttackInfo { name: string; title: string; attempt: string; held_looks_like: string; control: boolean; offer_should_move: boolean }
 export interface AttackRun { name: string; title: string; attempt: string; control: boolean; held: boolean; system_did: string; offer_before: number | null; offer_after: number | null; decision_after: string | null; offer_unchanged: boolean | null; audit_chain_intact: boolean | null; offer_should_move: boolean; label: string }
 export interface GuardRow { guardrail: string; threshold: string; kind: string; enforced_in: string }
+export interface EstimateLine {
+  part_class: string; damage_class: string; severity: string; action: string; low: number; high: number;
+  part_mrp: number; dep_rate: number; dep_amount: number; part_net: number; labour: number; paint_gross: number; paint_net: number;
+  price_tier: string | null; price_status: string | null;
+}
+/** Adjuster only: an estimate from the detections, never an offer. The customer routes do not carry it. */
+export interface Estimate {
+  label?: string; applies: boolean; note?: string; decision: string | null;
+  lines?: EstimateLine[]; not_priced?: { part: string; reason: string }[];
+  gross_low?: number; gross_high?: number; deductible?: number; payable_low?: number; payable_high?: number;
+  complete?: boolean; reading?: string; basis?: string;
+}
 export interface RangeView {
   label: string; applies: boolean; note?: string; initial_offer?: number; current_offer?: number; ceiling?: number; ceiling_note?: string; deductible?: number; gross?: number; idv?: number;
   evidence_rounds_used?: number; evidence_rounds_allowed?: number; which_stops_a_higher_number?: { guardrail: string; rule: string; enforced_in: string }[];
@@ -72,6 +84,7 @@ export interface AdjLine extends Line {
 export interface Adjuster {
   label: string; claim_id: string; mode: string; state: string; plate_source: string | null; photos: PhotoRef[];
   audit: { chain_ok: boolean; events: number }; decision?: string; reasons?: string[]; tci?: number; missing?: string[];
+  estimate?: Estimate;
   lines?: AdjLine[]; ledger?: LedgerRow[]; offer?: number | null; deductible?: number; gross?: number | null;
   integrity_flags?: string[]; flags?: string[]; images?: { name: string; width: number; height: number; has_photo: boolean }[];
   recorded_images?: string[]; detections?: Detection[]; findings_by_image?: Record<string, Finding[]>; dep_rules?: DepRules;
@@ -116,6 +129,7 @@ export const api = {
   attacks: () => call<AttackInfo[]>("/attacks"),
   runAttack: (name: string) => call<AttackRun>(`/attacks/${name}/run`, { method: "POST" }),
   guardrails: () => call<GuardRow[]>("/guardrails"),
+  estimate: (id: string) => call<Estimate>(`/adjuster/${id}/estimate`),
   range: (id: string) => call<RangeView>(`/adjuster/${id}/range`),
   escalation: (id: string) => call<EscalationView>(`/adjuster/${id}/escalation`),
   assess: (id: string) => call<ClaimView>(`/claims/${id}/assess`, { method: "POST" }),

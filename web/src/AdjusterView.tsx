@@ -38,6 +38,37 @@ export default function AdjusterView({ id }: { id: string }) {
         {a.plate_source && <span className="badge2">Plate: {a.plate_source}</span>}
       </p>
 
+      {a.estimate?.applies && (
+        <section aria-labelledby="est-h">
+          <h2 id="est-h">Estimate from what the system can see <span className="demo-only">demo only</span></h2>
+          <p className="notice">For the adjuster only. This is an estimate, not an offer. The customer never sees it.</p>
+          <p>
+            <span className="badge2">Decision {a.estimate.decision}</span>{" "}
+            <b>{a.estimate.lines?.length ? <>Estimate {rupees(a.estimate.payable_low)} to {rupees(a.estimate.payable_high)}</> : "Nothing could be priced"}</b>
+            {a.estimate.complete ? "" : " (incomplete: a floor on what is visible, not the likely total)"}
+          </p>
+          <p>{a.estimate.reading}</p>
+          {!!a.estimate.lines?.length && (
+            <table>
+              <thead><tr><th>Part</th><th>Damage</th><th>Severity</th><th>Action</th><th>Low</th><th>High</th></tr></thead>
+              <tbody>
+                {a.estimate.lines.map((l) => <tr key={l.part_class + l.damage_class}><td>{partName(l.part_class)}</td><td>{l.damage_class}</td><td>{l.severity}</td><td>{l.action}</td><td>{rupees(l.low)}</td><td>{rupees(l.high)}</td></tr>)}
+                <tr><td colSpan={4}><b>Gross repair cost</b></td><td>{rupees(a.estimate.gross_low)}</td><td>{rupees(a.estimate.gross_high)}</td></tr>
+                <tr><td colSpan={4}>Deductible</td><td>{rupees(a.estimate.deductible)}</td><td>{rupees(a.estimate.deductible)}</td></tr>
+                <tr><td colSpan={4}><b>Payable range</b></td><td><b>{rupees(a.estimate.payable_low)}</b></td><td><b>{rupees(a.estimate.payable_high)}</b></td></tr>
+              </tbody>
+            </table>
+          )}
+          {!!a.estimate.not_priced?.length && (
+            <>
+              <h3>Not priced</h3>
+              <ul>{a.estimate.not_priced.map((n, i) => <li key={i}>{partName(n.part)}: {n.reason}</li>)}</ul>
+            </>
+          )}
+          <p className="note small">{a.estimate.basis}</p>
+        </section>
+      )}
+
       {range && (
         <section aria-labelledby="rng-h">
           <h2 id="rng-h">Allowable settlement range <span className="demo-only">demo only</span></h2>
