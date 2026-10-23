@@ -89,14 +89,21 @@ This runs `python -m autosettle_api --replay --with-qwen --fresh-seen`: recorded
 
 **Without a GPU.** A mentor without a GPU can use replay mode exactly as in the section above. The chat then answers every question from templates written from the same facts, labelled "Template", and the language-model scenario shows as disabled with the start command.
 
+## Your own photos or a video clip
+Start **live mode** with `run.ps1 demo-live` (macOS / Linux: `./run.sh demo-live`), which runs `python -m autosettle_api --no-qwen --fresh-seen`, then open <http://127.0.0.1:8000>. It needs the weights in `backup/` and a CUDA GPU. In **Try a claim**, the left panel is **Your own photos or video**: choose **Photos** or **Video**, type the policy and the plate as it is on the car, then press **Check my claim**. `run.ps1 demo-qwen` is **replay** mode with the language model: it can only show the recorded demo claims and cannot take uploads (the page says so and shows the command above).
+
+Clip advice: one clip, up to 60 seconds and 60 MB, H.264 MP4 or MOV (WebM also opens); daylight, phone upright and steady, walk slowly round the car and keep the damage in view. A clip with no clear frame is refused with its numbers and what to do. A clip whose continuity cannot be confirmed is flagged and goes to a person; that is expected for shaky or night footage. Two real night-time clips were run once each on 23 Oct 2026 (n = 2) and both went to a person: see `docs/REAL_CLIP_CHECK.md`.
+
+**Adjuster estimate.** The adjuster page shows an **Estimate from what the system can see** for any claim that has detections, even one that ended in more photos, a person or a surveyor. Low and high are the engine's own offer and ceiling pricing of each detection it can price; a detection it cannot price is listed with the reason, and then the figure is a floor on what is visible, not the likely total. It is for the adjuster only, it is not an offer, and the customer routes and the language model never receive it.
+
 ## What needs the weights and a GPU
 Live photo and video analysis, the language model (Qwen3-VL-8B 4-bit, which rewords the offer text and reads quote or plate photos) and `tools/eval_dev.py --live`. Weights are **not** in this repository; they go in `backup/` (`parts_s_best.pt`, `dent_det_best.pt`, `damage_merged_s_best.pt`, see `weights/README.md`). Install with `requirements-live.txt`, then `python -m autosettle_api --no-qwen --fresh-seen` (live pipeline, template wording) or `python -m autosettle_api --fresh-seen` (with the language model; the first offer takes about a minute). It was developed on an 8 GB laptop GPU.
 
 ## Tests (each count was measured with the command shown)
 ```
 python -m unittest discover -s autosettle_engine/tests -t .     # 61 tests (money logic, 5,000-claim fuzz, replies, depreciation facts)
-python -m unittest discover -s autosettle_api/tests -t .        # 68 tests, no GPU (1 is skipped when the demo photo is not on the machine)
-python -m unittest discover -s autosettle_vision/tests -t .     # 9 tests, needs the live stack (1 skipped unless AEQUOUR_ISHAN_VIDEOS is set)
+python -m unittest discover -s autosettle_api/tests -t .        # 80 tests, no GPU (1 is skipped when the demo photo is not on the machine)
+python -m unittest discover -s autosettle_vision/tests -t .     # 20 tests, needs the live stack (1 skipped unless AEQUOUR_ISHAN_VIDEOS is set)
 python -m autosettle_engine.exploit_suite                       # 20 attack scripts held, plus 1 control
 python -m autosettle_vision.video_attacks                       # 6 video attack scripts held, plus 1 control (synthetic clips)
 python tools/smoke.py                                           # replay demo path, 14 steps, PASS or FAIL each
@@ -121,7 +128,7 @@ The engine tests, API tests and attack suite pass in a fresh virtual environment
 ## Honest limits, in short
 - **Measured:** engine invariants (fuzz of 5,000 claims, attack scripts), detector scores on their own test splits, pipeline recall and precision on 41 dev photos, 0 offers on the 8-photo held-out set, quote reading on synthetic printed quotes, speed on the development laptop.
 - **Assumed, not measured:** labour and paint prices, severity bands, the review and total-loss thresholds, GST treatment, simulated policy records and plates.
-- **Not measured:** handwritten quotes, real Indian claim photos at scale, severity accuracy, real walk-around video, hosting cost, regulation.
+- **Not measured:** handwritten quotes, real Indian claim photos at scale, severity accuracy, real walk-around video (two real night-time clips were run once each on 23 Oct 2026, n = 2, both escalated: a first test), hosting cost, regulation.
 - **Tried and not adopted** (written up in `docs/`): retraining the parts model, per-panel crop detection (found 22 to 34 of 74 but more false alarms), the teammate's surface heuristic.
 
 ## Licence

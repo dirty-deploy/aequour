@@ -378,7 +378,7 @@ def create_app(settings=None, vision=None, qwen=None):
                                "max_appearance": vid.get("continuity_max_appearance"), "median_appearance": vid.get("continuity_median_appearance"),
                                "appearance_cut": VI.APPEARANCE_CUT},
                 "entities": entities,
-                "note": "Validated on synthetic clips only; nothing about real walk-around video is measured."}
+                "note": "Tested on synthetic clips. Two real night-time phone clips were run once each (n = 2): a first test, not a measurement."}
 
     def add_photo(c, data, filename):
         try:

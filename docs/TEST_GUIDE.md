@@ -38,6 +38,12 @@ Guardrails scene, **Run all**: 21 scripts run on fresh in-memory claims; every o
 ## 7. The adjuster view (demo only)
 From any claim, "Adjuster view": the allowable range (initial and current offer, the internal upper bound, the guardrails that stop a higher number), the escalation packet for the surveyor claim (reasons, evidence, audit events), the assumption ledger (OBSERVED, IMPUTED, UNRESOLVED), the detections table and the audit chain with its verification result. The customer view never shows the upper bound.
 
+## 7b. The estimate on the adjuster page
+Open the adjuster view of any recorded claim: the **Estimate from what the system can see** section sits above the allowable range. On the offer claim it shows ₹2,763 to ₹4,213 (gross ₹3,763 to ₹5,213, deductible ₹1,000) labelled "an estimate, not an offer"; on the surveyor claim it shows a figure although the engine priced nothing. The customer page never shows it.
+
+## 7c. Your own clip (live mode only)
+Start `run.ps1 demo-live`, choose **Video** in the left panel, pick a clip and press **Check my claim**. In replay mode the control is visible but disabled and the page names this command.
+
 ## 8. If something fails
 - `python -m autosettle_api --replay` is the safest start.
 - `--ui v1` serves the earlier web build.

@@ -17,7 +17,7 @@ Start before you walk on: `python -m autosettle_api --replay`, open <http://127.
 - Click *A protocol-compliant claim*: photo with the detection, decision, itemised lines, offer ₹2,763 (plate blurred on screen).
 - Quote tab, *Use the recorded quote*: ₹2,763 becomes **₹3,063**; the painting line is flagged above range. Say moment 1 here.
 - Conversation tab on *A counteroffer moves the offer only on evidence*: a figure with no evidence changes nothing; the supported quote moves it once; an inflated quote and pressure do nothing. "The engine does not negotiate a number; it moves only on evidence."
-- Video tab, *Recorded walk-around* (SYNTHETIC): 12 keyframes, continuity, damage tracked across frames, OFFER ₹2,763. Then *closer*: "More needed", because one panel appears in a single keyframe. Say plainly that video is validated on synthetic clips only.
+- Video tab, *Recorded walk-around* (SYNTHETIC): 12 keyframes, continuity, damage tracked across frames, OFFER ₹2,763. Then *closer*: "More needed", because one panel appears in a single keyframe. Say plainly that video is validated on synthetic clips; two real night-time phone clips were run once each (n = 2) and both went to a person, so do not claim real video works.
 - Click *A heavy crash*: SURVEYOR, no price. Then *Adjuster view*: the escalation packet.
 
 **3. Technology stack (about 40 s).** Say: FastAPI and React; three YOLO11 models for panels and damage; Qwen3-VL-8B in 4-bit for wording and quote reading; a rate card of 151 listed part prices; the engine has no AI. Replay mode runs with no GPU. Versions and licences: `docs/TECH_STACK.md` (Ultralytics is AGPL-3.0; no weights are distributed).

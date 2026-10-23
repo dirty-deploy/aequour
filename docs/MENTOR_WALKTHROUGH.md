@@ -69,7 +69,7 @@ In **Guardrails**, press **Run all**. 21 scripts run on fresh in-memory claims (
 
 ## 7. Video (synthetic)
 
-In **Try a claim**, tab **Video**, press **Recorded walk-around**. It shows 12 keyframes with sharpness and light scores, a continuity check, the damage tracked across keyframes, and the decision (an offer of ₹2,763). The closer clip ends in **We need more**: one panel shows damage in a single keyframe, so the system asks for a clearer view instead of guessing. Both clips are a zoom and pan over one photo, labelled SYNTHETIC. Nothing about real walk-around video is measured.
+In **Try a claim**, tab **Video**, press **Recorded walk-around**. It shows 12 keyframes with sharpness and light scores, a continuity check, the damage tracked across keyframes, and the decision (an offer of ₹2,763). The closer clip ends in **We need more**: one panel shows damage in a single keyframe, so the system asks for a clearer view instead of guessing. Both clips are a zoom and pan over one photo, labelled SYNTHETIC. Two real night-time phone clips were run once each (n = 2, both escalated, no offer): a first test, not a measurement. To try your own clip, start `run.ps1 demo-live`, choose **Video** in the left panel and press **Check my claim**; the adjuster view then shows an **Estimate** (adjuster only, never an offer) even when the claim is escalated.
 
 ## 8. Live mode
 

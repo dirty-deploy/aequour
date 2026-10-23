@@ -78,15 +78,15 @@
    "id": "video_tests",
    "label": "Video path",
    "value": "6 of 6 attacks held",
-   "detail": "plus 1 control and 9 vision tests, on synthetic clips (generated textures, 2 clips from the teammate)",
-   "caveat": "implemented and tested on synthetic cases; not validated on real walk-around video",
+   "detail": "plus 1 control and 20 vision tests (last run 23 Oct), on synthetic clips (generated textures, 2 clips from the teammate); two real night-time phone clips run once each on 23 Oct (n = 2)",
+   "caveat": "implemented and tested on synthetic cases; two real night-time phone clips run once each (n = 2): both flagged not continuous and escalated, no offer; a first test, not a measurement, not validated on real walk-around video",
    "source": "`python -m autosettle_vision.video_attacks`, `autosettle_vision/tests`"
   },
   {
    "id": "engine",
    "label": "Money logic",
    "value": "20 of 20 attacks held",
-   "detail": "scripted attacks on the claim flow plus 1 control; 48 unit tests including a 5,000-claim fuzz",
+   "detail": "scripted attacks on the claim flow plus 1 control; 61 unit tests including a 5,000-claim fuzz (last run 23 Oct)",
    "caveat": "shows these attacks fail, not that none exist; tests written against the same code",
    "source": "`python -m unittest discover -s autosettle_engine/tests -t .`, `python -m autosettle_engine.exploit_suite`"
   },

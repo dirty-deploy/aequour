@@ -47,7 +47,7 @@ Values live in `autosettle_engine/config.py` (each tagged REAL, RULE or ASSUMPTI
 | 23 | Detector settings | confidence 0.25 (parts and damage), 0.50 for the merged model, image size 960, overlap rules 0.30 and 0.10 | IMPUTED | chosen during development; the 41 dev photos were also used for design choices |
 | 24 | Photo quality floors | sharpness below 60 (variance of the Laplacian) or brightness below 40 | IMPUTED | team choice |
 | 25 | Heavy crash | 3 severe parts, or a severe hood plus one more | IMPUTED | team choice |
-| 26 | Video limits | at most 60 s, 12 keyframes, 1,280 px; continuity needs 15 geometric inliers between neighbouring frames | IMPUTED | validated on synthetic clips only |
+| 26 | Video limits | at most 60 s, 12 keyframes, 1,280 px; continuity needs 15 geometric inliers between neighbouring frames | IMPUTED | validated on synthetic clips; two real night-time phone clips run once each on 23 Oct 2026 (n = 2), both flagged and escalated: a first test, not a measurement |
 | 27 | A typed plate counts as read | labelled "typed" in the adjuster view | IMPUTED | weaker than a plate photo |
 | 28 | Dev-photo labels | made by Claude by eye, not by a person | IMPUTED | all recall figures depend on them |
 | 29 | Demo scenarios | recorded pipeline output on public Wikimedia Commons photos, replayed through the live engine | OBSERVED | shown as REPLAY |
@@ -62,3 +62,14 @@ Values live in `autosettle_engine/config.py` (each tagged REAL, RULE or ASSUMPTI
 | 33 | Cashless versus reimbursement, salvage, tax treatment of labour | not modelled |
 | 34 | Regulation and data-protection compliance | not assessed |
 | 35 | The price a garage would actually charge | the garage quote is the evidence; a fitted price was never checked against a real garage |
+
+## Video quality, continuity naming and the adjuster estimate (added 23 Oct 2026)
+
+| # | Assumption | Value | Tag | Evidence and its limits |
+|---|---|---|---|---|
+| 36 | `BLUR_MIN_VIDEO`, sharpness floor for a video frame | 33.7 (variance of the Laplacian) | IMPUTED | the photo floor of 60 times the median 0.56 by which the 4 dev photos wider than 1280 px lost variance when resized to 1280 px. It does not model video compression or night noise. Override: `AEQUOUR_BLUR_MIN_VIDEO`. Photos keep 60 |
+| 37 | `DARK_MIN_VIDEO`, light floor for a video frame | 25 (mean grey level) | IMPUTED | below the photo floor of 40; chosen for two night-time phone clips (n = 2). Not measured on daylight footage. Override: `AEQUOUR_DARK_MIN_VIDEO`. Photos keep 40 |
+| 38 | Frames inspected before choosing keyframes | 96, then the sharpest usable frame of each of up to 12 equal time windows | IMPUTED | 96 decoded in 0.57 to 0.63 s on a 35 to 37 s clip on the development laptop |
+| 39 | `DENSE_FRAMES`, frames in the continuity check | 120 | IMPUTED | `check_video` took 6.97 s and 6.43 s on CPU for the two real clips (60 frames: 3.43 s and 3.16 s). More frames is more evidence, not a looser rule |
+| 40 | `APPEARANCE_CUT`, a geometric break above this change in overall look is named a hard cut | 0.40 (Bhattacharyya distance between HSV histograms) | IMPUTED | two real clips (consecutive-frame maxima 0.289 and 0.268 at 240 frames) and two splices (0.567 and 0.543). At 120 frames the same clips reached 0.369; at 60 frames 0.440 and 0.416, so the value depends on sampling density. It only names a break, it never excuses one |
+| 41 | The adjuster estimate | low and high are the engine's own offer and ceiling pricing of every detection it can price | IMPUTED (no new price logic) | labour and paint prices inside it are the existing ASSUMPTIONS above. An incomplete estimate is a floor on what is visible, not the likely total |
