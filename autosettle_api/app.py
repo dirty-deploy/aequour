@@ -367,7 +367,7 @@ def create_app(settings=None, vision=None, qwen=None):
                 "label": (rec or {}).get("label") or "uploaded clip", "seconds": vid.get("seconds"), "fps": vid.get("fps"),
                 "frames": vid.get("frames"), "candidates": vid.get("candidates"), "usable": vid.get("usable"),
                 "dropped_blur_or_dark": vid.get("dropped_blur_or_dark"), "keyframes": kfs,
-                "filter": {"sharpness_min": V.BLUR_MIN, "brightness_min": V.DARK_MIN},
+                "filter": {"sharpness_min": vid.get("blur_min", V.BLUR_MIN_VIDEO), "brightness_min": vid.get("dark_min", V.DARK_MIN_VIDEO)},
                 "continuity": {"frames_checked": vid.get("continuity_frames_checked"), "lowest_inliers": vid.get("continuity_lowest"),
                                "median_inliers": vid.get("continuity_median"), "required_inliers": vid.get("min_inliers"),
                                "breaks": breaks, "verdict": "continuous" if not breaks else "not continuous"},

@@ -84,14 +84,17 @@ def severity_of(frac):
 
 
 # ------------------------------------------------------------------ quality and integrity
-def quality(img):
+def quality(img, blur_min=None, dark_min=None):
+    """Photos use BLUR_MIN and DARK_MIN. A video keyframe passes the video floors instead (autosettle_vision.video)."""
+    blur_min = BLUR_MIN if blur_min is None else blur_min
+    dark_min = DARK_MIN if dark_min is None else dark_min
     grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blur = float(cv2.Laplacian(grey, cv2.CV_64F).var())
     bright = float(grey.mean())
     flags = []
-    if blur < BLUR_MIN:
+    if blur < blur_min:
         flags.append("blurry")
-    if bright < DARK_MIN:
+    if bright < dark_min:
         flags.append("too_dark")
     return {"blur": round(blur, 1), "brightness": round(bright, 1), "flags": flags}
 
@@ -325,7 +328,11 @@ def run_claim(image_paths=(), video=None, claim_id=None, plate_reader=None, seen
 
     per_image, quality_report = [], {}
     for name, img in imgs:
-        q = quality(img)
+        if name.count("#f"):               # a video keyframe: the video floors (the sampler already applied them)
+            from .video import BLUR_MIN_VIDEO, DARK_MIN_VIDEO
+            q = quality(img, BLUR_MIN_VIDEO, DARK_MIN_VIDEO)
+        else:
+            q = quality(img)
         quality_report[name] = q
         if q["flags"]:
             flags.append(f"low_quality:{name}:{','.join(q['flags'])}")

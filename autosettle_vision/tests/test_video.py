@@ -88,5 +88,73 @@ class TestTracker(unittest.TestCase):
         self.assertIn("single sighting", dropped[0].reason)
 
 
+def _dimmed(alpha, sigma=0.0, seed=9):
+    """The synthetic scene darkened (and optionally blurred), generated here with OpenCV."""
+    base = A.scene(seed)
+    if sigma:
+        base = cv2.GaussianBlur(base, (0, 0), sigma)
+    return (base.astype(np.float32) * alpha).astype(np.uint8)
+
+
+class TestVideoQualityFloors(unittest.TestCase):
+    """Video frames use their own floors. Photos keep theirs. (Synthetic clips; real footage is n = 2 and not tested here.)"""
+    def test_floors_are_separate_and_photo_floors_unchanged(self):
+        from autosettle_vision import pipeline as P
+        self.assertEqual((P.BLUR_MIN, P.DARK_MIN, V.BLUR_MIN, V.DARK_MIN), (60.0, 40.0, 60.0, 40.0))
+        self.assertLess(V.BLUR_MIN_VIDEO, V.BLUR_MIN)
+        self.assertLess(V.DARK_MIN_VIDEO, V.DARK_MIN)
+
+    def test_dim_soft_clip_passes_video_floors_but_would_fail_photo_floors(self):
+        from autosettle_vision import pipeline as P
+        dim = _dimmed(0.32)
+        q = P.quality(dim)
+        self.assertIn("blurry", q["flags"])
+        self.assertIn("too_dark", q["flags"])
+        self.assertEqual(P.quality(dim, V.BLUR_MIN_VIDEO, V.DARK_MIN_VIDEO)["flags"], [])
+        frames = [np.roll(dim, 3 * k, axis=1) for k in range(24)]
+        kf, info = V.sample_keyframes(A.write_video(Path(tempfile.mkdtemp()) / "dim.mp4", frames))
+        self.assertGreaterEqual(len(kf), 2)
+        self.assertLessEqual(len(kf), V.MAX_KEYFRAMES)
+        self.assertEqual((info["blur_min"], info["dark_min"]), (V.BLUR_MIN_VIDEO, V.DARK_MIN_VIDEO))
+
+    def test_a_clip_that_is_too_dark_is_rejected_with_the_numbers(self):
+        frames = [A.view(_dimmed(0.1), k, 20) for k in range(20)]
+        with self.assertRaises(V.VideoRejected) as cm:
+            V.sample_keyframes(A.write_video(Path(tempfile.mkdtemp()) / "black.mp4", frames))
+        m = str(cm.exception)
+        self.assertIn("No frame was clear enough to read", m)
+        self.assertIn(f"at least {V.BLUR_MIN_VIDEO:g}", m)
+        self.assertIn(f"at least {V.DARK_MIN_VIDEO:g}", m)
+        self.assertRegex(m, r"sharpness \d+")
+        self.assertIn("Film in daylight", m)
+
+    def test_a_clip_that_is_too_blurred_is_rejected_with_the_numbers(self):
+        frames = [A.view(_dimmed(1.0, sigma=3.0), k, 20) for k in range(20)]
+        with self.assertRaises(V.VideoRejected) as cm:
+            V.sample_keyframes(A.write_video(Path(tempfile.mkdtemp()) / "soft.mp4", frames))
+        self.assertIn("No frame was clear enough to read", str(cm.exception))
+
+    def test_a_photo_between_the_floors_is_still_flagged_blurry(self):
+        from autosettle_vision import pipeline as P
+        soft = _dimmed(1.0, sigma=0.8)                                    # sharpness about 43, bright
+        g = cv2.cvtColor(soft, cv2.COLOR_BGR2GRAY)
+        v = float(cv2.Laplacian(g, cv2.CV_64F).var())
+        self.assertTrue(8 < v < P.BLUR_MIN, v)
+        self.assertEqual(P.quality(soft)["flags"], ["blurry"])
+        self.assertEqual(P.quality(soft, V.BLUR_MIN_VIDEO, V.DARK_MIN_VIDEO)["flags"], ["blurry"] if v < V.BLUR_MIN_VIDEO else [])
+
+    def test_the_sharpest_usable_frame_of_each_time_window_is_kept_in_time_order(self):
+        good = [(0, "a", 5.0), (1, "b", 9.0), (2, "c", 7.0), (60, "d", 3.0), (61, "e", 4.0)]
+        picked = V._pick_by_window(good, 100, 2)
+        self.assertEqual([x[1] for x in picked], ["b", "e"])
+
+    def test_a_file_that_is_not_video_says_how_to_fix_it(self):
+        p = Path(tempfile.mkdtemp()) / "notes.mov"
+        p.write_bytes(b"this is not a video" * 50)
+        with self.assertRaises(V.VideoRejected) as cm:
+            V.sample_keyframes(p)
+        self.assertEqual(str(cm.exception), "This video format could not be read. Save it as H.264 MP4 and try again.")
+
+
 if __name__ == "__main__":
     unittest.main()
