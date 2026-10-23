@@ -50,7 +50,7 @@ REASONS = {
 }
 INTEGRITY = (("photo_seen_in_claim_", "This photo was already used in another claim."),
              ("edited_with_", "One photo shows signs of having been edited."),
-             ("video_not_continuous", "The video jumps between scenes, so I can't rely on it."),
+             ("video_not_continuous", "I couldn't confirm that the video is one continuous take, so a person needs to look at it."),
              ("unreadable", "One photo could not be read."))
 
 
