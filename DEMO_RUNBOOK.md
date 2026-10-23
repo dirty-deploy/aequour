@@ -8,6 +8,8 @@ python -m autosettle_api --replay                          # safest: no GPU, no 
 ```
 Open <http://127.0.0.1:8000>. Optional: `AEQUOUR_DEV_PHOTOS` (a folder with the public Commons demo photos) lets the recorded scenarios show their photo; without it the detections are drawn on a blank card. `python tools/smoke.py` (or `run.ps1 smoke`, `./run.sh smoke`) checks the whole replay path first and prints PASS or FAIL per step.
 
+To analyse **your own photos or a video clip**, start live mode with `run.ps1 demo-live` (`./run.sh demo-live` elsewhere). It is the live pipeline with fixed-template wording, video on and an empty duplicate-photo store. `run.ps1 demo-qwen` is **replay** mode with the language model: it cannot take uploads, and the page says so. Clip advice: daylight, phone steady and upright, one clip up to 60 seconds and 60 MB, H.264 MP4 or MOV.
+
 With the GPU stack (`requirements-live.txt`, weights in `backup/`):
 ```
 python -m autosettle_api --no-qwen --fresh-seen            # live photo pipeline, fixed-template wording

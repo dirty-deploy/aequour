@@ -124,3 +124,10 @@
 .schip.lm i { color: #9be3b4; }
 @media (max-width: 760px) { .facts div { grid-template-columns: 1fr; gap: 0; } .chat-status { padding: 8px 12px; } }
 @media (max-width: 760px) { .suggest { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; } .sugg { flex: none; } }
+
+/* Photos | Video choice above the file picker */
+.kind-tabs { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--hairline-2); border-radius: 999px; margin-bottom: 12px; }
+.kind-tabs button { font: 600 14px/1 var(--font); color: var(--ink-2); background: transparent; border: 0; border-radius: 999px; padding: 8px 16px; }
+.kind-tabs button.on { color: var(--ink); background: rgba(255, 255, 255, 0.12); }
+.kind-tabs button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.kind-tabs button:disabled { opacity: 0.5; cursor: default; }

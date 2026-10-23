@@ -12,7 +12,9 @@ import { Count, Reveal } from "./Reveal";
 const MORE_TABS = ["Photo", "Garage quote", "Video", "Test samples"] as const;
 type MoreTab = (typeof MORE_TABS)[number];
 const ACTION: Record<string, string> = { replace: "Replace", repair_dent: "Repair the dent and repaint", repaint: "Repaint", polish: "Polish and touch up" };
-const LIVE_COMMAND = "python -m autosettle_api --live --fresh-seen";
+const LIVE_COMMAND = ".\\run.ps1 demo-live";     // ./run.sh demo-live elsewhere; both start: python -m autosettle_api --no-qwen --fresh-seen
+const VIDEO_ACCEPT = "video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm";
+const mb = (n: number) => (n / (1024 * 1024)).toFixed(1);
 
 const INTENT_WORDS: Record<string, string> = {
   greeting_or_meta: "a greeting or a question about the assistant", how_calculated: "how the offer was calculated", depreciation: "depreciation",
@@ -113,6 +115,10 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
   const [policyId, setPolicyId] = useState("POL-DEMO-001");
   const [plate, setPlate] = useState("");
   const [files, setFiles] = useState<File[]>([]);
+  const [kind, setKind] = useState<"Photos" | "Video">("Photos");
+  const [clip, setClip] = useState<File | null>(null);
+  const [secs, setSecs] = useState(0);              // seconds spent reading a clip
+  const [errorHint, setErrorHint] = useState("");
   const [current, setCurrent] = useState("");
   const [pending, setPending] = useState("");      // the customer's message while the reply is being written
   const log = useRef<HTMLUListElement>(null);
@@ -140,9 +146,15 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
     setAdj(a); setTr(t);
   }, []);
   const run = async (label: string, f: () => Promise<void>) => {
-    setBusy(label); setError("");
+    setBusy(label); setError(""); setErrorHint("");
     try { await f(); } catch (e) { setError((e as Error).message); } finally { setBusy(""); }
   };
+  useEffect(() => {
+    if (busy !== "clip") { setSecs(0); return; }
+    const t0 = Date.now();
+    const t = window.setInterval(() => setSecs(Math.floor((Date.now() - t0) / 1000)), 500);
+    return () => window.clearInterval(t);
+  }, [busy]);
   const flash = () => { setBlocked(true); window.setTimeout(() => setBlocked(false), 1800); };
   const reset = () => { setClaim(null); setAdj(null); setTr(null); setError(""); setFiles([]); setPlate(""); setCurrent(""); };
 
@@ -172,7 +184,20 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
     c = await api.assess(c.claim_id);
     setFiles([]); await refresh(c);
   });
-  const sendVideoFile = (f: File) => run("video", async () => { const c = await needClaim(); await refresh(await api.video(c.claim_id, f)); });
+  const sendVideoFile = (f: File) => run("clip", async () => {
+    try {
+      const c = await needClaim();
+      await refresh(await api.video(c.claim_id, f));
+      setClip(null); setMore("Video");
+      window.setTimeout(() => document.getElementById("try-more")?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+    } catch (e) {
+      const st = (e as Error & { status?: number }).status, m = (e as Error).message;
+      if (st === 422) { setErrorHint("Try again in daylight, hold the phone steady, and walk slowly."); throw new Error(m); }
+      if (st === 501) throw new Error("Video is switched off on this server. Restart without --video off.");
+      if (st === 503) throw new Error("The clip could not be analysed on this server just now. Try again, or send photos instead.");
+      throw new Error(st ? "The clip could not be sent. Check that the server is still running, then try again." : m);
+    }
+  });
   const sendRecorded = (key: string) => run("video", async () => {
     reset();
     const c0 = await api.create({ policy_id: "POL-DEMO-001", plate_text: "DL3CAB1234" });
@@ -263,8 +288,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
       <div className="more-video">
         <div className="btns">
           {samples.map((s) => <ChromeButton key={s.key} variant="quiet" disabled={!!busy} onClick={() => sendRecorded(s.key)}>{s.key.endsWith("close") ? "Recorded walk-around, closer" : "Recorded walk-around"} <em className="tagx">SYNTHETIC</em></ChromeButton>)}
-          <UploadButton quiet multiple={false} accept="video/mp4,video/quicktime,video/webm" label="Upload a clip" disabled={!!busy || !videoLive} onFiles={(f) => f[0] && sendVideoFile(f[0])} />
-          {!videoLive && <span className="small">Uploading a clip needs live mode; the recorded clips run in replay mode.</span>}
+          <span className="small">{videoLive ? "To send your own clip, use Video in the panel on the left." : "Your own clip needs live mode; the recorded clips run in replay mode."}</span>
         </div>
         {claim?.video ? (
           <div className="vid">
@@ -306,7 +330,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
 
   const chip = chipWords(claim);
   const options = claim && !claim.closed ? claim.options : [];
-  const lead = busy === "message" ? "Writing a reply..." : busy ? "Checking your photos..." : "";
+  const lead = busy === "message" ? "Writing a reply..." : busy === "clip" ? `Reading the clip... ${secs} s` : busy ? "Checking your photos..." : "";
   const QUESTIONS = ["How was this calculated?", "What should I do next?", "Why not more?"];
 
   return (
@@ -348,28 +372,54 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
               ))}
             </ul>
 
-            <h3 className="side-h">Your own photos</h3>
+            <h3 className="side-h">Your own photos or video</h3>
             {replay ? (
               <div className="own-off" role="note">
-                <p className="small">Your own photos need live mode. This server is in replay mode, so it can only show the recorded demo claims.</p>
-                <p className="small">To analyse your own photos, start live mode:</p>
+                <p className="small">Your own photos and video need live mode. This server is in replay mode, so it can only show the recorded demo claims.</p>
+                <p className="small">To analyse your own photos or a clip, start live mode:</p>
                 <code>{LIVE_COMMAND}</code>
-                <div className="btns"><ChromeButton variant="quiet" disabled aria-disabled="true">Choose photos</ChromeButton></div>
+                <div className="btns"><ChromeButton variant="quiet" disabled aria-disabled="true">Choose photos</ChromeButton><ChromeButton variant="quiet" disabled aria-disabled="true">Choose a video</ChromeButton></div>
               </div>
             ) : (
               <div className="own-form">
+                <div className="kind-tabs" role="tablist" aria-label="Photos or video">
+                  {(["Photos", "Video"] as const).map((k) => (
+                    <button key={k} type="button" role="tab" id={`kind-${k}`} aria-selected={kind === k} tabIndex={kind === k ? 0 : -1} className={kind === k ? "on" : ""} disabled={!!busy}
+                      onClick={() => setKind(k)}
+                      onKeyDown={(e) => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const n = k === "Photos" ? "Video" : "Photos"; setKind(n); document.getElementById(`kind-${n}`)?.focus(); } }}>{k}</button>
+                  ))}
+                </div>
                 <label className="f">Policy
                   <select value={policyId} onChange={(e) => setPolicyId(e.target.value)}>{policies.map((p) => <option key={p.policy_id} value={p.policy_id}>{p.vehicle}</option>)}</select>
                 </label>
                 <label className="f">Number plate, as it is on the car
                   <input value={plate} onChange={(e) => { setPlate(e.target.value); setCurrent("own"); }} placeholder="DL3CAB1234" maxLength={20} autoComplete="off" />
                 </label>
-                <div className="btns">
-                  <UploadButton disabled={!!busy} onFiles={(f) => { setFiles(f); setCurrent("own"); }} />
-                  <ChromeButton variant="quiet" disabled={!!busy || !files.length} onClick={submitOwn}>{busy === "own" ? "Working..." : "Check my claim"}</ChromeButton>
-                </div>
-                {files.length > 0 && <p className="small">{files.map((f) => f.name).join(", ")}</p>}
-                <p className="small">Up to 12 JPEG, PNG or WebP photos, 10 MB each.</p>
+                {kind === "Photos" ? (
+                  <>
+                    <div className="btns">
+                      <UploadButton disabled={!!busy} onFiles={(f) => { setFiles(f); setCurrent("own"); }} />
+                      <ChromeButton variant="quiet" disabled={!!busy || !files.length} onClick={submitOwn}>{busy === "own" ? "Working..." : "Check my claim"}</ChromeButton>
+                    </div>
+                    {files.length > 0 && <p className="small">{files.map((f) => f.name).join(", ")}</p>}
+                    <p className="small">Up to 12 JPEG, PNG or WebP photos, 10 MB each.</p>
+                  </>
+                ) : !videoLive ? (
+                  <div className="own-off" role="note">
+                    <p className="small">Video is switched off on this server. Restart without <code>--video off</code>.</p>
+                    <div className="btns"><ChromeButton variant="quiet" disabled aria-disabled="true">Choose a video</ChromeButton></div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="btns">
+                      <UploadButton multiple={false} accept={VIDEO_ACCEPT} label="Choose a video" disabled={!!busy} onFiles={(f) => { if (f[0]) { setClip(f[0]); setCurrent("own"); } }} />
+                      <ChromeButton variant="quiet" disabled={!!busy || !clip} onClick={() => clip && sendVideoFile(clip)}>{busy === "clip" ? "Reading the clip..." : "Check my claim"}</ChromeButton>
+                    </div>
+                    {clip && <p className="small">{clip.name}, {mb(clip.size)} MB</p>}
+                    {busy === "clip" && <p className="small" role="status">Reading the clip... {secs} s. This can take a minute.</p>}
+                    <p className="small">One clip, up to 60 seconds and 60 MB. Walk slowly round the car in daylight, phone upright, and keep the damage in view.</p>
+                  </>
+                )}
                 <details className="guide-d"><summary>What to photograph</summary>
                   <ol className="guide">{guide.map((g) => <li key={g.id}><span><strong>{g.title}.</strong> {g.text}</span></li>)}</ol>
                 </details>
@@ -378,7 +428,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
           </aside>
 
           <div className="try2-right">
-            {error && <p className="error" role="alert">{error}</p>}
+            {error && <p className="error" role="alert">{error}{errorHint && <><br />{errorHint}</>}</p>}
 
             <div className="offer-card card" aria-live="polite">
               {!claim ? (

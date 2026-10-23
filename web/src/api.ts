@@ -82,7 +82,9 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
   if (!r.ok) {
     let d = "";
     try { const j = await r.json(); d = typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail); } catch { /* not JSON */ }
-    throw new Error(d || `${r.status} ${r.statusText}`);
+    const err = new Error(d || `${r.status} ${r.statusText}`) as Error & { status?: number };
+    err.status = r.status;
+    throw err;
   }
   return r.json() as Promise<T>;
 }
