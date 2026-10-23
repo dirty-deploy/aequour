@@ -302,7 +302,7 @@ export default function TryScene({ auto, onClaim, replay, videoLive }: { auto?: 
             </div>
             <dl className="vstats">
               <div><dt>Clip</dt><dd>{claim.video.seconds}s, {claim.video.frames} frames; {claim.video.usable} of {claim.video.candidates} sampled frames usable (sharpness at least {claim.video.filter.sharpness_min}, light at least {claim.video.filter.brightness_min})</dd></div>
-              <div><dt>Continuity</dt><dd><b className={claim.video.continuity.verdict === "continuous" ? "okc" : "badc"}>{claim.video.continuity.verdict}</b>: lowest {claim.video.continuity.lowest_inliers} geometric matches between neighbouring frames, median {claim.video.continuity.median_inliers}, at least {claim.video.continuity.required_inliers} needed</dd></div>
+              <div><dt>Continuity</dt><dd><b className={claim.video.continuity.outcome === "continuous" ? "okc" : "badc"}>{claim.video.continuity.outcome_words}</b>. Lowest {claim.video.continuity.lowest_inliers} geometric matches between neighbouring frames, median {claim.video.continuity.median_inliers}, at least {claim.video.continuity.required_inliers} needed; {claim.video.continuity.breaks.length} breaks ({claim.video.continuity.hard_cuts.length} hard cuts, {claim.video.continuity.unverified.length} unverified).{claim.video.continuity.max_appearance != null && <> Largest change in overall look {claim.video.continuity.max_appearance} (median {claim.video.continuity.median_appearance}; a hard cut is above {claim.video.continuity.appearance_cut}).</>}</dd></div>
             </dl>
             <table className="qtab ents">
               <thead><tr><th>Damage tracked across keyframes</th><th>Seen in</th><th>Confidence</th><th>Status</th></tr></thead>

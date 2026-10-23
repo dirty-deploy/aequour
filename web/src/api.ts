@@ -30,10 +30,15 @@ export interface Turn { n: number; from: "customer" | "system"; text: string; wo
 export interface Transcript { claim_id: string; mode: string; state: string; chain_ok: boolean; turns: Turn[] }
 export interface VideoKeyframe { index: number; name: string | null; frame?: number; seconds?: number; sharpness?: number; brightness?: number; thumbnail: string | null; findings: number }
 export interface VideoEntity { part_class: string; damage_class: string | null; keyframes: number[]; seen_in: number; of: number; best_conf: number; severity: string | null; status: string }
+export interface VideoContinuity {
+  frames_checked: number | null; lowest_inliers: number | null; median_inliers: number | null; required_inliers: number | null;
+  breaks: number[]; verdict: string; outcome: string; outcome_words: string; hard_cuts: number[]; unverified: number[];
+  max_appearance: number | null; median_appearance: number | null; appearance_cut: number;
+}
 export interface VideoView {
   synthetic: boolean; recorded: boolean; label: string; seconds?: number; fps?: number; frames?: number; candidates?: number; usable?: number; dropped_blur_or_dark?: number;
   keyframes: VideoKeyframe[]; filter: { sharpness_min: number; brightness_min: number };
-  continuity: { frames_checked?: number; lowest_inliers?: number | null; median_inliers?: number | null; required_inliers?: number; breaks: number[]; verdict: string };
+  continuity: VideoContinuity;
   entities: VideoEntity[]; note: string;
 }
 export interface VideoSample { key: string; label: string; shows: string; synthetic: boolean }

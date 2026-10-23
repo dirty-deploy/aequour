@@ -156,5 +156,60 @@ class TestVideoQualityFloors(unittest.TestCase):
         self.assertEqual(str(cm.exception), "This video format could not be read. Save it as H.264 MP4 and try again.")
 
 
+def _motion_blur(img, k):
+    ker = np.zeros((k, k), np.float32)
+    ker[k // 2, :] = 1.0 / k
+    return cv2.filter2D(img, -1, ker)
+
+
+class TestContinuityNaming(unittest.TestCase):
+    """A break is named hard cut or unverified from the change in overall look. Either way the flag stays and the engine escalates."""
+    def _run(self, frames, name):
+        from autosettle_vision.video_claim import run_video_claim
+        p = A.write_video(Path(tempfile.mkdtemp()) / name, frames)
+        cont = VI.check_video(p)
+        v = run_video_claim(p, name, A._seen(), A.fake_analyser())
+        res, _ = A._decide(v)
+        return cont, v, res
+
+    def test_a_continuous_clip_has_no_break_and_no_flag(self):
+        a = A.scene(1)
+        cont, v, res = self._run([A.view(a, k, 60) for k in range(60)], "c.mp4")
+        self.assertEqual((cont["breaks"], cont["hard_cuts"], cont["unverified"]), ([], [], []))
+        self.assertEqual(VI.outcome(cont)[0], "continuous")
+        self.assertEqual(VI.flags(cont), [])
+        self.assertEqual(v["integrity_flags"], [])
+        self.assertEqual(res["decision"], "OFFER")
+
+    def test_a_splice_is_a_hard_cut_and_still_escalates(self):
+        a, b = A.scene(1), A.scene(2)
+        cont, v, res = self._run([A.view(a, k, 30) for k in range(30)] + [A.view(b, k, 30) for k in range(30)], "s.mp4")
+        self.assertTrue(cont["hard_cuts"], cont)
+        self.assertEqual(cont["unverified"], [])
+        self.assertEqual(VI.outcome(cont)[0], "hard_cut")
+        self.assertIn("A hard cut was found", VI.outcome(cont)[1])
+        self.assertTrue(any(f.startswith("video_not_continuous") for f in v["integrity_flags"]))
+        self.assertEqual((res["decision"], res["offer"]), ("ESCALATE", None))
+
+    def test_shaky_footage_is_unverified_keeps_the_flag_and_still_escalates(self):
+        a = A.scene(1)
+        frames = [_motion_blur(A.view(a, k, 60), 31 if k % 2 else 3) for k in range(60)]
+        cont, v, res = self._run(frames, "shaky.mp4")
+        self.assertTrue(cont["breaks"], cont)
+        self.assertEqual(cont["hard_cuts"], [])
+        self.assertEqual(cont["unverified"], cont["breaks"])
+        self.assertEqual(VI.outcome(cont)[0], "unverified")
+        self.assertIn("Could not confirm one continuous take", VI.outcome(cont)[1])
+        self.assertLess(cont["max_appearance"], VI.APPEARANCE_CUT)
+        self.assertTrue(any(f.startswith("video_not_continuous") for f in v["integrity_flags"]))
+        self.assertEqual((res["decision"], res["offer"]), ("ESCALATE", None))
+
+    def test_every_break_is_in_exactly_one_group_and_the_flag_follows_the_breaks(self):
+        a, b = A.scene(1), A.scene(2)
+        r = VI.check_frames([A.view(a, k, 20) for k in range(20)] + [A.view(b, k, 20) for k in range(20)])
+        self.assertEqual(sorted(r["hard_cuts"] + r["unverified"]), r["breaks"])
+        self.assertEqual(bool(VI.flags(r)), bool(r["breaks"]))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -320,7 +320,7 @@ def create_app(settings=None, vision=None, qwen=None):
     def build_video_view(c, v, rec=None):
         """What the Video tab shows: keyframes with their usability scores, the continuity numbers, and the damage seen
         across keyframes (an entity seen in only one keyframe is shown as such, never silently dropped)."""
-        from autosettle_vision import synthetic_clip as SC, video as V
+        from autosettle_vision import synthetic_clip as SC, video as V, video_integrity as VI
         vid = v.get("video", {})
         scores = vid.get("keyframe_scores", [])
         thumbs = vid.get("thumbnails")
@@ -363,6 +363,9 @@ def create_app(settings=None, vision=None, qwen=None):
         kfs = [{"index": k, "name": names[k] if k < len(names) else None, **(scores[k] if k < len(scores) else {}),
                 "thumbnail": thumbs[k] if k < len(thumbs) else None, "findings": count.get(k, 0)} for k in range(len(scores))]
         breaks = vid.get("continuity_breaks", [])
+        hard, unver = vid.get("continuity_hard_cuts", []), vid.get("continuity_unverified", breaks if breaks else [])
+        name, words = vid.get("continuity_outcome") or (("continuous", "One continuous take: no breaks") if not breaks else
+                                                         ("unverified", "Could not confirm one continuous take: a person will check"))
         return {"synthetic": bool(vid.get("synthetic")), "recorded": rec is not None,
                 "label": (rec or {}).get("label") or "uploaded clip", "seconds": vid.get("seconds"), "fps": vid.get("fps"),
                 "frames": vid.get("frames"), "candidates": vid.get("candidates"), "usable": vid.get("usable"),
@@ -370,7 +373,10 @@ def create_app(settings=None, vision=None, qwen=None):
                 "filter": {"sharpness_min": vid.get("blur_min", V.BLUR_MIN_VIDEO), "brightness_min": vid.get("dark_min", V.DARK_MIN_VIDEO)},
                 "continuity": {"frames_checked": vid.get("continuity_frames_checked"), "lowest_inliers": vid.get("continuity_lowest"),
                                "median_inliers": vid.get("continuity_median"), "required_inliers": vid.get("min_inliers"),
-                               "breaks": breaks, "verdict": "continuous" if not breaks else "not continuous"},
+                               "breaks": breaks, "verdict": "continuous" if not breaks else "not continuous",
+                               "outcome": name, "outcome_words": words, "hard_cuts": hard, "unverified": unver,
+                               "max_appearance": vid.get("continuity_max_appearance"), "median_appearance": vid.get("continuity_median_appearance"),
+                               "appearance_cut": VI.APPEARANCE_CUT},
                 "entities": entities,
                 "note": "Validated on synthetic clips only; nothing about real walk-around video is measured."}
 
