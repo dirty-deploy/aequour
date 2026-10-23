@@ -1,1 +1,1 @@
-Images are not included (licences and size). `commons/SOURCES.csv` lists each photo's source and licence; `ground_truth.csv` holds the labels, made by Claude by eye, not by a person.
+Only the three photos used by the recorded demo scenarios are included (`c05`, `c44`, `c53`; see `THIRD_PARTY_NOTICES.md`). The other images are not included (licences and size). `commons/SOURCES.csv` lists each photo's source and licence; `ground_truth.csv` holds the labels, made by Claude by eye, not by a person.
